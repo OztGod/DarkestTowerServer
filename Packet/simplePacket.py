@@ -238,6 +238,22 @@ def tokenize(str, delims, rangeDelims):
 
     return tokens
 
+def beginString(langType):
+    if langType == 0: #cpp
+        return "#pragma once\n#include <stdint.h>\n\n"
+    elif langType == 1: #cs
+        return "using System;\nusing System.Text;\nusing System.Runtime.InteropServices;\n\nnamespace Packet\n{\n\n"
+    else:
+        return ""
+
+def endString(langType):
+    if langType == 0: #cpp
+        return ""
+    elif langType == 1: #cs
+        return "}\n"
+    else:
+        return ""
+
 print "generate..."
 
 packet = ""
@@ -272,12 +288,14 @@ with open(src, 'r') as list:
             print tokens[tokenIndex] + " is invalid keyword."
             sys.exit()
     
-out = ""
+out = beginString(langType)
 for enum in enums.values():
     out = out + enum.toString(langType)
     
 for packet in packets.values():
     out = out + packet.toString(langType)
+
+out = out + endString(langType)
     
 with open(dest, 'w') as outFile:
     outFile.write(out)

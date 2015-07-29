@@ -1,3 +1,10 @@
+using System;
+using System.Text;
+using System.Runtime.InteropServices;
+
+namespace Packet
+{
+
 public enum Type
 {
 	LOGIN_REQUEST = 0,
@@ -27,4 +34,5 @@ public class LoginResponse : Header
 {
 	[MarshalAs(UnmanagedType.U1)]
 	public byte result;
+}
 }

@@ -1,3 +1,6 @@
+#pragma once
+#include <stdint.h>
+
 enum class Type : uint8_t
 {
 	LOGIN_REQUEST = 0,
