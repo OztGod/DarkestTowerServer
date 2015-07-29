@@ -1,0 +1,27 @@
+enum Type : uint8
+{
+	LOGIN_REQUEST = 0
+	LOGIN_RESPONSE = 1
+}
+
+packet Header
+{
+	Type type
+}
+
+packet LoginRequest : Header
+{
+	string16 id
+	string16 password
+}
+
+enum LoginResult : uint8
+{
+	FAILED = 0
+	SUCCESS = 1
+}
+
+packet LoginResponse : Header
+{
+	LoginResult result
+}
