@@ -2,6 +2,7 @@ enum Type : uint8
 {
 	LOGIN_REQUEST = 0
 	LOGIN_RESPONSE = 1
+	TYPE_NUM = 2
 }
 
 packet Header
@@ -11,6 +12,8 @@ packet Header
 
 packet LoginRequest : Header
 {
+	int8 idLength
+	int8 passwordLength
 	string16 id
 	string16 password
 }

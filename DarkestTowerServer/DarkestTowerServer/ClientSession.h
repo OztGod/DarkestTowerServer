@@ -1,5 +1,6 @@
 #pragma once
 #include "Skylark.h"
+#include "pcPacket.h"
 
 class ClientSession : public skylark::Session
 {
@@ -9,5 +10,10 @@ public:
 
 	bool onAccept() override;
 
+	bool onRead() override;
+
+	void onLoginRequest(const LoginRequest& packet);
+
 private:
+	skylark::PacketHandler<Header, static_cast<int>(Type::TYPE_NUM)> handler;
 };

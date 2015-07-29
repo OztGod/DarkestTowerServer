@@ -9,6 +9,7 @@ public enum Type
 {
 	LOGIN_REQUEST = 0,
 	LOGIN_RESPONSE = 1,
+	TYPE_NUM = 2,
 }
 public enum LoginResult
 {
@@ -24,6 +25,10 @@ public class Header
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public class LoginRequest : Header
 {
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte idLength;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte passwordLength;
 	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
 	public char[] id;
 	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]

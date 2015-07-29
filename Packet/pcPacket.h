@@ -5,6 +5,7 @@ enum class Type : uint8_t
 {
 	LOGIN_REQUEST = 0,
 	LOGIN_RESPONSE = 1,
+	TYPE_NUM = 2,
 };
 enum class LoginResult : uint8_t
 {
@@ -20,6 +21,8 @@ struct Header
 #pragma pack(push, 1)
 struct LoginRequest : Header
 {
+	int8_t idLength;
+	int8_t passwordLength;
 	char id[16];
 	char password[16];
 };
