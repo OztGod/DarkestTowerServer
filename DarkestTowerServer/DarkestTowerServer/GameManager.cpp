@@ -21,14 +21,25 @@ void GameManager::getRandomHeros(OUT std::vector<HeroClass>& classes)
 	}
 }
 
-bool GameManager::isValidAccount(const char * id, int idLength, const char * password, int pwdLength)
+int GameManager::isValidAccount(const char * id, int idLength, const char * password, int pwdLength)
 {
 	//계정 정보 체크 - 나중에 DB에서 체크하게끔 변경
 	if (strncmp("test", id, idLength) == 0 &&
 		strncmp("12345", password, pwdLength) == 0)
 	{
-		return true;
+		return 0;
 	}
 
-	return false;
+	if (strncmp("test2", id, idLength) == 0 &&
+		strncmp("12345", password, pwdLength) == 0)
+	{
+		return 1;
+	}
+
+	return -1;
+}
+
+void GameManager::addMatchPendingList(std::shared_ptr<Player>& player)
+{
+	matchPendingList.push_back(player);
 }

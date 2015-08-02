@@ -2,6 +2,8 @@
 #include "Skylark.h"
 #include "pcPacket.h"
 
+class Player;
+
 class ClientSession : public skylark::Session
 {
 public:
@@ -22,6 +24,8 @@ public:
 	void onRandomHeroRequest(const RandomHeroRequest& packet);
 
 private:
+	std::shared_ptr<Player> player = nullptr;
+
 	//TODO : static으로 바꾸자
 	skylark::PacketHandler<Header, static_cast<int>(Type::TYPE_NUM)> handler;
 };

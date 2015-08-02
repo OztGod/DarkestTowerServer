@@ -25,14 +25,14 @@
     <ClCompile Include="DarkestTowerApplication.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MatchMaker.cpp" />
+    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientSession.h" />
     <ClInclude Include="ClientSessionManager.h" />
     <ClInclude Include="DarkestTowerApplication.h" />
     <ClInclude Include="GameManager.h" />
-    <ClInclude Include="MatchMaker.h" />
+    <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Skylark\Skylark\Skylark\Skylark.vcxproj">

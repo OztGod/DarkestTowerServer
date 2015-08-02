@@ -1,6 +1,7 @@
 #include "ClientSession.h"
 #include "ClientSessionManager.h"
 #include "GameManager.h"
+#include "Player.h"
 
 ClientSession::ClientSession(skylark::CompletionPort * port, std::size_t sendBufSize, std::size_t recvBufSize)
 	:Session(port, sendBufSize, recvBufSize)
@@ -69,15 +70,18 @@ void ClientSession::sessionReset()
 
 void ClientSession::onLoginRequest(const LoginRequest & packet)
 {
-	LoginResponse response;
+	int pid = GameManager::getInstance()
+		->isValidAccount(packet.id, packet.idLength,
+			packet.password, packet.passwordLength);
 
+
+	LoginResponse response;
 	response.type = Type::LOGIN_RESPONSE;
 
-	if (GameManager::getInstance()
-		->isValidAccount(packet.id, packet.idLength,
-			packet.password, packet.passwordLength))
+	if (pid != -1)
 	{
 		response.result = LoginResult::SUCCESS;
+		player = std::make_shared<Player>(pid, this);
 	}
 	else
 	{
