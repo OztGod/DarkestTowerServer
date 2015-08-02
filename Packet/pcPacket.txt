@@ -2,7 +2,18 @@ enum Type : uint8
 {
 	LOGIN_REQUEST = 0
 	LOGIN_RESPONSE = 1
-	TYPE_NUM = 2
+    ALLOC_HERO = 2
+	TYPE_NUM = 3
+}
+
+enum HeroClass : uint8
+{
+    FIGHTER = 0
+    MAGICIAN = 1
+    ARCHER = 2
+    THIEF = 3
+    PRIEST = 4
+    MONK = 5
 }
 
 packet Header
@@ -27,4 +38,12 @@ enum LoginResult : uint8
 packet LoginResponse : Header
 {
 	LoginResult result
+}
+
+packet AllocHero : Header
+{
+    int8 allocNum
+    HeroClass heroClass arr 4
+    int8 x arr 4
+    int8 y arr 4
 }

@@ -33,6 +33,10 @@ int DarkestTowerApplication::run()
 
 bool DarkestTowerApplication::init()
 {
+
+	//main thread lock order check init
+	skylark::TLS::lockOrderChecker = new skylark::LockOrderChecker(0);
+
 	mainPort = new skylark::CompletionPort(10);
 	listen = new skylark::Socket(skylark::ConnectType::TCP);
 
@@ -42,18 +46,20 @@ bool DarkestTowerApplication::init()
 	if (!listen->reuseAddr(true))
 		return false;
 
-	if (!listen->bind("10.73.43.193", 41010))
+	if (!listen->bind("127.0.0.1", 41010))
 		return false;
 
 	if (!listen->listen())
 		return false;
 
-	for (int i = 0; i < threadNum; i++)
+	for (int i = 1; i <= threadNum; i++)
 	{
 		auto thread = new skylark::IOThread(i, mainPort);
 
 		threads.push_back(thread);
 	}
+
+	ClientSessionManager::getInstance()->prepareClientSessions(mainPort);
 
 	return true;
 }

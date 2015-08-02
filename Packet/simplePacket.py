@@ -94,6 +94,7 @@ class Member:
         self.mName = ""
         self.mDefault = ""
         self.mLength = 0
+        self.mNum = 0
     
     def parsing(self, tokens, index):
         if tokens[index] in types:
@@ -119,6 +120,9 @@ class Member:
         if(tokens[index] == "="):
             self.mDefault = tokens[index+1]
             index = index + 2
+        elif(tokens[index] == "arr"):
+            self.mNum = int(tokens[index+1])
+            index = index + 2
         
         return index
         
@@ -132,12 +136,21 @@ class Member:
             elif self.mType in enums:
                 s = s + enums[self.mType].mName + " " + self.mName
             
+            if self.mNum != 0:
+                s = s + "[" + str(self.mNum) + "]"
+            
             if self.mDefault != "":
                 s = s + " = " + self.mDefault
         
             s = s + ";\n"
         elif langType == 1: # cs
-            if self.mType == "string":
+            if self.mNum != 0:
+                s = s + "[MarshalAs(UnManagedType.ByValArray, SizeConst = " + str(self.mNum) + ")]\n\t"
+                if self.mType in types:
+                    s = s + "public " + types[self.mType].mCs + "[] " + self.mName
+                else:
+                    s = s + "public " + types[enums[self.mType].mType].mCs + "[] " + self.mName
+            elif self.mType == "string":
                 s = s + "[MarshalAs(UnmanagedType.ByValArray, SizeConst = " + str(self.mLength) + ")]\n\t"
                 s = s + "public char[] " + self.mName
             elif self.mType in types:
@@ -146,6 +159,8 @@ class Member:
             elif self.mType in enums:
                 s = s + "[MarshalAs(UnmanagedType.U" + str(self.mLength) + ")]\n\t"
                 s = s + "public " + types[enums[self.mType].mType].mCs + " " + self.mName
+            
+            
             
             if self.mDefault != "":
                 s = s + " = " + self.mDefault
@@ -159,6 +174,7 @@ class Packet:
         self.mMemberKeys = []
         self.mName = ""
         self.mBase = ""
+        self.mLength = 0
     
     def parsing(self, tokens, index):
         self.mName = tokens[index]
@@ -181,6 +197,7 @@ class Packet:
             index = newMember.parsing(tokens,index)
             self.mMembers[newMember.mName] = newMember
             self.mMemberKeys.append(newMember.mName)
+            self.mLength += newMember.mLength
         
         print "invalid syntax. expected \`}\` omitted."
         sys.exit()
@@ -291,7 +308,7 @@ with open(src, 'r') as list:
 out = beginString(langType)
 for enum in enums.values():
     out = out + enum.toString(langType)
-    
+
 for packet in packets.values():
     out = out + packet.toString(langType)
 
