@@ -5,7 +5,9 @@ enum Type : uint8
     ALLOC_HERO = 2
     RANDOM_HERO_REQUEST = 3
     RANDOM_HERO_RESPONSE = 4
-	TYPE_NUM = 5
+    MATCH_START = 5
+    GAME_DATA = 6
+	TYPE_NUM = 7
 }
 
 enum HeroClass : uint8
@@ -56,4 +58,17 @@ packet RandomHeroRequest : Header
 packet RandomHeroResponse : Header
 {
     HeroClass heroClass arr 4
+}
+
+packet MatchStart : Header
+{
+}
+
+packet GameData : Header
+{
+    int8 turn
+    int8 classNum
+    HeroClass classes arr 4
+    int8 x arr 4
+    int8 y arr 4
 }
