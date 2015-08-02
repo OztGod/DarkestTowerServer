@@ -22,6 +22,11 @@ ClientSession::ClientSession(skylark::CompletionPort * port, std::size_t sendBuf
 	{
 		onRandomHeroRequest(packet);
 	});
+
+	handler.registerHandler<AllocHero>(static_cast<int>(Type::ALLOC_HERO), [this](const AllocHero& packet)
+	{
+		onAllocHero(packet);
+	});
 }
 
 ClientSession::~ClientSession()
@@ -114,4 +119,19 @@ void ClientSession::onRandomHeroRequest(const RandomHeroRequest & packet)
 	randomResponse.heroClass[3] = classes[3];
 
 	sendPacket(randomResponse);
+}
+
+void ClientSession::onAllocHero(const AllocHero & packet)
+{
+	auto context = new AllocHeroContext();
+	context->player = player;
+	context->posNum = packet.allocNum;
+	
+	for (int i = 0; i < packet.allocNum; i++)
+	{
+		context->pos[i].x = packet.x[i];
+		context->pos[i].y = packet.y[i];
+	}
+
+	skylark::postContext(HmmoApplication::getInstance()->getLogicPort(), context, 0);
 }

@@ -3,6 +3,7 @@
 #include "ClientSession.h"
 #include "LogicContext.h"
 #include "HmmoApplication.h"
+#include "Match.h"
 
 GameManager* GameManager::instance = nullptr;
 
@@ -52,12 +53,20 @@ void GameManager::update()
 {
 	//match 대기중인 player가 2명 이상이면 경기를 하나 만든다
 	//일단 connect 여부 판단은 제외
-	if (matchPendingList.size() >= 2)
+	while (matchPendingList.size() >= 2)
 	{
 		auto player = matchPendingList.front();
 		matchPendingList.pop_front();
 		auto player2 = matchPendingList.front();
 		matchPendingList.pop_front();
+
+		//이 부분 중복 매치 등등 여부 판단하게
+		Match* newMatch = new Match(player, player2);
+
+		matchList.push_back(newMatch);
+		playerMatchMap[player->getId()] = newMatch;
+		playerMatchMap[player2->getId()] = newMatch;
+
 
 		MatchStart start;
 		start.type = Type::MATCH_START;
@@ -72,4 +81,9 @@ void GameManager::update()
 		context2->session = player2->getSession();
 		skylark::postContext(HmmoApplication::getInstance()->getIoPort(), context2, 0);
 	}
+}
+
+void GameManager::placeHero(std::shared_ptr<Player>& player, int posNum, Point * points)
+{
+	playerMatchMap[player->getId()]->placeHero(player, posNum, points);
 }

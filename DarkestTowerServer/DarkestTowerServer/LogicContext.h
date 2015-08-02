@@ -1,5 +1,6 @@
 #pragma once
 #include "skylark.h"
+#include "Hero.h"
 
 class ClientSession;
 class Player;
@@ -35,4 +36,18 @@ struct AddMatchPendingContext : skylark::Context
 	bool onFailure() override;
 
 	std::shared_ptr<Player> player;
+};
+
+struct AllocHeroContext : skylark::Context
+{
+	AllocHeroContext() = default;
+	~AllocHeroContext() override = default;
+
+	bool onComplete(int transferred, int key) override;
+
+	bool onFailure() override;
+
+	std::shared_ptr<Player> player;
+	int posNum;
+	Point pos[4];
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include "Skylark.h"
 #include "pcPacket.h"
+#include "Hero.h"
 
 class Player;
 class Match;
@@ -16,6 +17,8 @@ public:
 	void addMatchPendingList(std::shared_ptr<Player>& player);
 
 	void update();
+
+	void placeHero(std::shared_ptr<Player>& player, int posNum, Point* points);
 
 private:
 	GameManager() = default;

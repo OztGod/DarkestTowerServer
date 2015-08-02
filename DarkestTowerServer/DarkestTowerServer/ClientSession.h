@@ -20,8 +20,8 @@ public:
 	void sessionReset();
 
 	void onLoginRequest(const LoginRequest& packet);
-
 	void onRandomHeroRequest(const RandomHeroRequest& packet);
+	void onAllocHero(const AllocHero& packet);
 
 private:
 	std::shared_ptr<Player> player = nullptr;

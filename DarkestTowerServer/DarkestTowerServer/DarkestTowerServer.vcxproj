@@ -33,6 +33,7 @@
   <ItemGroup>
     <ClInclude Include="ClientSession.h" />
     <ClInclude Include="ClientSessionManager.h" />
+    <ClInclude Include="Hero.h" />
     <ClInclude Include="HmmoApplication.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="LogicContext.h" />
