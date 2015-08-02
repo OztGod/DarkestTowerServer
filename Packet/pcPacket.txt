@@ -3,7 +3,9 @@ enum Type : uint8
 	LOGIN_REQUEST = 0
 	LOGIN_RESPONSE = 1
     ALLOC_HERO = 2
-	TYPE_NUM = 3
+    RANDOM_HERO_REQUEST = 3
+    RANDOM_HERO_RESPONSE = 4
+	TYPE_NUM = 5
 }
 
 enum HeroClass : uint8
@@ -43,7 +45,15 @@ packet LoginResponse : Header
 packet AllocHero : Header
 {
     int8 allocNum
-    HeroClass heroClass arr 4
     int8 x arr 4
     int8 y arr 4
+}
+
+packet RandomHeroRequest : Header
+{
+}
+
+packet RandomHeroResponse : Header
+{
+    HeroClass heroClass arr 4
 }

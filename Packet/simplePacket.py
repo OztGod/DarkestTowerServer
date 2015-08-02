@@ -274,6 +274,7 @@ def endString(langType):
 print "generate..."
 
 packet = ""
+packetList = []
 lang = sys.argv[1]
 langType = -1
 if lang == "cpp":
@@ -301,6 +302,7 @@ with open(src, 'r') as list:
             newPacket = Packet()
             tokenIndex = newPacket.parsing(tokens, tokenIndex + 1)
             packets[newPacket.mName] = newPacket
+            packetList.append(newPacket)
         else:
             print tokens[tokenIndex] + " is invalid keyword."
             sys.exit()
@@ -309,8 +311,8 @@ out = beginString(langType)
 for enum in enums.values():
     out = out + enum.toString(langType)
 
-for packet in packets.values():
-    out = out + packet.toString(langType)
+for packet in packetList:
+    out = out + packets[packet.mName].toString(langType)
 
 out = out + endString(langType)
     

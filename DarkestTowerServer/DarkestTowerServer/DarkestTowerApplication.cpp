@@ -1,11 +1,13 @@
 #include "DarkestTowerApplication.h"
 #include "ClientSession.h"
 #include "ClientSessionManager.h"
+#include "GameManager.h"
 
 DarkestTowerApplication::DarkestTowerApplication(int threadNum_)
 	: threadNum(threadNum_)
 {
 	ClientSessionManager::getInstance()->setMaxConnection(1000);
+	GameManager::getInstance();
 }
 
 DarkestTowerApplication::~DarkestTowerApplication()

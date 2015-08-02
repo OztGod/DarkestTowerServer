@@ -33,6 +33,12 @@
     <ClCompile Include="ClientSessionManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="MatchMaker.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DarkestTowerApplication.h">
@@ -42,6 +48,12 @@
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="ClientSessionManager.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MatchMaker.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>

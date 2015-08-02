@@ -1,5 +1,6 @@
 #include "ClientSession.h"
 #include "ClientSessionManager.h"
+#include "GameManager.h"
 
 ClientSession::ClientSession(skylark::CompletionPort * port, std::size_t sendBufSize, std::size_t recvBufSize)
 	:Session(port, sendBufSize, recvBufSize)
@@ -12,6 +13,11 @@ ClientSession::ClientSession(skylark::CompletionPort * port, std::size_t sendBuf
 	handler.registerHandler<LoginRequest>(static_cast<int>(Type::LOGIN_REQUEST), [this](const LoginRequest& packet)
 	{
 		onLoginRequest(packet);
+	});
+
+	handler.registerHandler<RandomHeroRequest>(static_cast<int>(Type::RANDOM_HERO_REQUEST), [this](const RandomHeroRequest& packet)
+	{
+		onRandomHeroRequest(packet);
 	});
 }
 
@@ -67,8 +73,9 @@ void ClientSession::onLoginRequest(const LoginRequest & packet)
 
 	response.type = Type::LOGIN_RESPONSE;
 
-	if (strncmp("test", packet.id, packet.idLength) == 0 &&
-		strncmp("12345", packet.password, packet.passwordLength) == 0)
+	if (GameManager::getInstance()
+		->isValidAccount(packet.id, packet.idLength,
+			packet.password, packet.passwordLength))
 	{
 		response.result = LoginResult::SUCCESS;
 	}
@@ -78,4 +85,21 @@ void ClientSession::onLoginRequest(const LoginRequest & packet)
 	}
 
 	sendPacket(response);
+}
+
+void ClientSession::onRandomHeroRequest(const RandomHeroRequest & packet)
+{
+	std::vector<HeroClass> classes;
+
+	GameManager::getInstance()->getRandomHeros(classes);
+
+	RandomHeroResponse randomResponse;
+
+	randomResponse.type = Type::RANDOM_HERO_RESPONSE;
+	randomResponse.heroClass[0] = classes[0];
+	randomResponse.heroClass[1] = classes[1];
+	randomResponse.heroClass[2] = classes[2];
+	randomResponse.heroClass[3] = classes[3];
+
+	sendPacket(randomResponse);
 }
