@@ -30,12 +30,18 @@
     <ClCompile Include="..\..\Packet\pcPacket.h">
       <Filter>소스 파일\packet</Filter>
     </ClCompile>
+    <ClCompile Include="ClientSessionManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DarkestTowerApplication.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="ClientSession.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientSessionManager.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>

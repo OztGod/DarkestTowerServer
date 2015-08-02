@@ -1,4 +1,5 @@
 #include "ClientSession.h"
+#include "ClientSessionManager.h"
 
 ClientSession::ClientSession(skylark::CompletionPort * port, std::size_t sendBufSize, std::size_t recvBufSize)
 	:Session(port, sendBufSize, recvBufSize)
@@ -20,7 +21,13 @@ ClientSession::~ClientSession()
 
 bool ClientSession::onAccept()
 {
-	printf("connected!");
+	printf("connected!\n");
+	return true;
+}
+
+bool ClientSession::onDisconnect(int reason)
+{
+	printf("disconnected!\n");
 	return true;
 }
 
@@ -29,6 +36,29 @@ bool ClientSession::onRead()
 	handler.packetHandle(this);
 
 	return preRecv();
+}
+
+void ClientSession::onRelease()
+{
+	ClientSessionManager::getInstance()->returnClientSession(this);
+}
+
+void ClientSession::sessionReset()
+{
+	connected = false;
+	refCount = 0;
+	
+	recvBuffer.bufferReset();
+
+	{
+		skylark::Guard guard(sendLock, true);
+		sendBuffer.bufferReset();
+	}
+
+	socket->setLinger(true, 0);
+	delete socket;
+
+	socket = new skylark::Socket(skylark::ConnectType::TCP);
 }
 
 void ClientSession::onLoginRequest(const LoginRequest & packet)

@@ -1,9 +1,11 @@
 #include "DarkestTowerApplication.h"
 #include "ClientSession.h"
+#include "ClientSessionManager.h"
 
 DarkestTowerApplication::DarkestTowerApplication(int threadNum_)
 	: threadNum(threadNum_)
 {
+	ClientSessionManager::getInstance()->setMaxConnection(1000);
 }
 
 DarkestTowerApplication::~DarkestTowerApplication()
@@ -12,16 +14,12 @@ DarkestTowerApplication::~DarkestTowerApplication()
 
 int DarkestTowerApplication::run()
 {
-	//100 clients accept
-	for (int i = 0; i < 100; i++)
-	{
-		ClientSession* session = new ClientSession(mainPort, 4096, 4096);
-		skylark::AcceptContext* context = new skylark::AcceptContext(session, listen);
-
-		session->accept(listen, context);
-	}
-
 	printf("start server...\n");
+
+	while (ClientSessionManager::getInstance()->acceptClientSessions(listen))
+	{
+		Sleep(100);
+	}
 
 	for (auto thread : threads)
 	{
