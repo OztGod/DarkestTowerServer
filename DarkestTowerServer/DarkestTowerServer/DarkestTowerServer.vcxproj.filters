@@ -21,9 +21,6 @@
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="DarkestTowerApplication.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="ClientSession.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -39,11 +36,20 @@
     <ClCompile Include="Player.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Match.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LogicThread.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LogicContext.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="HmmoApplication.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DarkestTowerApplication.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
     <ClInclude Include="ClientSession.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
@@ -54,6 +60,18 @@
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Match.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicThread.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicContext.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="HmmoApplication.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>

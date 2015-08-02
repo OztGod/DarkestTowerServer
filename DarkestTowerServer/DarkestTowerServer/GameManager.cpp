@@ -1,4 +1,8 @@
 #include "GameManager.h"
+#include "Player.h"
+#include "ClientSession.h"
+#include "LogicContext.h"
+#include "HmmoApplication.h"
 
 GameManager* GameManager::instance = nullptr;
 
@@ -42,4 +46,30 @@ int GameManager::isValidAccount(const char * id, int idLength, const char * pass
 void GameManager::addMatchPendingList(std::shared_ptr<Player>& player)
 {
 	matchPendingList.push_back(player);
+}
+
+void GameManager::update()
+{
+	//match 대기중인 player가 2명 이상이면 경기를 하나 만든다
+	//일단 connect 여부 판단은 제외
+	if (matchPendingList.size() >= 2)
+	{
+		auto player = matchPendingList.front();
+		matchPendingList.pop_front();
+		auto player2 = matchPendingList.front();
+		matchPendingList.pop_front();
+
+		MatchStart start;
+		start.type = Type::MATCH_START;
+
+		auto context = new PacketContext<MatchStart>();
+		context->packet = start;
+		context->session = player->getSession();
+		skylark::postContext(HmmoApplication::getInstance()->getIoPort(), context, 0);
+
+		auto context2 = new PacketContext<MatchStart>();
+		context2->packet = start;
+		context2->session = player2->getSession();
+		skylark::postContext(HmmoApplication::getInstance()->getIoPort(), context2, 0);
+	}
 }

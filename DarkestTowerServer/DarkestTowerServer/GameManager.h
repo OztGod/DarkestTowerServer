@@ -3,6 +3,7 @@
 #include "pcPacket.h"
 
 class Player;
+class Match;
 
 class GameManager
 {
@@ -14,11 +15,15 @@ public:
 
 	void addMatchPendingList(std::shared_ptr<Player>& player);
 
+	void update();
+
 private:
 	GameManager() = default;
 	~GameManager() = default;
 
-	std::vector<std::shared_ptr<Player>> matchPendingList;
+	std::list<std::shared_ptr<Player>> matchPendingList;
+	std::vector<Match*> matchList;
+	std::map<int, Match*> playerMatchMap;
 
 	static GameManager* instance;
 };

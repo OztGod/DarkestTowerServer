@@ -22,16 +22,22 @@
     <ClCompile Include="..\..\Packet\pcPacket.h" />
     <ClCompile Include="ClientSession.cpp" />
     <ClCompile Include="ClientSessionManager.cpp" />
-    <ClCompile Include="DarkestTowerApplication.cpp" />
+    <ClCompile Include="HmmoApplication.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="LogicContext.cpp" />
+    <ClCompile Include="LogicThread.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Match.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientSession.h" />
     <ClInclude Include="ClientSessionManager.h" />
-    <ClInclude Include="DarkestTowerApplication.h" />
+    <ClInclude Include="HmmoApplication.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="LogicContext.h" />
+    <ClInclude Include="LogicThread.h" />
+    <ClInclude Include="Match.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>

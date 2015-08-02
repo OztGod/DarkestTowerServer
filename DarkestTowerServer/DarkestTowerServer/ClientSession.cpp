@@ -2,6 +2,8 @@
 #include "ClientSessionManager.h"
 #include "GameManager.h"
 #include "Player.h"
+#include "LogicContext.h"
+#include "HmmoApplication.h"
 
 ClientSession::ClientSession(skylark::CompletionPort * port, std::size_t sendBufSize, std::size_t recvBufSize)
 	:Session(port, sendBufSize, recvBufSize)
@@ -82,6 +84,12 @@ void ClientSession::onLoginRequest(const LoginRequest & packet)
 	{
 		response.result = LoginResult::SUCCESS;
 		player = std::make_shared<Player>(pid, this);
+
+		//일단 로그인 성공하면 무조건 match pending list에 넣는다
+		auto context = new AddMatchPendingContext();
+		context->player = player;
+
+		skylark::postContext(HmmoApplication::getInstance()->getLogicPort(), context, 0);
 	}
 	else
 	{

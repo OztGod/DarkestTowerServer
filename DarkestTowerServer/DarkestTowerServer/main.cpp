@@ -1,8 +1,8 @@
-#include "DarkestTowerApplication.h"
+#include "HmmoApplication.h"
 
 int main()
 {
-	DarkestTowerApplication app(4);
+	HmmoApplication app(4);
 
 	if (!app.init())
 	{
