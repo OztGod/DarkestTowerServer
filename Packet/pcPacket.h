@@ -77,6 +77,11 @@ struct GameData : Header
 	int8_t turn;
 	int8_t classNum;
 	HeroClass classes[4];
+	int8_t hp[4];
+	int8_t act[4];
+	int8_t skillNum[4];
+	int8_t skillIdx[4];
+	int8_t skillLevel[4];
 	int8_t x[4];
 	int8_t y[4];
 };

@@ -69,6 +69,11 @@ packet GameData : Header
     int8 turn
     int8 classNum
     HeroClass classes arr 4
+    int8 hp arr 4
+    int8 act arr 4
+    int8 skillNum arr 4
+    int8 skillIdx arr 4
+    int8 skillLevel arr 4
     int8 x arr 4
     int8 y arr 4
 }

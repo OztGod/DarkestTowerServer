@@ -15,14 +15,18 @@ GameManager * GameManager::getInstance()
 	return instance;
 }
 
-void GameManager::getRandomHeros(OUT std::vector<HeroClass>& classes)
+void GameManager::getRandomHeros(std::shared_ptr<Player>& player, OUT std::vector<HeroClass>& classes)
 {
 	//TODO : 나중에 DB에서 받아온 데이터 기반으로 랜덤 데이터 돌려주게끔
 	classes.clear();
+	std::vector<Hero> heros;
+
+	playerMatchMap[player->getId()]->randomHero(player);
+	playerMatchMap[player->getId()]->getHeroData(player, heros);
 
 	for (int i = 0; i < 4; i++)
 	{
-		classes.push_back(static_cast<HeroClass>(rand() % 6));
+		classes.push_back(heros[i].type);
 	}
 }
 
@@ -66,7 +70,6 @@ void GameManager::update()
 		matchList.push_back(newMatch);
 		playerMatchMap[player->getId()] = newMatch;
 		playerMatchMap[player2->getId()] = newMatch;
-
 
 		MatchStart start;
 		start.type = Type::MATCH_START;

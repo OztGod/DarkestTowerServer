@@ -88,6 +88,16 @@ public class GameData : Header
 	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
 	public byte[] classes;
 	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
+	public sbyte[] hp;
+	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
+	public sbyte[] act;
+	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
+	public sbyte[] skillNum;
+	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
+	public sbyte[] skillIdx;
+	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
+	public sbyte[] skillLevel;
+	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
 	public sbyte[] x;
 	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
 	public sbyte[] y;

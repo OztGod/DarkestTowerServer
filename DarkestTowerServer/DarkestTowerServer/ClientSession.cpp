@@ -108,7 +108,7 @@ void ClientSession::onRandomHeroRequest(const RandomHeroRequest & packet)
 {
 	std::vector<HeroClass> classes;
 
-	GameManager::getInstance()->getRandomHeros(classes);
+	GameManager::getInstance()->getRandomHeros(player, classes);
 
 	RandomHeroResponse randomResponse;
 

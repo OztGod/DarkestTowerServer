@@ -11,7 +11,7 @@ class GameManager
 public:
 	static GameManager* getInstance();
 
-	void getRandomHeros(OUT std::vector<HeroClass>& classes);
+	void getRandomHeros(std::shared_ptr<Player>& player, OUT std::vector<HeroClass>& classes);
 	int isValidAccount(const char* id, int idLength, const char* password, int pwdLength);
 
 	void addMatchPendingList(std::shared_ptr<Player>& player);

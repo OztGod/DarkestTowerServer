@@ -6,6 +6,13 @@ struct Point
 	int x, y;
 };
 
+
+struct Skill
+{
+	int idx;
+	int level;
+};
+
 struct Hero
 {
 	HeroClass type;
@@ -14,8 +21,5 @@ struct Hero
 	int act;
 	int maxAct;
 	Point pos;
-};
-
-struct Skill
-{
+	std::vector<Skill> skills;
 };
