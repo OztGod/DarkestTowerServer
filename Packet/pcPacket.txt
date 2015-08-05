@@ -27,6 +27,7 @@ enum HeroClass : uint8
 packet Header
 {
 	Type type
+    char foo
 }
 
 packet LoginRequest : Header

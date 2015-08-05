@@ -39,6 +39,8 @@ public class Header
 {
 	[MarshalAs(UnmanagedType.U1)]
 	public byte type;
+	[MarshalAs(UnmanagedType.U1)]
+	public char foo;
 }
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public class LoginRequest : Header

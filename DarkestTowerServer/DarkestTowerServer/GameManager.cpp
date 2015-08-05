@@ -117,11 +117,13 @@ void GameManager::createMatch()
 
 GameManager::GameManager()
 {
-	Account account[5];
-
 	for (int i = 0; i < 5; i++)
 	{
-		account[i].name = "test" + std::to_string(i);
-		account[i].pwd = "12345";
+		Account account;
+
+		account.name = "test" + std::to_string(i);
+		account.pwd = "12345";
+
+		accounts.push_back(account);
 	}
 }

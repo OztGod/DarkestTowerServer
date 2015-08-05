@@ -34,6 +34,7 @@ enum class LoginResult : uint8_t
 struct Header
 {
 	Type type;
+	char foo;
 };
 #pragma pack(pop)
 #pragma pack(push, 1)
