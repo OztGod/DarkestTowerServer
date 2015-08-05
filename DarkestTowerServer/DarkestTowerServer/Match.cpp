@@ -9,6 +9,9 @@ Match::Match(std::shared_ptr<Player>& player1, std::shared_ptr<Player>& player2)
 {
 	players[0] = player1;
 	players[1] = player2;
+
+	players[0]->matchStart(this);
+	players[1]->matchStart(this);
 }
 
 void Match::ready(std::shared_ptr<Player>& player)
@@ -37,7 +40,7 @@ void Match::ready(std::shared_ptr<Player>& player)
 
 				for (int s = 0; s < heroData[t][i].skills.size(); s++)
 				{
-					data.skillIdx[i] = heroData[t][i].skills[s].idx;
+					data.skillIdx[i] = heroData[t][i].skills[s].id;
 					data.skillLevel[i] = heroData[t][i].skills[s].level;
 				}
 
@@ -69,6 +72,64 @@ void Match::placeHero(std::shared_ptr<Player>& player, int num, Point * points)
 	ready(player);
 }
 
+void Match::moveHero(std::shared_ptr<Player>& player, int idx, Point pos)
+{
+	int t = getPlayerIndex(player);
+
+	int swapIdx = -1;
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (heroData[t][i].hp != 0 && heroData[t][i].pos.x == pos.x && heroData[t][i].pos.y == pos.y)
+		{
+			swapIdx = i;
+		}
+	}
+
+	Point prevPos = heroData[t][idx].pos;
+	heroData[t][idx].pos = pos;
+	heroData[t][idx].act -= 1;
+
+	if (swapIdx != -1)
+	{
+		//자리 바꾸기는 1 더 깎임
+		heroData[t][idx].act -= 1;
+		
+		heroData[t][swapIdx].pos = prevPos;
+
+		//자리 바뀐 애도 바뀌었다는 패킷 보내주기
+		ChangeHeroState state;
+		
+		state.type = Type::CHANGE_HERO_STATE;
+		state.idx = swapIdx;
+		state.hp = heroData[t][swapIdx].hp;
+		state.act = heroData[t][swapIdx].act;
+		state.x = heroData[t][swapIdx].pos.x;
+		state.y = heroData[t][swapIdx].pos.y;
+
+		auto context = new PacketContext<ChangeHeroState>();
+		context->packet = state;
+		context->session = player->getSession();
+
+		skylark::postContext(HmmoApplication::getInstance()->getIoPort(), context, 0);
+	}
+
+	ChangeHeroState state;
+
+	state.type = Type::CHANGE_HERO_STATE;
+	state.idx = idx;
+	state.hp = heroData[t][idx].hp;
+	state.act = heroData[t][idx].act;
+	state.x = heroData[t][idx].pos.x;
+	state.y = heroData[t][idx].pos.y;
+
+	auto context = new PacketContext<ChangeHeroState>();
+	context->packet = state;
+	context->session = player->getSession();
+
+	skylark::postContext(HmmoApplication::getInstance()->getIoPort(), context, 0);
+}
+
 void Match::randomHero(std::shared_ptr<Player>& player)
 {
 	int t = getPlayerIndex(player);
@@ -79,6 +140,10 @@ void Match::randomHero(std::shared_ptr<Player>& player)
 		heroData[t][i].type = static_cast<HeroClass>(rand() % 6);
 		heroData[t][i].maxHp = 5;
 		heroData[t][i].maxAct = 5;
+		heroData[t][i].hp = heroData[t][i].maxHp;
+		heroData[t][i].act = heroData[t][i].maxAct;
+		heroData[t][i].pos.x = 0;
+		heroData[t][i].pos.y = 0;
 	}
 }
 

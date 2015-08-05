@@ -56,7 +56,7 @@ bool HmmoApplication::init()
 	if (!listen->reuseAddr(true))
 		return false;
 
-	if (!listen->bind("127.0.0.1", 41010))
+	if (!listen->bind("10.73.43.193", 41010))
 		return false;
 
 	if (!listen->listen())

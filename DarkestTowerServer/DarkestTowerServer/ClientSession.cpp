@@ -61,6 +61,7 @@ void ClientSession::sessionReset()
 {
 	connected = false;
 	refCount = 0;
+	player = nullptr;
 	
 	recvBuffer.bufferReset();
 
@@ -126,6 +127,8 @@ void ClientSession::onAllocHero(const AllocHero & packet)
 	auto context = new AllocHeroContext();
 	context->player = player;
 	context->posNum = packet.allocNum;
+
+	printf("allocNum : %d x,y = %d,%d \n", packet.allocNum, packet.x[0], packet.y[0]);
 	
 	for (int i = 0; i < packet.allocNum; i++)
 	{

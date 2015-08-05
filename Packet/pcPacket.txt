@@ -7,7 +7,9 @@ enum Type : uint8
     RANDOM_HERO_RESPONSE = 4
     MATCH_START = 5
     GAME_DATA = 6
-	TYPE_NUM = 7
+    MOVE_HERO = 7
+    CHANGE_HERO_STATE = 8
+	TYPE_NUM = 9
 }
 
 enum HeroClass : uint8
@@ -77,4 +79,20 @@ packet GameData : Header
     int8 skillLevel arr 4
     int8 x arr 4
     int8 y arr 4
+}
+
+packet MoveHero : Header
+{
+    int8 idx
+    int8 x
+    int8 y
+}
+
+packet ChangeHeroState : Header
+{
+    int8 idx
+    int8 hp
+    int8 act
+    int8 x
+    int8 y
 }

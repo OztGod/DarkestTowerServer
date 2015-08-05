@@ -6,6 +6,13 @@
 class Player;
 class Match;
 
+struct Account
+{
+	std::string name;
+	std::string pwd;
+	bool isConnected = false;
+};
+
 class GameManager
 {
 public:
@@ -16,16 +23,18 @@ public:
 
 	void addMatchPendingList(std::shared_ptr<Player>& player);
 
+	void login(int pid);
+	void logout(int pid);
 	void update();
 
-	void placeHero(std::shared_ptr<Player>& player, int posNum, Point* points);
-
 private:
-	GameManager() = default;
+	GameManager();
 	~GameManager() = default;
 
 	std::list<std::shared_ptr<Player>> matchPendingList;
 	std::vector<Match*> matchList;
+	//юс╫ц
+	std::vector<Account> accounts;
 	std::map<int, Match*> playerMatchMap;
 
 	static GameManager* instance;

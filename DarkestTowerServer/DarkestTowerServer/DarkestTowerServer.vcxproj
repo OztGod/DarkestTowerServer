@@ -40,6 +40,7 @@
     <ClInclude Include="LogicThread.h" />
     <ClInclude Include="Match.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Skill.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Skylark\Skylark\Skylark\Skylark.vcxproj">

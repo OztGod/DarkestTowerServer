@@ -1,5 +1,7 @@
 #include "LogicContext.h"
 #include "GameManager.h"
+#include "Player.h"
+#include "Match.h"
 
 bool AddMatchPendingContext::onComplete(int transferred, int key)
 {
@@ -14,11 +16,22 @@ bool AddMatchPendingContext::onFailure()
 
 bool AllocHeroContext::onComplete(int transferred, int key)
 {
-	GameManager::getInstance()->placeHero(player, posNum, pos);
+	player->getMatch()->placeHero(player, posNum, pos);
 	return true;
 }
 
 bool AllocHeroContext::onFailure()
+{
+	return true;
+}
+
+bool MoveHeroContext::onComplete(int transferred, int key)
+{
+	player->getMatch()->moveHero(player, idx, pos);
+	return false;
+}
+
+bool MoveHeroContext::onFailure()
 {
 	return true;
 }

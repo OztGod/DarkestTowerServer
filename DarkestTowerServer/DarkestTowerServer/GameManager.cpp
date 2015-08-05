@@ -33,16 +33,15 @@ void GameManager::getRandomHeros(std::shared_ptr<Player>& player, OUT std::vecto
 int GameManager::isValidAccount(const char * id, int idLength, const char * password, int pwdLength)
 {
 	//계정 정보 체크 - 나중에 DB에서 체크하게끔 변경
-	if (strncmp("test", id, idLength) == 0 &&
-		strncmp("12345", password, pwdLength) == 0)
-	{
-		return 0;
-	}
 
-	if (strncmp("test2", id, idLength) == 0 &&
-		strncmp("12345", password, pwdLength) == 0)
+	for (int i = 0; i < 5; i++)
 	{
-		return 1;
+		if (strncmp(accounts[i].name.c_str(), id, idLength) == 0 &&
+			strncmp(accounts[i].pwd.c_str(), password, pwdLength) == 0 &&
+			accounts[i].isConnected == false)
+		{
+			return i;
+		}
 	}
 
 	return -1;
@@ -51,6 +50,16 @@ int GameManager::isValidAccount(const char * id, int idLength, const char * pass
 void GameManager::addMatchPendingList(std::shared_ptr<Player>& player)
 {
 	matchPendingList.push_back(player);
+}
+
+void GameManager::login(int pid)
+{
+	accounts[pid].isConnected = true;
+}
+
+void GameManager::logout(int pid)
+{
+	accounts[pid].isConnected = false;
 }
 
 void GameManager::update()
@@ -89,7 +98,13 @@ void GameManager::update()
 	}
 }
 
-void GameManager::placeHero(std::shared_ptr<Player>& player, int posNum, Point * points)
+GameManager::GameManager()
 {
-	playerMatchMap[player->getId()]->placeHero(player, posNum, points);
+	Account account[5];
+
+	for (int i = 0; i < 5; i++)
+	{
+		account[i].name = "test" + std::to_string(i);
+		account[i].pwd = "12345";
+	}
 }

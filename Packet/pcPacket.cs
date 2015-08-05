@@ -23,7 +23,9 @@ public enum Type
 	RANDOM_HERO_RESPONSE = 4,
 	MATCH_START = 5,
 	GAME_DATA = 6,
-	TYPE_NUM = 7,
+	MOVE_HERO = 7,
+	CHANGE_HERO_STATE = 8,
+	TYPE_NUM = 9,
 }
 public enum LoginResult
 {
@@ -103,5 +105,29 @@ public class GameData : Header
 	public sbyte[] x= new sbyte[4];
 	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
 	public sbyte[] y= new sbyte[4];
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class MoveHero : Header
+{
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte idx;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte x;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte y;
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class ChangeHeroState : Header
+{
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte idx;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte hp;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte act;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte x;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte y;
 }
 }

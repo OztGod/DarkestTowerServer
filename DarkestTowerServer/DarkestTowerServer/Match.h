@@ -15,9 +15,9 @@ public:
 	void ready(std::shared_ptr<Player>& player);
 
 	void placeHero(std::shared_ptr<Player>& player, int num, Point* points);
+	void moveHero(std::shared_ptr<Player>& player, int idx, Point pos);
 
 	void randomHero(std::shared_ptr<Player>& player);
-
 	void getHeroData(std::shared_ptr<Player>& player, OUT std::vector<Hero>& data);
 
 private:

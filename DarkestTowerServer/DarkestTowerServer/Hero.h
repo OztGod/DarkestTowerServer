@@ -1,17 +1,12 @@
 #pragma once
 #include "pcPacket.h"
+#include "Skill.h"
 
 struct Point
 {
 	int x, y;
 };
 
-
-struct Skill
-{
-	int idx;
-	int level;
-};
 
 struct Hero
 {

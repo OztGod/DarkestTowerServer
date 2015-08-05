@@ -19,7 +19,9 @@ enum class Type : uint8_t
 	RANDOM_HERO_RESPONSE = 4,
 	MATCH_START = 5,
 	GAME_DATA = 6,
-	TYPE_NUM = 7,
+	MOVE_HERO = 7,
+	CHANGE_HERO_STATE = 8,
+	TYPE_NUM = 9,
 };
 enum class LoginResult : uint8_t
 {
@@ -85,5 +87,23 @@ struct GameData : Header
 	int8_t skillLevel[4];
 	int8_t x[4];
 	int8_t y[4];
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct MoveHero : Header
+{
+	int8_t idx;
+	int8_t x;
+	int8_t y;
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct ChangeHeroState : Header
+{
+	int8_t idx;
+	int8_t hp;
+	int8_t act;
+	int8_t x;
+	int8_t y;
 };
 #pragma pack(pop)

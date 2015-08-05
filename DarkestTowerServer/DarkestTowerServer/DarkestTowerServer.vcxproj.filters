@@ -16,6 +16,9 @@
     <Filter Include="소스 파일\packet">
       <UniqueIdentifier>{b362bac2-e555-482d-abf1-e51906ddd34f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\gameData">
+      <UniqueIdentifier>{d5303ff7-9a0e-44ef-a83e-d38650a756ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -75,7 +78,10 @@
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="Hero.h">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\gameData</Filter>
+    </ClInclude>
+    <ClInclude Include="Skill.h">
+      <Filter>소스 파일\gameData</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

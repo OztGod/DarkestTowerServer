@@ -51,3 +51,17 @@ struct AllocHeroContext : skylark::Context
 	int posNum;
 	Point pos[4];
 };
+
+struct MoveHeroContext : skylark::Context
+{
+	MoveHeroContext() = default;
+	~MoveHeroContext() override = default;
+
+	bool onComplete(int transferred, int key) override;
+
+	bool onFailure() override;
+
+	std::shared_ptr<Player> player;
+	int idx;
+	Point pos;
+};
