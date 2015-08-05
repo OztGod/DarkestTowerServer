@@ -48,11 +48,7 @@ void Match::ready(std::shared_ptr<Player>& player)
 				data.y[i] = heroData[t][i].pos.y;
 			}
 
-			auto context = new PacketContext<GameData>();
-			context->packet = data;
-			context->session = players[t]->getSession();
-
-			skylark::postContext(HmmoApplication::getInstance()->getIoPort(), context, 0);
+			broadcastPacket(data);
 		}
 		
 		isStart = true;
@@ -107,11 +103,7 @@ void Match::moveHero(std::shared_ptr<Player>& player, int idx, Point pos)
 		state.x = heroData[t][swapIdx].pos.x;
 		state.y = heroData[t][swapIdx].pos.y;
 
-		auto context = new PacketContext<ChangeHeroState>();
-		context->packet = state;
-		context->session = player->getSession();
-
-		skylark::postContext(HmmoApplication::getInstance()->getIoPort(), context, 0);
+		sendPacket(t, state);
 	}
 
 	ChangeHeroState state;
@@ -123,11 +115,7 @@ void Match::moveHero(std::shared_ptr<Player>& player, int idx, Point pos)
 	state.x = heroData[t][idx].pos.x;
 	state.y = heroData[t][idx].pos.y;
 
-	auto context = new PacketContext<ChangeHeroState>();
-	context->packet = state;
-	context->session = player->getSession();
-
-	skylark::postContext(HmmoApplication::getInstance()->getIoPort(), context, 0);
+	sendPacket(t, state);
 }
 
 void Match::randomHero(std::shared_ptr<Player>& player)
@@ -166,14 +154,7 @@ void Match::turnChange(std::shared_ptr<Player>& player)
 	packet.type = Type::UPDATE_TURN;
 	packet.nowTurn = nowTurn;
 
-	for (int i = 0; i < 2; i++)
-	{
-		auto context = new PacketContext<UpdateTurn>();
-		context->packet = packet;
-		context->session = players[i]->getSession();
-
-		skylark::postContext(HmmoApplication::getInstance()->getIoPort(), context, 0);
-	}
+	broadcastPacket(packet);
 }
 
 int Match::getPlayerIndex(std::shared_ptr<Player>& player)

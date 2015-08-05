@@ -64,16 +64,31 @@ void GameManager::logout(int pid)
 
 void GameManager::update()
 {
+	createMatch();
+}
+
+void GameManager::createMatch()
+{
 	//match 대기중인 player가 2명 이상이면 경기를 하나 만든다
-	//일단 connect 여부 판단은 제외
 	while (matchPendingList.size() >= 2)
 	{
 		auto player = matchPendingList.front();
 		matchPendingList.pop_front();
+
+		if (!player->getSession()->isConnected() || player->getMatch() != nullptr)
+		{
+			continue;
+		}
+
 		auto player2 = matchPendingList.front();
 		matchPendingList.pop_front();
 
-		//이 부분 중복 매치 등등 여부 판단하게
+		if (!player2->getSession()->isConnected() || player2->getMatch() != nullptr)
+		{
+			matchPendingList.push_front(player);
+			continue;
+		}
+
 		Match* newMatch = new Match(player, player2);
 
 		matchList.push_back(newMatch);

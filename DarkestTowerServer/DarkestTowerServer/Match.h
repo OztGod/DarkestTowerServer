@@ -23,6 +23,26 @@ public:
 	void turnChange(std::shared_ptr<Player>& player);
 
 private:
+	template<typename Packet>
+	void sendPacket(int idx, Packet& p)
+	{
+		auto context = new PacketContext<Packet>();
+		
+		context->packet = p;
+		context->session = players[idx]->getSession();
+
+		skylark::postContext(HmmoApplication::getInstance()->getIoPort(), context, 0);
+	}
+
+	template<typename Packet>
+	void broadcastPacket(Packet& p)
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			sendPacket(i, p);
+		}
+	}
+
 	int getPlayerIndex(std::shared_ptr<Player>& player);
 	std::shared_ptr<Player> players[2];
 	bool isReady[2];

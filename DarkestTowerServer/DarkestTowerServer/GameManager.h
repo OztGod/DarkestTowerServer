@@ -27,6 +27,8 @@ public:
 	void logout(int pid);
 	void update();
 
+	void createMatch();
+
 private:
 	GameManager();
 	~GameManager() = default;
