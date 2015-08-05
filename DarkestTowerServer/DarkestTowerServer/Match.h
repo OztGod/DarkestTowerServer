@@ -5,13 +5,15 @@
 #ifndef OUT
 #define OUT
 #endif
+#define MAX_NUM 5
 
 class Player;
 
 class Match
 {
 public:
-	Match(std::shared_ptr<Player>& player1, std::shared_ptr<Player>& player2);
+	Match();
+	void registerPlayer(std::shared_ptr<Player>& player);
 	void ready(std::shared_ptr<Player>& player);
 
 	void placeHero(std::shared_ptr<Player>& player, int num, Point* points);
@@ -37,17 +39,20 @@ private:
 	template<typename Packet>
 	void broadcastPacket(Packet& p)
 	{
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < playerNum; i++)
 		{
 			sendPacket(i, p);
 		}
 	}
 
+	bool isAllReady();
+
 	int getPlayerIndex(std::shared_ptr<Player>& player);
-	std::shared_ptr<Player> players[2];
-	bool isReady[2];
-	int board[2][3][3];
-	Hero heroData[2][4];
+	std::shared_ptr<Player> players[MAX_NUM];
+	bool isReady[MAX_NUM];
+	int board[MAX_NUM][3][3];
+	Hero heroData[MAX_NUM][4];
+	int playerNum = 0;
 	int nowTurn = 0;
 	bool isStart = false;
 };

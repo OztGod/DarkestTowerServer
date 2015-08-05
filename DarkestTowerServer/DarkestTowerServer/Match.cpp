@@ -5,13 +5,15 @@
 #include "LogicContext.h"
 #include "HmmoApplication.h"
 
-Match::Match(std::shared_ptr<Player>& player1, std::shared_ptr<Player>& player2)
+Match::Match()
 {
-	players[0] = player1;
-	players[1] = player2;
+}
 
-	players[0]->matchStart(this);
-	players[1]->matchStart(this);
+void Match::registerPlayer(std::shared_ptr<Player>& player)
+{
+	players[playerNum] = player;
+	players[playerNum]->matchStart(this);
+	playerNum++;
 }
 
 void Match::ready(std::shared_ptr<Player>& player)
@@ -25,13 +27,13 @@ void Match::ready(std::shared_ptr<Player>& player)
 	isReady[t] = true;
 
 	//둘 다 ready(영웅 배치 제출)면 진짜 게임 시작(게임 시작 패킷 전송)
-	if (isReady[0] && isReady[1])
+	if (isAllReady())
 	{
 		GameData data;
 		data.classNum = 4;
 		data.type = Type::GAME_DATA;
 
-		for (int t = 0; t < 2; t++)
+		for (int t = 0; t < playerNum; t++)
 		{
 			data.turn = t;
 			
@@ -180,7 +182,7 @@ void Match::turnChange(std::shared_ptr<Player>& player)
 	if (!isStart || nowTurn != t)
 		return;
 
-	nowTurn = (nowTurn + 1) % 2;
+	nowTurn = (nowTurn + 1) % playerNum;
 
 	UpdateTurn packet;
 
@@ -190,11 +192,24 @@ void Match::turnChange(std::shared_ptr<Player>& player)
 	broadcastPacket(packet);
 }
 
+bool Match::isAllReady()
+{
+	for (int i = 0; i < playerNum; i++)
+	{
+		if (!isReady[i])
+		{
+			return false;
+		}
+	}
+	
+	return true;
+}
+
 int Match::getPlayerIndex(std::shared_ptr<Player>& player)
 {
 	int t = -1;
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < playerNum; i++)
 	{
 		if (players[i] == player)
 			t = i;

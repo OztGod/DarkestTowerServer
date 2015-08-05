@@ -89,7 +89,9 @@ void GameManager::createMatch()
 			continue;
 		}
 
-		Match* newMatch = new Match(player, player2);
+		Match* newMatch = new Match();
+		newMatch->registerPlayer(player);
+		newMatch->registerPlayer(player2);
 
 		matchList.push_back(newMatch);
 		playerMatchMap[player->getId()] = newMatch;
