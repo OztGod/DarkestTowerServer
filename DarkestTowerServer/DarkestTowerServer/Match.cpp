@@ -11,6 +11,7 @@ Match::Match()
 
 void Match::registerPlayer(std::shared_ptr<Player>& player)
 {
+	isReady[playerNum] = false;
 	players[playerNum] = player;
 	players[playerNum]->matchStart(this);
 	playerNum++;
