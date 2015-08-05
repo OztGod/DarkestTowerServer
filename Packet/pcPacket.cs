@@ -59,10 +59,10 @@ public class AllocHero : Header
 {
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte allocNum;
-	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
-	public sbyte[] x;
-	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
-	public sbyte[] y;
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+	public sbyte[] x= new sbyte[4];
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+	public sbyte[] y= new sbyte[4];
 }
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public class RandomHeroRequest : Header
@@ -71,8 +71,8 @@ public class RandomHeroRequest : Header
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public class RandomHeroResponse : Header
 {
-	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
-	public byte[] heroClass;
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+	public byte[] heroClass= new byte[4];
 }
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public class MatchStart : Header
@@ -87,21 +87,21 @@ public class GameData : Header
 	public sbyte turn;
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte classNum;
-	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
-	public byte[] classes;
-	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
-	public sbyte[] hp;
-	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
-	public sbyte[] act;
-	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
-	public sbyte[] skillNum;
-	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
-	public sbyte[] skillIdx;
-	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
-	public sbyte[] skillLevel;
-	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
-	public sbyte[] x;
-	[MarshalAs(UnManagedType.ByValArray, SizeConst = 4)]
-	public sbyte[] y;
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+	public byte[] classes= new byte[4];
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+	public sbyte[] hp= new sbyte[4];
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+	public sbyte[] act= new sbyte[4];
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+	public sbyte[] skillNum= new sbyte[4];
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+	public sbyte[] skillIdx= new sbyte[4];
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+	public sbyte[] skillLevel= new sbyte[4];
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+	public sbyte[] x= new sbyte[4];
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+	public sbyte[] y= new sbyte[4];
 }
 }

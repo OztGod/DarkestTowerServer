@@ -145,11 +145,11 @@ class Member:
             s = s + ";\n"
         elif langType == 1: # cs
             if self.mNum != 0:
-                s = s + "[MarshalAs(UnManagedType.ByValArray, SizeConst = " + str(self.mNum) + ")]\n\t"
+                s = s + "[MarshalAs(UnmanagedType.ByValArray, SizeConst = " + str(self.mNum) + ")]\n\t"
                 if self.mType in types:
-                    s = s + "public " + types[self.mType].mCs + "[] " + self.mName
+                    s = s + "public " + types[self.mType].mCs + "[] " + self.mName + "= new " + types[self.mType].mCs + "[" + str(self.mNum) + "]"
                 else:
-                    s = s + "public " + types[enums[self.mType].mType].mCs + "[] " + self.mName
+                    s = s + "public " + types[enums[self.mType].mType].mCs + "[] " + self.mName + "= new " + types[enums[self.mType].mType].mCs + "[" + str(self.mNum) + "]"
             elif self.mType == "string":
                 s = s + "[MarshalAs(UnmanagedType.ByValArray, SizeConst = " + str(self.mLength) + ")]\n\t"
                 s = s + "public char[] " + self.mName
