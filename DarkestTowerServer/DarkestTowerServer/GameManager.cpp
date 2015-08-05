@@ -73,11 +73,14 @@ void GameManager::update()
 
 		MatchStart start;
 		start.type = Type::MATCH_START;
+		start.turn = 0;
 
 		auto context = new PacketContext<MatchStart>();
 		context->packet = start;
 		context->session = player->getSession();
 		skylark::postContext(HmmoApplication::getInstance()->getIoPort(), context, 0);
+
+		start.turn = 1;
 
 		auto context2 = new PacketContext<MatchStart>();
 		context2->packet = start;
