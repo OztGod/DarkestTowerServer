@@ -62,6 +62,7 @@ packet RandomHeroResponse : Header
 
 packet MatchStart : Header
 {
+    int8 turn
 }
 
 packet GameData : Header

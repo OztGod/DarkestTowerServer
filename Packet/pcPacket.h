@@ -69,6 +69,7 @@ struct RandomHeroResponse : Header
 #pragma pack(push, 1)
 struct MatchStart : Header
 {
+	int8_t turn;
 };
 #pragma pack(pop)
 #pragma pack(push, 1)

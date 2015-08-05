@@ -77,6 +77,8 @@ public class RandomHeroResponse : Header
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public class MatchStart : Header
 {
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte turn;
 }
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public class GameData : Header
