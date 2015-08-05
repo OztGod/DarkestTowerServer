@@ -16,6 +16,10 @@ Match::Match(std::shared_ptr<Player>& player1, std::shared_ptr<Player>& player2)
 
 void Match::ready(std::shared_ptr<Player>& player)
 {
+	//이미 겜 시작한 상태면 무시
+	if (isStart)
+		return;
+
 	int t = getPlayerIndex(player);
 
 	isReady[t] = true;
@@ -59,6 +63,10 @@ void Match::placeHero(std::shared_ptr<Player>& player, int num, Point * points)
 {
 	int t = getPlayerIndex(player);
 
+	//히어로 위치 배정은 겜 시작하기 전에만 가능(레디 박기 전에만 가능)
+	if (isStart || isReady[t])
+		return;
+
 	for (int i = 0; i < num; i++)
 	{
 		heroData[t][i].pos.x = points[i].x;
@@ -70,7 +78,15 @@ void Match::placeHero(std::shared_ptr<Player>& player, int num, Point * points)
 
 void Match::moveHero(std::shared_ptr<Player>& player, int idx, Point pos)
 {
+	//겜 시작했을 때만 이동 가능
+	if (!isStart)
+		return;
+
 	int t = getPlayerIndex(player);
+
+	//자기 턴도 아닌데 움직일려고 하면 거부
+	if (t != nowTurn)
+		return;
 
 	int swapIdx = -1;
 
@@ -82,15 +98,22 @@ void Match::moveHero(std::shared_ptr<Player>& player, int idx, Point pos)
 		}
 	}
 
+	int needAct = 1;
+
+	//자리 바꾸는 케이스는 act 1 더 필요
+	if (swapIdx != -1)
+		needAct = 2;
+
+	//act 부족하면 거부
+	if (heroData[t][idx].act < needAct)
+		return;
+
 	Point prevPos = heroData[t][idx].pos;
 	heroData[t][idx].pos = pos;
-	heroData[t][idx].act -= 1;
+	heroData[t][idx].act -= needAct;
 
 	if (swapIdx != -1)
-	{
-		//자리 바꾸기는 1 더 깎임
-		heroData[t][idx].act -= 1;
-		
+	{		
 		heroData[t][swapIdx].pos = prevPos;
 
 		//자리 바뀐 애도 바뀌었다는 패킷 보내주기
@@ -122,6 +145,10 @@ void Match::randomHero(std::shared_ptr<Player>& player)
 {
 	int t = getPlayerIndex(player);
 
+	//겜시작 or 레디 박은 상태면 히어로 변경 불가
+	if (isStart || isReady[t])
+		return;
+
 	for (int i = 0; i < 4; i++)
 	{
 		//hero 랜덤 생성. 아직 영웅 정보 가져와서 초기화 못했으니 일단은 클래스만 랜덤으로.
@@ -147,6 +174,12 @@ void Match::getHeroData(std::shared_ptr<Player>& player, OUT std::vector<Hero>& 
 
 void Match::turnChange(std::shared_ptr<Player>& player)
 {
+	int t = getPlayerIndex(player);
+
+	//겜이 시작 안했거나, 자기 턴도 아니면서 턴 바꿀려고 한 경우 무시
+	if (!isStart || nowTurn != t)
+		return;
+
 	nowTurn = (nowTurn + 1) % 2;
 
 	UpdateTurn packet;
