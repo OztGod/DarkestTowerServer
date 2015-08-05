@@ -157,6 +157,25 @@ void Match::getHeroData(std::shared_ptr<Player>& player, OUT std::vector<Hero>& 
 	}
 }
 
+void Match::turnChange(std::shared_ptr<Player>& player)
+{
+	nowTurn = (nowTurn + 1) % 2;
+
+	UpdateTurn packet;
+
+	packet.type = Type::UPDATE_TURN;
+	packet.nowTurn = nowTurn;
+
+	for (int i = 0; i < 2; i++)
+	{
+		auto context = new PacketContext<UpdateTurn>();
+		context->packet = packet;
+		context->session = players[i]->getSession();
+
+		skylark::postContext(HmmoApplication::getInstance()->getIoPort(), context, 0);
+	}
+}
+
 int Match::getPlayerIndex(std::shared_ptr<Player>& player)
 {
 	int t = -1;

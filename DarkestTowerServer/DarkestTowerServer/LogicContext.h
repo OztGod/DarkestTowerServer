@@ -65,3 +65,15 @@ struct MoveHeroContext : skylark::Context
 	int idx;
 	Point pos;
 };
+
+struct TurnEndContext : skylark::Context
+{
+	TurnEndContext() = default;
+	~TurnEndContext() override = default;
+
+	bool onComplete(int transferred, int key) override;
+
+	bool onFailure() override;
+
+	std::shared_ptr<Player> player;
+};

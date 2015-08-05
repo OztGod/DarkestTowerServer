@@ -35,3 +35,14 @@ bool MoveHeroContext::onFailure()
 {
 	return true;
 }
+
+bool TurnEndContext::onComplete(int transferred, int key)
+{
+	player->getMatch()->turnChange(player);
+	return true;
+}
+
+bool TurnEndContext::onFailure()
+{
+	return true;
+}

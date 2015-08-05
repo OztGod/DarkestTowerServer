@@ -27,6 +27,16 @@ ClientSession::ClientSession(skylark::CompletionPort * port, std::size_t sendBuf
 	{
 		onAllocHero(packet);
 	});
+
+	handler.registerHandler<TurnEnd>(static_cast<int>(Type::TURN_END), [this](const TurnEnd& packet)
+	{
+		onTurnEnd(packet);
+	});
+
+	handler.registerHandler<MoveHero>(static_cast<int>(Type::MOVE_HERO), [this](const MoveHero& packet)
+	{
+		onMoveHero(packet);
+	});
 }
 
 ClientSession::~ClientSession()
@@ -135,6 +145,25 @@ void ClientSession::onAllocHero(const AllocHero & packet)
 		context->pos[i].x = packet.x[i];
 		context->pos[i].y = packet.y[i];
 	}
+
+	skylark::postContext(HmmoApplication::getInstance()->getLogicPort(), context, 0);
+}
+
+void ClientSession::onMoveHero(const MoveHero & packet)
+{
+	auto context = new MoveHeroContext();
+	context->player = player;
+	context->pos.x = packet.x;
+	context->pos.y = packet.y;
+	context->idx = packet.idx;
+
+	skylark::postContext(HmmoApplication::getInstance()->getLogicPort(), context, 0);
+}
+
+void ClientSession::onTurnEnd(const TurnEnd & packet)
+{
+	auto context = new TurnEndContext();
+	context->player = player;
 
 	skylark::postContext(HmmoApplication::getInstance()->getLogicPort(), context, 0);
 }

@@ -25,7 +25,9 @@ public enum Type
 	GAME_DATA = 6,
 	MOVE_HERO = 7,
 	CHANGE_HERO_STATE = 8,
-	TYPE_NUM = 9,
+	TURN_END = 9,
+	UPDATE_TURN = 10,
+	TYPE_NUM = 11,
 }
 public enum LoginResult
 {
@@ -129,5 +131,17 @@ public class ChangeHeroState : Header
 	public sbyte x;
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte y;
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class TurnEnd : Header
+{
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte turn;
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class UpdateTurn : Header
+{
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte nowTurn;
 }
 }

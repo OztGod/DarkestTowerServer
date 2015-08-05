@@ -20,6 +20,8 @@ public:
 	void randomHero(std::shared_ptr<Player>& player);
 	void getHeroData(std::shared_ptr<Player>& player, OUT std::vector<Hero>& data);
 
+	void turnChange(std::shared_ptr<Player>& player);
+
 private:
 	int getPlayerIndex(std::shared_ptr<Player>& player);
 	std::shared_ptr<Player> players[2];

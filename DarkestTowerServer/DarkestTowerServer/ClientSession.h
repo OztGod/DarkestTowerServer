@@ -22,6 +22,8 @@ public:
 	void onLoginRequest(const LoginRequest& packet);
 	void onRandomHeroRequest(const RandomHeroRequest& packet);
 	void onAllocHero(const AllocHero& packet);
+	void onMoveHero(const MoveHero& packet);
+	void onTurnEnd(const TurnEnd& packet);
 
 private:
 	std::shared_ptr<Player> player = nullptr;

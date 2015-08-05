@@ -21,7 +21,9 @@ enum class Type : uint8_t
 	GAME_DATA = 6,
 	MOVE_HERO = 7,
 	CHANGE_HERO_STATE = 8,
-	TYPE_NUM = 9,
+	TURN_END = 9,
+	UPDATE_TURN = 10,
+	TYPE_NUM = 11,
 };
 enum class LoginResult : uint8_t
 {
@@ -105,5 +107,17 @@ struct ChangeHeroState : Header
 	int8_t act;
 	int8_t x;
 	int8_t y;
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct TurnEnd : Header
+{
+	int8_t turn;
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct UpdateTurn : Header
+{
+	int8_t nowTurn;
 };
 #pragma pack(pop)
