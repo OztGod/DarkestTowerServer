@@ -52,6 +52,7 @@ bool ClientSession::onAccept()
 bool ClientSession::onDisconnect(int reason)
 {
 	printf("disconnected!\n");
+
 	return true;
 }
 

@@ -2,6 +2,8 @@
 
 int main()
 {
+	srand(time(nullptr));
+
 	HmmoApplication app(4);
 
 	if (!app.init())

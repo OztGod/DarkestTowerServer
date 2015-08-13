@@ -30,6 +30,7 @@ void Match::ready(std::shared_ptr<Player>& player)
 	//둘 다 ready(영웅 배치 제출)면 진짜 게임 시작(게임 시작 패킷 전송)
 	if (isAllReady())
 	{
+		printf("send gameData...\n");
 		GameData data;
 		data.classNum = 4;
 		data.type = Type::GAME_DATA;
@@ -112,6 +113,12 @@ void Match::moveHero(std::shared_ptr<Player>& player, int idx, Point pos)
 		return;
 
 	Point prevPos = heroData[t][idx].pos;
+
+	//pos 바꾸는 위치가 이상하면 거부
+	int delta = abs(pos.x - prevPos.x + pos.y - prevPos.y);
+	if (delta != 1)
+		return;
+
 	heroData[t][idx].pos = pos;
 	heroData[t][idx].act -= needAct;
 
