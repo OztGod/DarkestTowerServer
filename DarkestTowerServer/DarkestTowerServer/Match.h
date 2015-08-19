@@ -56,6 +56,14 @@ private:
 		}
 	}
 
+	void sendReject(int idx)
+	{
+		Reject packet;
+		packet.type = Type::REJECT;
+
+		sendPacket(idx, packet);
+	}
+
 	bool isAllReady();
 
 	int getPlayerIndex(std::shared_ptr<Player>& player);

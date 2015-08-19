@@ -21,11 +21,14 @@ void Match::registerPlayer(std::shared_ptr<Player>& player)
 
 void Match::ready(std::shared_ptr<Player>& player)
 {
+	int t = getPlayerIndex(player);
+
 	//이미 겜 시작한 상태면 무시
 	if (isStart)
+	{
+		sendReject(t);
 		return;
-
-	int t = getPlayerIndex(player);
+	}
 
 	isReady[t] = true;
 
@@ -80,7 +83,10 @@ void Match::placeHero(std::shared_ptr<Player>& player, int num, Point * points)
 
 	//히어로 위치 배정은 겜 시작하기 전에만 가능(레디 박기 전에만 가능)
 	if (isStart || isReady[t])
+	{
+		sendReject(t);
 		return;
+	}
 
 	for (int i = 0; i < num; i++)
 	{
@@ -93,10 +99,13 @@ void Match::placeHero(std::shared_ptr<Player>& player, int num, Point * points)
 void Match::moveHero(std::shared_ptr<Player>& player, int idx, Point pos)
 {
 	//겜 시작했을 때만 이동 가능
-	if (!isStart)
-		return;
-
 	int t = getPlayerIndex(player);
+
+	if (!isStart)
+	{
+		sendReject(t);
+		return;
+	}
 
 	//자기 턴도 아닌데 움직일려고 하면 거부
 	if (t != nowTurn)
@@ -120,13 +129,19 @@ void Match::moveHero(std::shared_ptr<Player>& player, int idx, Point pos)
 
 	//act 부족하면 거부
 	if (!heroData[t][idx]->consumeAct(needAct))
+	{
+		sendReject(t);
 		return;
+	}
 
 	Point prevPos = heroData[t][idx]->getPos();
 
 	//pos 바꾸는 위치가 이상하면 거부
 	if (!heroData[t][idx]->move(pos))
+	{
+		sendReject(t);
 		return;
+	}
 
 	map.move(prevPos, pos, t);
 
@@ -147,8 +162,11 @@ void Match::randomHero(std::shared_ptr<Player>& player)
 
 	//겜시작 or 레디 박은 상태면 히어로 변경 불가
 	if (isStart || isReady[t])
+	{
+		sendReject(t);
 		return;
-
+	}
+	
 	heroData[t].clear();
 
 	for (int i = 0; i < 4; i++)
@@ -212,6 +230,7 @@ void Match::getSkillRange(std::shared_ptr<Player>& player, int heroIdx, int skil
 	//skill 쓸 수 있는 위치 아니면 무시
 	if (!skill->isActEnable(heroPos, heroData[t], heroData[(t + 1) % 2]))
 	{
+		sendReject(t);
 		return;
 	}
 
@@ -247,7 +266,10 @@ void Match::turnChange(std::shared_ptr<Player>& player)
 
 	//겜이 시작 안했거나, 자기 턴도 아니면서 턴 바꿀려고 한 경우 무시
 	if (!isStart || nowTurn != t)
+	{
+		sendReject(t);
 		return;
+	}
 
 	nowTurn = (nowTurn + 1) % playerNum;
 
@@ -274,21 +296,33 @@ void Match::actHero(std::shared_ptr<Player>& player, int heroIdx, int skillIdx, 
 
 	//skill 사용에 필요한 act 포인트 남아있지 않은 경우 무시
 	if (skill->getAct() > heroData[t][heroIdx]->getAct())
+	{
+		sendReject(t);
 		return;
+	}
 
 	//skill이 아직 cool인 경우 무시
 	if (heroData[t][heroIdx]->getSkillCool(skillIdx) > 0)
+	{
+		sendReject(t);
 		return;
+	}
 
 	//skill 사용 불가능한 위치일 경우 무시
 	if (!skill->isActEnable(heroPos, heroData[t], heroData[(t + 1) % 2]))
+	{
+		sendReject(t);
 		return;
+	}
 
 	auto heroList = skill->getHeroInEffect(pos, heroData[t], heroData[(t + 1) % 2]);
 			
 	//skill 효과 범위에 들어가는 캐릭터가 하나도 없을 경우 무시
 	if (heroList.size() == 0)
+	{
+		sendReject(t);
 		return;
+	}
 
 	//스킬 사용했으므로 사용한 놈 act 감소시키고 스킬 쿨 돌게 만든다
 	heroData[t][heroIdx]->setSkillCool(skillIdx, skill->getCool());
