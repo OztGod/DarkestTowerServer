@@ -24,7 +24,7 @@ void GameManager::getRandomHeros(std::shared_ptr<Player>& player, OUT std::vecto
 	playerMatchMap[player->getId()]->randomHero(player);
 	playerMatchMap[player->getId()]->getHeroData(player, heros);
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < heros.size(); i++)
 	{
 		classes.push_back(heros[i]->getType());
 	}

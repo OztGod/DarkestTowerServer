@@ -151,7 +151,7 @@ void Match::randomHero(std::shared_ptr<Player>& player)
 
 	heroData[t].clear();
 
-	for (int i = 0; i < heroData[t].size(); i++)
+	for (int i = 0; i < 4; i++)
 	{
 		heroData[t].push_back(getRandomHero());
 	}
@@ -254,6 +254,7 @@ void Match::turnChange(std::shared_ptr<Player>& player)
 	for (int i = 0; i < heroData[t].size(); i++)
 	{
 		heroData[nowTurn][i]->turnUpdate();
+		sendHeroState(t, i);
 	}
 
 	UpdateTurn packet;
