@@ -2,6 +2,7 @@
 #include <memory>
 #include <vector>
 #include "Hero.h"
+#include "Map.h"
 #ifndef OUT
 #define OUT
 #endif
@@ -61,4 +62,5 @@ private:
 	int playerNum = 0;
 	int nowTurn = 0;
 	bool isStart = false;
+	Map map;
 };

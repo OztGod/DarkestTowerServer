@@ -21,10 +21,12 @@
   <ItemGroup>
     <ClCompile Include="..\..\Packet\pcPacket.h" />
     <ClCompile Include="Archer.cpp" />
+    <ClCompile Include="ArcherAttack.cpp" />
     <ClCompile Include="ClientSession.cpp" />
     <ClCompile Include="ClientSessionManager.cpp" />
     <ClCompile Include="Fighter.cpp" />
     <ClCompile Include="FighterAttack.cpp" />
+    <ClCompile Include="Heal.cpp" />
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="HmmoApplication.cpp" />
     <ClCompile Include="GameManager.cpp" />
@@ -32,31 +34,41 @@
     <ClCompile Include="LogicThread.cpp" />
     <ClCompile Include="Magician.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="Match.cpp" />
     <ClCompile Include="Monk.cpp" />
+    <ClCompile Include="MonkAttack.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Priest.cpp" />
     <ClCompile Include="Skill.cpp" />
     <ClCompile Include="Thief.cpp" />
+    <ClCompile Include="ThiefAttack.cpp" />
+    <ClCompile Include="ThunderStorm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Archer.h" />
+    <ClInclude Include="ArcherAttack.h" />
     <ClInclude Include="ClientSession.h" />
     <ClInclude Include="ClientSessionManager.h" />
     <ClInclude Include="Fighter.h" />
     <ClInclude Include="FighterAttack.h" />
+    <ClInclude Include="Heal.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="HmmoApplication.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="LogicContext.h" />
     <ClInclude Include="LogicThread.h" />
     <ClInclude Include="Magician.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="Match.h" />
     <ClInclude Include="Monk.h" />
+    <ClInclude Include="MonkAttack.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Priest.h" />
     <ClInclude Include="Skill.h" />
     <ClInclude Include="Thief.h" />
+    <ClInclude Include="ThiefAttack.h" />
+    <ClInclude Include="ThunderStorm.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>
   <ItemGroup>

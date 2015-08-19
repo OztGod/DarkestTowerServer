@@ -1,11 +1,11 @@
 #pragma once
 #include "Skill.h"
 
-class FighterAttack : public Skill
+class ThiefAttack : public Skill
 {
 public:
-	FighterAttack();
-	~FighterAttack() override = default;
+	ThiefAttack();
+	~ThiefAttack() override = default;
 
 	bool isActEnable(Point pos, const Map& map, int t) const override;
 

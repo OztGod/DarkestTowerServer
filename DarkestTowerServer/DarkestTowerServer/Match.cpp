@@ -8,6 +8,7 @@
 
 Match::Match()
 {
+	map.reset();
 }
 
 void Match::registerPlayer(std::shared_ptr<Player>& player)
@@ -55,6 +56,8 @@ void Match::ready(std::shared_ptr<Player>& player)
 
 				data.x[i] = heroData[t][i]->getPos().x;
 				data.y[i] = heroData[t][i]->getPos().y;
+
+				map.set(heroData[t][i]->getPos().x, heroData[t][i]->getPos().y, t, true);
 			}
 
 			broadcastPacket(data);
@@ -118,6 +121,8 @@ void Match::moveHero(std::shared_ptr<Player>& player, int idx, Point pos)
 	if (!heroData[t][idx]->setPos(pos))
 		return;
 
+	map.move(prevPos, pos, t);
+
 	if (swapIdx != -1)
 	{		
 		heroData[t][swapIdx]->setPos(prevPos);
@@ -167,7 +172,7 @@ void Match::selectHero(std::shared_ptr<Player>& player, int idx)
 	{
 		auto skill = heroData[t][idx]->getSkill(i);
 
-		if (skill->isValidActPos(heroPos) && heroData[t][idx]->getSkillCool(i) == 0)
+		if (skill->isValidActPos(heroPos, map, t) && heroData[t][idx]->getSkillCool(i) == 0)
 		{
 			validSkills.push_back(i);
 		}
@@ -196,12 +201,12 @@ void Match::getSkillRange(std::shared_ptr<Player>& player, int heroIdx, int skil
 	auto skill = heroData[t][heroIdx]->getSkill(skillIdx);
 
 	//skill 쓸 수 있는 위치 아니면 무시
-	if (!skill->isActEnable(heroPos))
+	if (!skill->isActEnable(heroPos, map, t))
 	{
 		return;
 	}
 
-	auto range = skill->getRange(heroPos);
+	auto range = skill->getRange(heroPos, map, t);
 	auto effect = skill->getEffectRange(heroPos);
 
 	SkillRangeResponse packet;
@@ -237,6 +242,11 @@ void Match::turnChange(std::shared_ptr<Player>& player)
 
 	nowTurn = (nowTurn + 1) % playerNum;
 
+	for (int i = 0; i < 4; i++)
+	{
+		heroData[nowTurn][i]->turnUpdate();
+	}
+
 	UpdateTurn packet;
 
 	packet.type = Type::UPDATE_TURN;
@@ -261,7 +271,7 @@ void Match::actHero(std::shared_ptr<Player>& player, int heroIdx, int skillIdx, 
 		return;
 
 	//skill 사용 불가능한 위치일 경우 무시
-	if (!skill->isActEnable(heroPos))
+	if (!skill->isActEnable(heroPos, map, t))
 		return;
 
 	bool isEffect = false;
@@ -270,10 +280,10 @@ void Match::actHero(std::shared_ptr<Player>& player, int heroIdx, int skillIdx, 
 	{
 		for (int idx = 0; idx < 4; idx++)
 		{
-			if (skill->doSkill(pos, heroData[t][idx].get(), p == t))
+			if (skill->doSkill(pos, heroData[t][heroIdx].get(), heroData[p][idx].get(), p == t))
 			{
 				isEffect = true;
-				
+
 				//스킬 효과 받았으므로 갱신된 hero 상태 돌려준다
 				sendHeroState(p, idx);
 				break;

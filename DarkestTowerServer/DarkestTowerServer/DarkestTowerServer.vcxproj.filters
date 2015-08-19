@@ -111,6 +111,24 @@
     <ClCompile Include="Skill.cpp">
       <Filter>소스 파일\gameData</Filter>
     </ClCompile>
+    <ClCompile Include="ArcherAttack.cpp">
+      <Filter>소스 파일\gameData\Hero\Archer</Filter>
+    </ClCompile>
+    <ClCompile Include="ThunderStorm.cpp">
+      <Filter>소스 파일\gameData\Hero\Magician</Filter>
+    </ClCompile>
+    <ClCompile Include="MonkAttack.cpp">
+      <Filter>소스 파일\gameData\Hero\Monk</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>소스 파일\game</Filter>
+    </ClCompile>
+    <ClCompile Include="ThiefAttack.cpp">
+      <Filter>소스 파일\gameData\Hero\Thief</Filter>
+    </ClCompile>
+    <ClCompile Include="Heal.cpp">
+      <Filter>소스 파일\gameData\Hero\Priest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientSession.h">
@@ -166,6 +184,24 @@
     </ClInclude>
     <ClInclude Include="FighterAttack.h">
       <Filter>소스 파일\gameData\Hero\Fighter</Filter>
+    </ClInclude>
+    <ClInclude Include="ArcherAttack.h">
+      <Filter>소스 파일\gameData\Hero\Archer</Filter>
+    </ClInclude>
+    <ClInclude Include="ThunderStorm.h">
+      <Filter>소스 파일\gameData\Hero\Magician</Filter>
+    </ClInclude>
+    <ClInclude Include="MonkAttack.h">
+      <Filter>소스 파일\gameData\Hero\Monk</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>소스 파일\game</Filter>
+    </ClInclude>
+    <ClInclude Include="ThiefAttack.h">
+      <Filter>소스 파일\gameData\Hero\Thief</Filter>
+    </ClInclude>
+    <ClInclude Include="Heal.h">
+      <Filter>소스 파일\gameData\Hero\Priest</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
