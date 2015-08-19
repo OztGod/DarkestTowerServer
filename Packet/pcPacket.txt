@@ -74,7 +74,7 @@ enum SkillType : uint8
 packet Header
 {
 	Type type
-    char foo
+    trash foo
 }
 
 packet LoginRequest : Header

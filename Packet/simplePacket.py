@@ -17,7 +17,8 @@ types = {"int8" : Type("int8_t", "sbyte", "0", 1),
          "uint64" : Type("uint64_t", "UInt64", "0", 8),
          "float" : Type("float", "float", "0.0f", 4),
          "double" : Type("double", "double", "0.0", 8),
-         "char" : Type("char", "char", "\' \'", 1)}
+         "char" : Type("char", "char", "\' \'", 1),
+         "trash" : Type("char", "trash", "\' \'", 1)}
 
 enums = {}
 packets = {}
@@ -153,6 +154,9 @@ class Member:
             elif self.mType == "string":
                 s = s + "[MarshalAs(UnmanagedType.ByValArray, SizeConst = " + str(self.mLength) + ")]\n\t"
                 s = s + "public char[] " + self.mName
+            elif self.mType == "trash":
+                s = s + "[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1)]\n\t"
+                s = s + "public string " + self.mName
             elif self.mType in types:
                 s = s + "[MarshalAs(UnmanagedType.U" + str(self.mLength) + ")]\n\t"
                 s = s + "public " + types[self.mType].mCs + " " + self.mName
