@@ -5,7 +5,7 @@
 #ifndef OUT
 #define OUT
 #endif
-#define MAX_NUM 5
+#define MAX_NUM 2
 
 class Player;
 

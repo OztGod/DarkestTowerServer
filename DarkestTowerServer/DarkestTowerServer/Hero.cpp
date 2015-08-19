@@ -34,6 +34,11 @@ bool Hero::consumeAct(int value)
 	return true;
 }
 
+void Hero::damage(int value)
+{
+	hp -= value;
+}
+
 std::unique_ptr<Hero> getRandomHero()
 {
 	std::unique_ptr<Hero> hero = nullptr;

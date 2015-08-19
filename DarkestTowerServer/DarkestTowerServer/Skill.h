@@ -3,6 +3,8 @@
 #include "pcPacket.h"
 #include <vector>
 
+class Hero;
+
 class Skill
 {
 public:
@@ -15,15 +17,24 @@ public:
 	SkillType getType() const { return type; }
 
 	//skill 해당 위치가 시전이 적절한 위치인지
-	virtual bool isValidPos(Point pos) const = 0;
+	bool isValidActPos(Point pos) const;
 
-	//skill 시전 범위 리턴
+	//내 위치가 시전을 할 수 있는 위치인지
+	virtual bool isActEnable(Point pos) const = 0;
+
+	//skill 쓸 수 있는 범위 리턴
 	virtual Range getRange(Point pos) const = 0;
 
-private:
+	//skill의 효과가 들어가는 범위 리턴. 상대 좌표
+	virtual std::vector<Point> getEffectRange(Point pos) const = 0;
+
+	virtual void doSkill(Point pos, Hero* target, bool isAlly) = 0;
+
+protected:
+	bool isHeroInEffect(Point pos, Hero* target, bool isAlly);
+
 	SkillType type;
 	int level;
 	int act;
 	int cool;
-
 };

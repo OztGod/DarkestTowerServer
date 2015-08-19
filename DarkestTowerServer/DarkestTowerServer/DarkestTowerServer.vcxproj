@@ -24,6 +24,7 @@
     <ClCompile Include="ClientSession.cpp" />
     <ClCompile Include="ClientSessionManager.cpp" />
     <ClCompile Include="Fighter.cpp" />
+    <ClCompile Include="FighterAttack.cpp" />
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="HmmoApplication.cpp" />
     <ClCompile Include="GameManager.cpp" />
@@ -35,6 +36,7 @@
     <ClCompile Include="Monk.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Priest.cpp" />
+    <ClCompile Include="Skill.cpp" />
     <ClCompile Include="Thief.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +44,7 @@
     <ClInclude Include="ClientSession.h" />
     <ClInclude Include="ClientSessionManager.h" />
     <ClInclude Include="Fighter.h" />
+    <ClInclude Include="FighterAttack.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="HmmoApplication.h" />
     <ClInclude Include="GameManager.h" />

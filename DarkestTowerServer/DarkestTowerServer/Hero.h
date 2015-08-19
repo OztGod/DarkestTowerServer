@@ -21,8 +21,9 @@ public:
 	const Skill* getSkill(int idx) const { return skills[idx].get(); }
 	bool setPos(Point pos_);
 	bool consumeAct(int value);
+	void damage(int value);
 
-private:
+protected:
 	HeroClass type;
 	int hp;
 	int maxHp;
