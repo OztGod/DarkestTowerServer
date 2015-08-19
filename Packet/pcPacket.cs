@@ -35,7 +35,8 @@ public enum Type
 	ACT_HERO = 15,
 	TURN_END = 16,
 	UPDATE_TURN = 17,
-	TYPE_NUM = 18,
+	REJECT = 18,
+	TYPE_NUM = 19,
 }
 public enum SkillType
 {
@@ -248,5 +249,9 @@ public class MatchEnd : Header
 {
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte winner;;
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class Reject : Header
+{
 }
 }

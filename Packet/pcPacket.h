@@ -31,7 +31,8 @@ enum class Type : uint8_t
 	ACT_HERO = 15,
 	TURN_END = 16,
 	UPDATE_TURN = 17,
-	TYPE_NUM = 18,
+	REJECT = 18,
+	TYPE_NUM = 19,
 };
 enum class SkillType : uint8_t
 {
@@ -210,5 +211,10 @@ struct EnemySkillShot : Header
 struct MatchEnd : Header
 {
 	int8_t winner;;
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct Reject : Header
+{
 };
 #pragma pack(pop)

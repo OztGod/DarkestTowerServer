@@ -25,6 +25,8 @@ enum Type : uint8
     
     TURN_END
     UPDATE_TURN
+    
+    REJECT
 	
     TYPE_NUM
 }
@@ -205,4 +207,8 @@ packet EnemySkillShot : Header
 packet MatchEnd : Header
 {
     int8 winner;
+}
+
+packet Reject : Header
+{
 }
