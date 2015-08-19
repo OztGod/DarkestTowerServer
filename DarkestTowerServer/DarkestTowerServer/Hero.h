@@ -30,7 +30,8 @@ public:
 	Point getPos() const { return pos; }
 	int getSkillNum() const { return skills.size(); }
 	const Skill* getSkill(int idx) const { return skills[idx].skill.get(); }
-	bool setPos(Point pos_);
+	void setPos(Point pos_);
+	bool move(Point pos_);
 	bool consumeAct(int value);
 	void damage(int value);
 	void setSkillCool(int idx, int cool);

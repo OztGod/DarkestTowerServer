@@ -118,7 +118,7 @@ void Match::moveHero(std::shared_ptr<Player>& player, int idx, Point pos)
 	Point prevPos = heroData[t][idx]->getPos();
 
 	//pos 바꾸는 위치가 이상하면 거부
-	if (!heroData[t][idx]->setPos(pos))
+	if (!heroData[t][idx]->move(pos))
 		return;
 
 	map.move(prevPos, pos, t);

@@ -11,7 +11,12 @@ Hero::Hero(HeroClass type_, int maxHp_, int maxAct_)
 {
 }
 
-bool Hero::setPos(Point pos_)
+void Hero::setPos(Point pos_)
+{
+	pos = pos_;
+}
+
+bool Hero::move(Point pos_)
 {
 	Point prevPos = pos;
 
@@ -19,7 +24,7 @@ bool Hero::setPos(Point pos_)
 	if (delta != 1)
 		return false;
 
-	pos = pos_;
+	setPos(pos_);
 
 	return true;
 }
