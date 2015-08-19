@@ -9,6 +9,7 @@ enum Type : uint8
     RANDOM_HERO_RESPONSE
     
     MATCH_START
+    MATCH_END
     
     GAME_DATA
     CHANGE_HERO_STATE
@@ -199,4 +200,9 @@ packet EnemySkillShot : Header
 {
     int8 heroIdx
     int8 skillIdx
+}
+
+packet MatchEnd : Header
+{
+    int8 winner;
 }

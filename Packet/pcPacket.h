@@ -19,18 +19,19 @@ enum class Type : uint8_t
 	RANDOM_HERO_REQUEST = 3,
 	RANDOM_HERO_RESPONSE = 4,
 	MATCH_START = 5,
-	GAME_DATA = 6,
-	CHANGE_HERO_STATE = 7,
-	SELECT_HERO = 8,
-	VALID_SKILLS = 9,
-	SKILL_RANGE_REQUEST = 10,
-	SKILL_RANGE_RESPONSE = 11,
-	ENEMY_SKILL_SHOT = 12,
-	MOVE_HERO = 13,
-	ACT_HERO = 14,
-	TURN_END = 15,
-	UPDATE_TURN = 16,
-	TYPE_NUM = 17,
+	MATCH_END = 6,
+	GAME_DATA = 7,
+	CHANGE_HERO_STATE = 8,
+	SELECT_HERO = 9,
+	VALID_SKILLS = 10,
+	SKILL_RANGE_REQUEST = 11,
+	SKILL_RANGE_RESPONSE = 12,
+	ENEMY_SKILL_SHOT = 13,
+	MOVE_HERO = 14,
+	ACT_HERO = 15,
+	TURN_END = 16,
+	UPDATE_TURN = 17,
+	TYPE_NUM = 18,
 };
 enum class SkillType : uint8_t
 {
@@ -203,5 +204,11 @@ struct EnemySkillShot : Header
 {
 	int8_t heroIdx;
 	int8_t skillIdx;
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct MatchEnd : Header
+{
+	int8_t winner;;
 };
 #pragma pack(pop)
