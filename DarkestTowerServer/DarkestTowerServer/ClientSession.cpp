@@ -91,13 +91,11 @@ void ClientSession::onLoginRequest(const LoginRequest& packet)
 		response.result = LoginResult::SUCCESS;
 		player = std::make_shared<Player>(pid, this);
 
-		printf("login succed! pid = %d\n", pid);
-
 		//일단 로그인 성공하면 무조건 match pending list에 넣는다
 		auto context = new AddMatchPendingContext();
 		context->player = player;
 
-		skylark::postContext(HmmoApplication::getInstance()->getLogicPort(), context, 0);
+		HmmoApplication::getInstance()->getLogicPort()->take(context, 0);
 	}
 	else
 	{

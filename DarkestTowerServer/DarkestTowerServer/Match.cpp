@@ -329,6 +329,47 @@ void Match::actHero(std::shared_ptr<Player>& player, int heroIdx, int skillIdx, 
 	}
 }
 
+bool Match::isEnd()
+{
+	//연결 끊기면 나머지 한쪽이 자동으로 부전승을 거둔다
+
+	if (!players[0]->getSession()->isConnected())
+	{
+		MatchEnd end;
+		end.type = Type::MATCH_END;
+		end.winner = 1;
+
+		resetPlayer();
+
+		broadcastPacket(end);
+
+		return true;
+	}
+
+	if (!players[1]->getSession()->isConnected())
+	{
+		MatchEnd end;
+		end.type = Type::MATCH_END;
+		end.winner = 0;
+
+		resetPlayer();
+		
+		broadcastPacket(end);
+
+		return true;
+	}
+
+	return false;
+}
+
+void Match::resetPlayer()
+{
+	players[0]->resetMatch();
+	players[1]->resetMatch();
+	GameManager::getInstance()->removePlayerMatchMap(players[0]);
+	GameManager::getInstance()->removePlayerMatchMap(players[1]);
+}
+
 void Match::sendHeroState(int t, int heroIdx)
 {
 	ChangeHeroState state;

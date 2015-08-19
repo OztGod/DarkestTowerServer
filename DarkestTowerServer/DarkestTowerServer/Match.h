@@ -29,7 +29,10 @@ public:
 	void turnChange(std::shared_ptr<Player>& player);
 	void actHero(std::shared_ptr<Player>& player, int heroIdx, int skillIdx, Point pos);
 
+	bool isEnd();
+
 private:
+	void resetPlayer();
 	void sendHeroState(int t, int heroIdx);
 
 	template<typename Packet>

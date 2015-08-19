@@ -28,6 +28,9 @@ public:
 	void update();
 
 	void createMatch();
+	void updateMatch();
+
+	void removePlayerMatchMap(std::shared_ptr<Player>& player);
 
 private:
 	GameManager();

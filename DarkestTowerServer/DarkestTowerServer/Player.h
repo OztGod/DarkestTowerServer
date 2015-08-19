@@ -31,6 +31,11 @@ public:
 		return nowMatch;
 	}
 
+	void resetMatch()
+	{
+		nowMatch = nullptr;
+	}
+
 private:
 	ClientSession* session = nullptr;
 	Match* nowMatch = nullptr;

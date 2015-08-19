@@ -54,17 +54,20 @@ void GameManager::addMatchPendingList(std::shared_ptr<Player>& player)
 
 void GameManager::login(int pid)
 {
+	printf("login! id = %d\n", pid);
 	accounts[pid].isConnected = true;
 }
 
 void GameManager::logout(int pid)
 {
+	printf("logout! id = %d\n", pid);
 	accounts[pid].isConnected = false;
 }
 
 void GameManager::update()
 {
 	createMatch();
+	updateMatch();
 }
 
 void GameManager::createMatch()
@@ -104,15 +107,53 @@ void GameManager::createMatch()
 		auto context = new PacketContext<MatchStart>();
 		context->packet = start;
 		context->session = player->getSession();
-		skylark::postContext(HmmoApplication::getInstance()->getIoPort(), context, 0);
+		HmmoApplication::getInstance()->getIoPort()->take(context, 0);
 
 		start.turn = 1;
 
 		auto context2 = new PacketContext<MatchStart>();
 		context2->packet = start;
 		context2->session = player2->getSession();
-		skylark::postContext(HmmoApplication::getInstance()->getIoPort(), context2, 0);
+		HmmoApplication::getInstance()->getIoPort()->take(context2, 0);
 	}
+}
+
+void GameManager::updateMatch()
+{
+	for (auto iter = matchList.begin(); iter != matchList.end();)
+	{
+		Match* match = *iter;
+
+		if (match->isEnd())
+		{
+			printf("match end\n");
+			delete match;
+			iter = matchList.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
+	}
+
+	for (auto iter = matchPendingList.begin(); iter != matchPendingList.end();)
+	{
+		auto& player = *iter;
+
+		if (!player->getSession()->isConnected())
+		{
+			iter = matchPendingList.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
+	}
+}
+
+void GameManager::removePlayerMatchMap(std::shared_ptr<Player>& player)
+{
+	playerMatchMap.erase(player->getId());
 }
 
 GameManager::GameManager()
