@@ -25,8 +25,6 @@ int HmmoApplication::run()
 
 	while (ClientSessionManager::getInstance()->acceptClientSessions(listen))
 	{
-		//logic thread 분리하자
-		GameManager::getInstance()->update();
 		Sleep(50);
 	}
 
@@ -56,7 +54,7 @@ bool HmmoApplication::init()
 	if (!listen->reuseAddr(true))
 		return false;
 
-	if (!listen->bind("10.73.43.238", 41010))
+	if (!listen->bind("10.73.44.30", 41010))
 		return false;
 
 	if (!listen->listen())

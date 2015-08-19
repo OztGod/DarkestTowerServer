@@ -25,11 +25,12 @@ enum class Type : uint8_t
 	VALID_SKILLS = 9,
 	SKILL_RANGE_REQUEST = 10,
 	SKILL_RANGE_RESPONSE = 11,
-	MOVE_HERO = 12,
-	ACT_HERO = 13,
-	TURN_END = 14,
-	UPDATE_TURN = 15,
-	TYPE_NUM = 16,
+	ENEMY_SKILL_SHOT = 12,
+	MOVE_HERO = 13,
+	ACT_HERO = 14,
+	TURN_END = 15,
+	UPDATE_TURN = 16,
+	TYPE_NUM = 17,
 };
 enum class SkillType : uint8_t
 {
@@ -136,6 +137,7 @@ struct MoveHero : Header
 #pragma pack(push, 1)
 struct ChangeHeroState : Header
 {
+	int8_t turn;
 	int8_t idx;
 	int8_t hp;
 	int8_t act;
@@ -194,5 +196,12 @@ struct ActHero : Header
 	int8_t skillIdx;
 	int8_t x;
 	int8_t y;
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct EnemySkillShot : Header
+{
+	int8_t heroIdx;
+	int8_t skillIdx;
 };
 #pragma pack(pop)

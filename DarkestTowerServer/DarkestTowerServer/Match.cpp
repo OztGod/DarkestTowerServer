@@ -64,6 +64,13 @@ void Match::ready(std::shared_ptr<Player>& player)
 		}
 		
 		isStart = true;
+
+		UpdateTurn packet;
+		
+		packet.type = Type::UPDATE_TURN;
+		packet.nowTurn = nowTurn;
+
+		broadcastPacket(packet);
 	}
 }
 
@@ -280,13 +287,9 @@ void Match::actHero(std::shared_ptr<Player>& player, int heroIdx, int skillIdx, 
 	{
 		for (int idx = 0; idx < 4; idx++)
 		{
-			if (skill->doSkill(pos, heroData[t][heroIdx].get(), heroData[p][idx].get(), p == t))
+			if (skill->isHeroInEffect(pos, heroData[t][heroIdx].get(), p == t))
 			{
 				isEffect = true;
-
-				//스킬 효과 받았으므로 갱신된 hero 상태 돌려준다
-				sendHeroState(p, idx);
-				break;
 			}
 		}
 
@@ -295,14 +298,35 @@ void Match::actHero(std::shared_ptr<Player>& player, int heroIdx, int skillIdx, 
 	}
 
 	//skill 효과 범위에 들어가는 캐릭터가 하나도 없을 경우 무시
-	if (!isEffect)
+	if (isEffect)
 		return;
 
-	//skill 효과 받은 애가 있다면 스킬 사용했으므로 사용한 놈 act 감소시키고 스킬 쿨 돌게 만든다
+	//스킬 사용했으므로 사용한 놈 act 감소시키고 스킬 쿨 돌게 만든다
 	heroData[t][heroIdx]->setSkillCool(skillIdx, skill->getCool());
 	heroData[t][heroIdx]->consumeAct(skill->getAct());
 
+	EnemySkillShot packet;
+	packet.type = Type::ENEMY_SKILL_SHOT;
+	packet.heroIdx = heroIdx;
+	packet.skillIdx = skillIdx;
+
+	//상대에게 스킬 사용했음을 나타내는 패킷 보냄
+	sendPacket((t + 1) % 2, packet);
+
 	sendHeroState(t, heroIdx);
+
+	for (int p = 0; p < playerNum; p++)
+	{
+		for (int idx = 0; idx < 4; idx++)
+		{
+			if (skill->doSkill(pos, heroData[t][heroIdx].get(), heroData[p][idx].get(), p == t))
+			{
+				//스킬 효과 받았으므로 갱신된 hero 상태 돌려준다
+				sendHeroState(p, idx);
+				break;
+			}
+		}
+	}
 }
 
 void Match::sendHeroState(int t, int heroIdx)
@@ -310,13 +334,14 @@ void Match::sendHeroState(int t, int heroIdx)
 	ChangeHeroState state;
 
 	state.type = Type::CHANGE_HERO_STATE;
+	state.turn = t;
 	state.idx = heroIdx;
 	state.hp = heroData[t][heroIdx]->getHp();
 	state.act = heroData[t][heroIdx]->getAct();
 	state.x = heroData[t][heroIdx]->getPos().x;
 	state.y = heroData[t][heroIdx]->getPos().y;
 
-	sendPacket(t, state);
+	broadcastPacket(state);
 }
 
 bool Match::isAllReady()
