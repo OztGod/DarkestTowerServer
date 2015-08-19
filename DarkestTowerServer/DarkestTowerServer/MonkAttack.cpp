@@ -1,12 +1,13 @@
 #include "MonkAttack.h"
 #include "Hero.h"
+#include <algorithm>
 
 MonkAttack::MonkAttack()
 	:Skill(SkillType::MONK_ATTACK, 2, 0, false)
 {
 }
 
-bool MonkAttack::isActEnable(Point pos, const Map& map, int t) const
+bool MonkAttack::isActEnable(Point pos, const UHeroVec& ally, const UHeroVec& enemy) const
 {
 	if (pos.y == 2)
 		return false;
@@ -14,7 +15,7 @@ bool MonkAttack::isActEnable(Point pos, const Map& map, int t) const
 	return true;
 }
 
-Range MonkAttack::getRange(Point pos, const Map& map, int t) const
+Range MonkAttack::getRange(Point pos, const UHeroVec& ally, const UHeroVec& enemy) const
 {
 	Range res;
 
@@ -24,29 +25,25 @@ Range MonkAttack::getRange(Point pos, const Map& map, int t) const
 
 	res.pos.push_back(front);
 
-	//front에 아무도 없으면 middle까지 가능
-	if (!map.get(front.x, front.y, (t + 1) % 2))
+	for (int i = 0; i < enemy.size(); i++)
 	{
-		res.pos.push_back(middle);
+		if (enemy[i]->getPos() == front)
+			return res;
 	}
+
+	//front에 아무도 없으면 middle까지 가능
+	res.pos.push_back(middle);
 
 	return res;
 }
 
-std::vector<Point> MonkAttack::getEffectRange(Point pos) const
+std::vector<Point> MonkAttack::getEffectRange(Point pos, const UHeroVec& ally, const UHeroVec& enemy) const
 {
 	return { Point(0,0) };
 }
 
-bool MonkAttack::doSkill(Point pos, Hero* user, Hero * target, bool isAlly) const
+bool MonkAttack::doSkill(Point pos, Hero* user, Hero * target, const UHeroVec& ally, const UHeroVec& enemy) const
 {
-	//적군에게만 영향
-	if (isAlly)
-		return false;
-
-	if (!isHeroInEffect(pos, target, isAlly))
-		return false;
-
 	target->damage(2);
 
 	return true;

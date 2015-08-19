@@ -61,7 +61,7 @@ private:
 	std::shared_ptr<Player> players[MAX_NUM];
 	bool isReady[MAX_NUM];
 	int board[MAX_NUM][3][3];
-	std::unique_ptr<Hero> heroData[MAX_NUM][4];
+	UHeroVec heroData[MAX_NUM];
 	int playerNum = 0;
 	int nowTurn = 0;
 	bool isStart = false;

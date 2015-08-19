@@ -34,14 +34,14 @@ void Match::ready(std::shared_ptr<Player>& player)
 	{
 		printf("send gameData...\n");
 		GameData data;
-		data.classNum = 4;
 		data.type = Type::GAME_DATA;
 
 		for (int t = 0; t < playerNum; t++)
 		{
 			data.turn = t;
+			data.classNum = heroData[t].size();
 			
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < heroData[t].size(); i++)
 			{
 				data.classes[i] = heroData[t][i]->getType();
 				data.hp[i] = heroData[t][i]->getMaxHp();
@@ -104,7 +104,7 @@ void Match::moveHero(std::shared_ptr<Player>& player, int idx, Point pos)
 
 	int swapIdx = -1;
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < heroData[t].size(); i++)
 	{
 		if (heroData[t][i]->getHp() != 0 && heroData[t][i]->getPos() == pos)
 		{
@@ -149,9 +149,11 @@ void Match::randomHero(std::shared_ptr<Player>& player)
 	if (isStart || isReady[t])
 		return;
 
-	for (int i = 0; i < 4; i++)
+	heroData[t].clear();
+
+	for (int i = 0; i < heroData[t].size(); i++)
 	{
-		heroData[t][i] = getRandomHero();
+		heroData[t].push_back(getRandomHero());
 	}
 }
 
@@ -159,7 +161,7 @@ void Match::getHeroData(std::shared_ptr<Player>& player, OUT std::vector<const H
 {
 	int t = getPlayerIndex(player);
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < heroData[t].size(); i++)
 	{
 		data.push_back(heroData[t][i].get());
 	}
@@ -179,7 +181,7 @@ void Match::selectHero(std::shared_ptr<Player>& player, int idx)
 	{
 		auto skill = heroData[t][idx]->getSkill(i);
 
-		if (skill->isValidActPos(heroPos, map, t) && heroData[t][idx]->getSkillCool(i) == 0)
+		if (skill->isValidActPos(heroPos, heroData[t], heroData[(t + 1) % 2]) && heroData[t][idx]->getSkillCool(i) == 0)
 		{
 			validSkills.push_back(i);
 		}
@@ -208,13 +210,13 @@ void Match::getSkillRange(std::shared_ptr<Player>& player, int heroIdx, int skil
 	auto skill = heroData[t][heroIdx]->getSkill(skillIdx);
 
 	//skill 쓸 수 있는 위치 아니면 무시
-	if (!skill->isActEnable(heroPos, map, t))
+	if (!skill->isActEnable(heroPos, heroData[t], heroData[(t + 1) % 2]))
 	{
 		return;
 	}
 
-	auto range = skill->getRange(heroPos, map, t);
-	auto effect = skill->getEffectRange(heroPos);
+	auto range = skill->getRange(heroPos, heroData[t], heroData[(t + 1) % 2]);
+	auto effect = skill->getEffectRange(heroPos, heroData[t], heroData[(t + 1) % 2]);
 
 	SkillRangeResponse packet;
 
@@ -249,7 +251,7 @@ void Match::turnChange(std::shared_ptr<Player>& player)
 
 	nowTurn = (nowTurn + 1) % playerNum;
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < heroData[t].size(); i++)
 	{
 		heroData[nowTurn][i]->turnUpdate();
 	}
@@ -278,27 +280,13 @@ void Match::actHero(std::shared_ptr<Player>& player, int heroIdx, int skillIdx, 
 		return;
 
 	//skill 사용 불가능한 위치일 경우 무시
-	if (!skill->isActEnable(heroPos, map, t))
+	if (!skill->isActEnable(heroPos, heroData[t], heroData[(t + 1) % 2]))
 		return;
 
-	bool isEffect = false;
-
-	for (int p = 0; p < playerNum; p++)
-	{
-		for (int idx = 0; idx < 4; idx++)
-		{
-			if (skill->isHeroInEffect(pos, heroData[t][heroIdx].get(), p == t))
-			{
-				isEffect = true;
-			}
-		}
-
-		if (isEffect)
-			break;
-	}
-
+	auto heroList = skill->getHeroInEffect(pos, heroData[t], heroData[(t + 1) % 2]);
+			
 	//skill 효과 범위에 들어가는 캐릭터가 하나도 없을 경우 무시
-	if (isEffect)
+	if (heroList.size() == 0)
 		return;
 
 	//스킬 사용했으므로 사용한 놈 act 감소시키고 스킬 쿨 돌게 만든다
@@ -315,17 +303,12 @@ void Match::actHero(std::shared_ptr<Player>& player, int heroIdx, int skillIdx, 
 
 	sendHeroState(t, heroIdx);
 
-	for (int p = 0; p < playerNum; p++)
+	for (auto& target : heroList)
 	{
-		for (int idx = 0; idx < 4; idx++)
-		{
-			if (skill->doSkill(pos, heroData[t][heroIdx].get(), heroData[p][idx].get(), p == t))
-			{
-				//스킬 효과 받았으므로 갱신된 hero 상태 돌려준다
-				sendHeroState(p, idx);
-				break;
-			}
-		}
+		int turn = skill->myField() ? turn : (turn + 1) % 2;
+		skill->doSkill(pos, heroData[t][heroIdx].get(), heroData[turn][target].get(), heroData[t], heroData[(t + 1) % 2]);
+		//스킬 효과 받았으므로 갱신된 hero 상태 돌려준다
+		sendHeroState(turn, target);
 	}
 }
 

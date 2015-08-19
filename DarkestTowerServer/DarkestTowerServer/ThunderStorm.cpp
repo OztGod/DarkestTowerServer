@@ -6,7 +6,7 @@ ThunderStorm::ThunderStorm()
 {
 }
 
-bool ThunderStorm::isActEnable(Point pos, const Map& map, int t) const
+bool ThunderStorm::isActEnable(Point pos, const UHeroVec& ally, const UHeroVec& enemy) const
 {
 	if (pos.y == 2)
 		return true;
@@ -14,7 +14,7 @@ bool ThunderStorm::isActEnable(Point pos, const Map& map, int t) const
 	return false;
 }
 
-Range ThunderStorm::getRange(Point pos, const Map& map, int t) const
+Range ThunderStorm::getRange(Point pos, const UHeroVec& ally, const UHeroVec& enemy) const
 {
 	Range res;
 
@@ -24,7 +24,7 @@ Range ThunderStorm::getRange(Point pos, const Map& map, int t) const
 	return res;
 }
 
-std::vector<Point> ThunderStorm::getEffectRange(Point pos) const
+std::vector<Point> ThunderStorm::getEffectRange(Point pos, const UHeroVec& ally, const UHeroVec& enemy) const
 {
 	return
 	{
@@ -34,15 +34,8 @@ std::vector<Point> ThunderStorm::getEffectRange(Point pos) const
 	};
 }
 
-bool ThunderStorm::doSkill(Point pos, Hero* user, Hero * target, bool isAlly) const
+bool ThunderStorm::doSkill(Point pos, Hero* user, Hero * target, const UHeroVec& ally, const UHeroVec& enemy) const
 {
-	//적군에게만 영향
-	if (isAlly)
-		return false;
-
-	if (!isHeroInEffect(pos, target, isAlly))
-		return false;
-
 	target->damage(5);
 
 	return true;

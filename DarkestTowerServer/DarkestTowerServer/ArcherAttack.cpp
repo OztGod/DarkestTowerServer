@@ -6,7 +6,7 @@ ArcherAttack::ArcherAttack()
 {
 }
 
-bool ArcherAttack::isActEnable(Point pos, const Map& map, int t) const
+bool ArcherAttack::isActEnable(Point pos, const UHeroVec& ally, const UHeroVec& enemy) const
 {
 	if (pos.y == 0)
 		return false;
@@ -14,7 +14,7 @@ bool ArcherAttack::isActEnable(Point pos, const Map& map, int t) const
 	return true;
 }
 
-Range ArcherAttack::getRange(Point pos, const Map& map, int t) const
+Range ArcherAttack::getRange(Point pos, const UHeroVec& ally, const UHeroVec& enemy) const
 {
 	Range res;
 
@@ -25,20 +25,13 @@ Range ArcherAttack::getRange(Point pos, const Map& map, int t) const
 	return res;
 }
 
-std::vector<Point> ArcherAttack::getEffectRange(Point pos) const
+std::vector<Point> ArcherAttack::getEffectRange(Point pos, const UHeroVec& ally, const UHeroVec& enemy) const
 {
 	return { Point(0, 0) };
 }
 
-bool ArcherAttack::doSkill(Point pos, Hero* user, Hero * target, bool isAlly) const
+bool ArcherAttack::doSkill(Point pos, Hero* user, Hero * target, const UHeroVec& ally, const UHeroVec& enemy) const
 {
-	//적군에게만 영향
-	if (isAlly)
-		return false;
-
-	if (!isHeroInEffect(pos, target, isAlly))
-		return false;
-
 	target->damage(2);
 
 	return true;

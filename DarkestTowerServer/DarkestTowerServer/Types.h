@@ -1,5 +1,9 @@
 #pragma once
 #include <vector>
+#include <memory>
+
+class Hero;
+using UHeroVec = std::vector<std::unique_ptr<Hero>>;
 
 struct Point
 {

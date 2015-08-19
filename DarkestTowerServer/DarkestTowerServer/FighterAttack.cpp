@@ -6,7 +6,7 @@ FighterAttack::FighterAttack()
 {
 }
 
-bool FighterAttack::isActEnable(Point pos, const Map& map, int t) const
+bool FighterAttack::isActEnable(Point pos, const UHeroVec& ally, const UHeroVec& enemy) const
 {
 	if (pos.y == 0)
 		return true;
@@ -14,7 +14,7 @@ bool FighterAttack::isActEnable(Point pos, const Map& map, int t) const
 	return false;
 }
 
-Range FighterAttack::getRange(Point pos, const Map& map, int t) const
+Range FighterAttack::getRange(Point pos, const UHeroVec& ally, const UHeroVec& enemy) const
 {
 	Range res;
 
@@ -24,20 +24,13 @@ Range FighterAttack::getRange(Point pos, const Map& map, int t) const
 	return res;
 }
 
-std::vector<Point> FighterAttack::getEffectRange(Point pos) const
+std::vector<Point> FighterAttack::getEffectRange(Point pos, const UHeroVec& ally, const UHeroVec& enemy) const
 {
 	return { Point(0, 0) };
 }
 
-bool FighterAttack::doSkill(Point pos, Hero* user, Hero* target, bool isAlly) const
+bool FighterAttack::doSkill(Point pos, Hero* user, Hero* target, const UHeroVec& ally, const UHeroVec& enemy) const
 {
-	//적군에게만 영향
-	if (isAlly)
-		return false;
-
-	if (!isHeroInEffect(pos, target, isAlly))
-		return false;
-
 	target->damage(2);
 
 	return true;
