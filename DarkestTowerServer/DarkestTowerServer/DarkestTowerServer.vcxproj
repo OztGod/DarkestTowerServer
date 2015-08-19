@@ -20,27 +20,41 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Packet\pcPacket.h" />
+    <ClCompile Include="Archer.cpp" />
     <ClCompile Include="ClientSession.cpp" />
     <ClCompile Include="ClientSessionManager.cpp" />
+    <ClCompile Include="Fighter.cpp" />
+    <ClCompile Include="Hero.cpp" />
     <ClCompile Include="HmmoApplication.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="LogicContext.cpp" />
     <ClCompile Include="LogicThread.cpp" />
+    <ClCompile Include="Magician.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Match.cpp" />
+    <ClCompile Include="Monk.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Priest.cpp" />
+    <ClCompile Include="Thief.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Archer.h" />
     <ClInclude Include="ClientSession.h" />
     <ClInclude Include="ClientSessionManager.h" />
+    <ClInclude Include="Fighter.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="HmmoApplication.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="LogicContext.h" />
     <ClInclude Include="LogicThread.h" />
+    <ClInclude Include="Magician.h" />
     <ClInclude Include="Match.h" />
+    <ClInclude Include="Monk.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Priest.h" />
     <ClInclude Include="Skill.h" />
+    <ClInclude Include="Thief.h" />
+    <ClInclude Include="Types.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Skylark\Skylark\Skylark\Skylark.vcxproj">

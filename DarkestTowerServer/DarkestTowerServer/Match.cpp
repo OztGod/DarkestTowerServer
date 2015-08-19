@@ -4,6 +4,7 @@
 #include "ClientSession.h"
 #include "LogicContext.h"
 #include "HmmoApplication.h"
+#include "Skill.h"
 
 Match::Match()
 {
@@ -41,19 +42,19 @@ void Match::ready(std::shared_ptr<Player>& player)
 			
 			for (int i = 0; i < 4; i++)
 			{
-				data.classes[i] = heroData[t][i].type;
-				data.hp[i] = heroData[t][i].maxHp;
-				data.act[i] = heroData[t][i].maxAct;
-				data.skillNum[i] = heroData[t][i].skills.size();
+				data.classes[i] = heroData[t][i]->getType();
+				data.hp[i] = heroData[t][i]->getMaxHp();
+				data.act[i] = heroData[t][i]->getMaxAct();
+				data.skillNum[i] = heroData[t][i]->getSkillNum();
 
-				for (int s = 0; s < heroData[t][i].skills.size(); s++)
+				for (int s = 0; s < heroData[t][i]->getSkillNum(); s++)
 				{
-					data.skillIdx[i] = heroData[t][i].skills[s].id;
-					data.skillLevel[i] = heroData[t][i].skills[s].level;
+					data.skillType[i] = heroData[t][i]->getSkill(s)->getType();
+					data.skillLevel[i] = heroData[t][i]->getSkill(s)->getLevel();
 				}
 
-				data.x[i] = heroData[t][i].pos.x;
-				data.y[i] = heroData[t][i].pos.y;
+				data.x[i] = heroData[t][i]->getPos().x;
+				data.y[i] = heroData[t][i]->getPos().y;
 			}
 
 			broadcastPacket(data);
@@ -73,8 +74,7 @@ void Match::placeHero(std::shared_ptr<Player>& player, int num, Point * points)
 
 	for (int i = 0; i < num; i++)
 	{
-		heroData[t][i].pos.x = points[i].x;
-		heroData[t][i].pos.y = points[i].y;
+		heroData[t][i]->setPos(points[i]);
 	}
 
 	ready(player);
@@ -96,7 +96,7 @@ void Match::moveHero(std::shared_ptr<Player>& player, int idx, Point pos)
 
 	for (int i = 0; i < 4; i++)
 	{
-		if (heroData[t][i].hp != 0 && heroData[t][i].pos.x == pos.x && heroData[t][i].pos.y == pos.y)
+		if (heroData[t][i]->getHp() != 0 && heroData[t][i]->getPos() == pos)
 		{
 			swapIdx = i;
 		}
@@ -109,32 +109,28 @@ void Match::moveHero(std::shared_ptr<Player>& player, int idx, Point pos)
 		needAct = 2;
 
 	//act 부족하면 거부
-	if (heroData[t][idx].act < needAct)
+	if (!heroData[t][idx]->consumeAct(needAct))
 		return;
 
-	Point prevPos = heroData[t][idx].pos;
+	Point prevPos = heroData[t][idx]->getPos();
 
 	//pos 바꾸는 위치가 이상하면 거부
-	int delta = abs(pos.x - prevPos.x + pos.y - prevPos.y);
-	if (delta != 1)
+	if (!heroData[t][idx]->setPos(pos))
 		return;
-
-	heroData[t][idx].pos = pos;
-	heroData[t][idx].act -= needAct;
 
 	if (swapIdx != -1)
 	{		
-		heroData[t][swapIdx].pos = prevPos;
+		heroData[t][swapIdx]->setPos(prevPos);
 
 		//자리 바뀐 애도 바뀌었다는 패킷 보내주기
 		ChangeHeroState state;
 		
 		state.type = Type::CHANGE_HERO_STATE;
 		state.idx = swapIdx;
-		state.hp = heroData[t][swapIdx].hp;
-		state.act = heroData[t][swapIdx].act;
-		state.x = heroData[t][swapIdx].pos.x;
-		state.y = heroData[t][swapIdx].pos.y;
+		state.hp = heroData[t][swapIdx]->getHp();
+		state.act = heroData[t][swapIdx]->getAct();
+		state.x = heroData[t][swapIdx]->getPos().x;
+		state.y = heroData[t][swapIdx]->getPos().y;
 
 		sendPacket(t, state);
 	}
@@ -143,10 +139,10 @@ void Match::moveHero(std::shared_ptr<Player>& player, int idx, Point pos)
 
 	state.type = Type::CHANGE_HERO_STATE;
 	state.idx = idx;
-	state.hp = heroData[t][idx].hp;
-	state.act = heroData[t][idx].act;
-	state.x = heroData[t][idx].pos.x;
-	state.y = heroData[t][idx].pos.y;
+	state.hp = heroData[t][idx]->getHp();
+	state.act = heroData[t][idx]->getAct();
+	state.x = heroData[t][idx]->getPos().x;
+	state.y = heroData[t][idx]->getPos().y;
 
 	sendPacket(t, state);
 }
@@ -161,24 +157,17 @@ void Match::randomHero(std::shared_ptr<Player>& player)
 
 	for (int i = 0; i < 4; i++)
 	{
-		//hero 랜덤 생성. 아직 영웅 정보 가져와서 초기화 못했으니 일단은 클래스만 랜덤으로.
-		heroData[t][i].type = static_cast<HeroClass>(rand() % 6);
-		heroData[t][i].maxHp = 5;
-		heroData[t][i].maxAct = 5;
-		heroData[t][i].hp = heroData[t][i].maxHp;
-		heroData[t][i].act = heroData[t][i].maxAct;
-		heroData[t][i].pos.x = 0;
-		heroData[t][i].pos.y = 0;
+		heroData[t][i] = getRandomHero();
 	}
 }
 
-void Match::getHeroData(std::shared_ptr<Player>& player, OUT std::vector<Hero>& data)
+void Match::getHeroData(std::shared_ptr<Player>& player, OUT std::vector<const Hero*>& data)
 {
 	int t = getPlayerIndex(player);
 
 	for (int i = 0; i < 4; i++)
 	{
-		data.push_back(heroData[t][i]);
+		data.push_back(heroData[t][i].get());
 	}
 }
 

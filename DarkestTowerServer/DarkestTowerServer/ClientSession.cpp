@@ -87,7 +87,7 @@ void ClientSession::sessionReset()
 	socket = new skylark::Socket(skylark::ConnectType::TCP);
 }
 
-void ClientSession::onLoginRequest(const LoginRequest & packet)
+void ClientSession::onLoginRequest(const LoginRequest& packet)
 {
 	int pid = GameManager::getInstance()
 		->isValidAccount(packet.id, packet.idLength,

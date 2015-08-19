@@ -20,7 +20,7 @@ public:
 	void moveHero(std::shared_ptr<Player>& player, int idx, Point pos);
 
 	void randomHero(std::shared_ptr<Player>& player);
-	void getHeroData(std::shared_ptr<Player>& player, OUT std::vector<Hero>& data);
+	void getHeroData(std::shared_ptr<Player>& player, OUT std::vector<const Hero*>& data);
 
 	void turnChange(std::shared_ptr<Player>& player);
 
@@ -51,7 +51,7 @@ private:
 	std::shared_ptr<Player> players[MAX_NUM];
 	bool isReady[MAX_NUM];
 	int board[MAX_NUM][3][3];
-	Hero heroData[MAX_NUM][4];
+	std::unique_ptr<Hero> heroData[MAX_NUM][4];
 	int playerNum = 0;
 	int nowTurn = 0;
 	bool isStart = false;

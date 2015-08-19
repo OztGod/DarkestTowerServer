@@ -19,14 +19,14 @@ void GameManager::getRandomHeros(std::shared_ptr<Player>& player, OUT std::vecto
 {
 	//TODO : 나중에 DB에서 받아온 데이터 기반으로 랜덤 데이터 돌려주게끔
 	classes.clear();
-	std::vector<Hero> heros;
+	std::vector<const Hero*> heros;
 
 	playerMatchMap[player->getId()]->randomHero(player);
 	playerMatchMap[player->getId()]->getHeroData(player, heros);
 
 	for (int i = 0; i < 4; i++)
 	{
-		classes.push_back(heros[i].type);
+		classes.push_back(heros[i]->getType());
 	}
 }
 

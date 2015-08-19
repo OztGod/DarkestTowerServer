@@ -9,6 +9,7 @@ enum class HeroClass : uint8_t
 	THIEF = 3,
 	PRIEST = 4,
 	MONK = 5,
+	NUM = 6,
 };
 enum class Type : uint8_t
 {
@@ -24,6 +25,33 @@ enum class Type : uint8_t
 	TURN_END = 9,
 	UPDATE_TURN = 10,
 	TYPE_NUM = 11,
+};
+enum class SkillType : uint8_t
+{
+	FIGHTER_ATTACK = 0,
+	FIGHTER_CHARGE = 1,
+	FIGHTER_HARD = 2,
+	FIGHTER_IRON = 3,
+	MAGICIAN_ICE_ARROW = 4,
+	MAGICIAN_FIRE_BLAST = 5,
+	MAGICIAN_THUNDER_STORM = 6,
+	MAGICIAN_POLYMORPH = 7,
+	ARCHER_ATTACK = 8,
+	ARCHER_BACK_ATTACK = 9,
+	ARCHER_PENETRATE_SHOT = 10,
+	ARCHER_SNIPE = 11,
+	THIEF_ATTACK = 12,
+	THIEF_BACK_STEP = 13,
+	THIEF_POISON = 14,
+	THIEF_TAUNT = 15,
+	PRIEST_HEAL = 16,
+	PRIEST_ATTACK = 17,
+	PRIEST_BUFF = 18,
+	PRIEST_REMOVE_MAGIC = 19,
+	MONK_ATTACK = 20,
+	MONK_SACRIFICE = 21,
+	MONK_PRAY = 22,
+	MONK_KICK = 23,
 };
 enum class LoginResult : uint8_t
 {
@@ -86,7 +114,7 @@ struct GameData : Header
 	int8_t hp[4];
 	int8_t act[4];
 	int8_t skillNum[4];
-	int8_t skillIdx[4];
+	SkillType skillType[4];
 	int8_t skillLevel[4];
 	int8_t x[4];
 	int8_t y[4];

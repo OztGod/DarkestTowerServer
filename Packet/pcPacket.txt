@@ -22,6 +22,40 @@ enum HeroClass : uint8
     THIEF = 3
     PRIEST = 4
     MONK = 5
+    NUM = 6
+}
+
+enum SkillType : uint8
+{
+    FIGHTER_ATTACK
+    FIGHTER_CHARGE
+    FIGHTER_HARD
+    FIGHTER_IRON
+    
+    MAGICIAN_ICE_ARROW
+    MAGICIAN_FIRE_BLAST
+    MAGICIAN_THUNDER_STORM
+    MAGICIAN_POLYMORPH
+    
+    ARCHER_ATTACK
+    ARCHER_BACK_ATTACK
+    ARCHER_PENETRATE_SHOT
+    ARCHER_SNIPE
+    
+    THIEF_ATTACK
+    THIEF_BACK_STEP
+    THIEF_POISON
+    THIEF_TAUNT
+    
+    PRIEST_HEAL
+    PRIEST_ATTACK
+    PRIEST_BUFF
+    PRIEST_REMOVE_MAGIC
+    
+    MONK_ATTACK
+    MONK_SACRIFICE
+    MONK_PRAY
+    MONK_KICK
 }
 
 packet Header
@@ -78,7 +112,7 @@ packet GameData : Header
     int8 hp arr 4
     int8 act arr 4
     int8 skillNum arr 4
-    int8 skillIdx arr 4
+    SkillType skillType arr 4
     int8 skillLevel arr 4
     int8 x arr 4
     int8 y arr 4

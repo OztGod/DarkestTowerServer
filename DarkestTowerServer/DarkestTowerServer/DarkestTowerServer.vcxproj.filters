@@ -19,69 +19,129 @@
     <Filter Include="소스 파일\gameData">
       <UniqueIdentifier>{d5303ff7-9a0e-44ef-a83e-d38650a756ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\gameData\Skill">
+      <UniqueIdentifier>{1dec6560-c4d4-4c72-8249-fffce855efe5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\io">
+      <UniqueIdentifier>{390a4931-22a6-4392-b1d7-c157a4921b3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\io\context">
+      <UniqueIdentifier>{76abae46-d64a-4132-b175-ca28966d260b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\main">
+      <UniqueIdentifier>{150a1809-1be8-4199-9fee-0178c06c1e43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\game">
+      <UniqueIdentifier>{f68b2525-a4e3-45da-aae6-9dc1520da815}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\gameData\Hero">
+      <UniqueIdentifier>{75f935ee-2652-4ede-bec8-56e775f50fe0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ClientSession.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Packet\pcPacket.h">
       <Filter>소스 파일\packet</Filter>
     </ClCompile>
+    <ClCompile Include="ClientSession.cpp">
+      <Filter>소스 파일\io</Filter>
+    </ClCompile>
     <ClCompile Include="ClientSessionManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Match.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="LogicThread.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="LogicContext.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\io</Filter>
     </ClCompile>
     <ClCompile Include="HmmoApplication.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\io</Filter>
+    </ClCompile>
+    <ClCompile Include="LogicThread.cpp">
+      <Filter>소스 파일\io</Filter>
+    </ClCompile>
+    <ClCompile Include="LogicContext.cpp">
+      <Filter>소스 파일\io\context</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>소스 파일\main</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>소스 파일\game</Filter>
+    </ClCompile>
+    <ClCompile Include="Match.cpp">
+      <Filter>소스 파일\game</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>소스 파일\game</Filter>
+    </ClCompile>
+    <ClCompile Include="Hero.cpp">
+      <Filter>소스 파일\gameData\Hero</Filter>
+    </ClCompile>
+    <ClCompile Include="Fighter.cpp">
+      <Filter>소스 파일\gameData\Hero</Filter>
+    </ClCompile>
+    <ClCompile Include="Magician.cpp">
+      <Filter>소스 파일\gameData\Hero</Filter>
+    </ClCompile>
+    <ClCompile Include="Monk.cpp">
+      <Filter>소스 파일\gameData\Hero</Filter>
+    </ClCompile>
+    <ClCompile Include="Priest.cpp">
+      <Filter>소스 파일\gameData\Hero</Filter>
+    </ClCompile>
+    <ClCompile Include="Thief.cpp">
+      <Filter>소스 파일\gameData\Hero</Filter>
+    </ClCompile>
+    <ClCompile Include="Archer.cpp">
+      <Filter>소스 파일\gameData\Hero</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Skill.h">
+      <Filter>소스 파일\gameData\Skill</Filter>
+    </ClInclude>
     <ClInclude Include="ClientSession.h">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\io</Filter>
     </ClInclude>
     <ClInclude Include="ClientSessionManager.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameManager.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Match.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="LogicThread.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="LogicContext.h">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\io</Filter>
     </ClInclude>
     <ClInclude Include="HmmoApplication.h">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\io</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicThread.h">
+      <Filter>소스 파일\io</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicContext.h">
+      <Filter>소스 파일\io\context</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>소스 파일\game</Filter>
+    </ClInclude>
+    <ClInclude Include="Match.h">
+      <Filter>소스 파일\game</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>소스 파일\game</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>소스 파일\main</Filter>
     </ClInclude>
     <ClInclude Include="Hero.h">
-      <Filter>소스 파일\gameData</Filter>
+      <Filter>소스 파일\gameData\Hero</Filter>
     </ClInclude>
-    <ClInclude Include="Skill.h">
-      <Filter>소스 파일\gameData</Filter>
+    <ClInclude Include="Fighter.h">
+      <Filter>소스 파일\gameData\Hero</Filter>
+    </ClInclude>
+    <ClInclude Include="Magician.h">
+      <Filter>소스 파일\gameData\Hero</Filter>
+    </ClInclude>
+    <ClInclude Include="Monk.h">
+      <Filter>소스 파일\gameData\Hero</Filter>
+    </ClInclude>
+    <ClInclude Include="Priest.h">
+      <Filter>소스 파일\gameData\Hero</Filter>
+    </ClInclude>
+    <ClInclude Include="Thief.h">
+      <Filter>소스 파일\gameData\Hero</Filter>
+    </ClInclude>
+    <ClInclude Include="Archer.h">
+      <Filter>소스 파일\gameData\Hero</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
