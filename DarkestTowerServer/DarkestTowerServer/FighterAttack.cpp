@@ -20,6 +20,8 @@ Range FighterAttack::getRange(Point pos) const
 
 	res.isMyField = false;
 	res.pos.push_back(Point(2 - pos.x, 0));
+
+	return res;
 }
 
 std::vector<Point> FighterAttack::getEffectRange(Point pos) const
@@ -27,14 +29,16 @@ std::vector<Point> FighterAttack::getEffectRange(Point pos) const
 	return { Point(0, 0) };
 }
 
-void FighterAttack::doSkill(Point pos, Hero* target, bool isAlly)
+bool FighterAttack::doSkill(Point pos, Hero* target, bool isAlly) const
 {
 	//적군에게만 영향
 	if (isAlly)
-		return;
+		return false;
 
 	if (!isHeroInEffect(pos, target, isAlly))
-		return;
+		return false;
 
 	target->damage(2);
+
+	return true;
 }

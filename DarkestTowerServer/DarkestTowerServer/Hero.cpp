@@ -39,6 +39,22 @@ void Hero::damage(int value)
 	hp -= value;
 }
 
+void Hero::setSkillCool(int idx, int cool)
+{
+	skills[idx].cool = cool;
+}
+
+void Hero::turnUpdate()
+{
+	act = maxAct;
+
+	for (auto& skill : skills)
+	{
+		if (skill.cool > 0)
+			skill.cool--;
+	}
+}
+
 std::unique_ptr<Hero> getRandomHero()
 {
 	std::unique_ptr<Hero> hero = nullptr;

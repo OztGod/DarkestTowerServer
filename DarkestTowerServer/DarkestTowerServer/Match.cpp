@@ -123,28 +123,10 @@ void Match::moveHero(std::shared_ptr<Player>& player, int idx, Point pos)
 		heroData[t][swapIdx]->setPos(prevPos);
 
 		//자리 바뀐 애도 바뀌었다는 패킷 보내주기
-		ChangeHeroState state;
-		
-		state.type = Type::CHANGE_HERO_STATE;
-		state.idx = swapIdx;
-		state.hp = heroData[t][swapIdx]->getHp();
-		state.act = heroData[t][swapIdx]->getAct();
-		state.x = heroData[t][swapIdx]->getPos().x;
-		state.y = heroData[t][swapIdx]->getPos().y;
-
-		sendPacket(t, state);
+		sendHeroState(t, swapIdx);
 	}
 
-	ChangeHeroState state;
-
-	state.type = Type::CHANGE_HERO_STATE;
-	state.idx = idx;
-	state.hp = heroData[t][idx]->getHp();
-	state.act = heroData[t][idx]->getAct();
-	state.x = heroData[t][idx]->getPos().x;
-	state.y = heroData[t][idx]->getPos().y;
-
-	sendPacket(t, state);
+	sendHeroState(t, idx);
 }
 
 void Match::randomHero(std::shared_ptr<Player>& player)
@@ -171,6 +153,80 @@ void Match::getHeroData(std::shared_ptr<Player>& player, OUT std::vector<const H
 	}
 }
 
+void Match::selectHero(std::shared_ptr<Player>& player, int idx)
+{
+	//해당 플레이어의 idx번째 영웅에 대해 해당 위치에서 사용 가능한 모든 스킬을 돌려준다
+	int t = getPlayerIndex(player);
+	std::vector<int> validSkills;
+
+	printf("[player %d] : select hero..", t);
+
+	auto heroPos = heroData[t][idx]->getPos();
+
+	for (int i = 0; i < heroData[t][idx]->getSkillNum(); i++)
+	{
+		auto skill = heroData[t][idx]->getSkill(i);
+
+		if (skill->isValidActPos(heroPos) && heroData[t][idx]->getSkillCool(i) == 0)
+		{
+			validSkills.push_back(i);
+		}
+	}
+
+	ValidSkills packet;
+
+	packet.type = Type::VALID_SKILLS;
+	packet.num = validSkills.size();
+
+	for (int i = 0; i < validSkills.size(); i++)
+	{
+		packet.idx[i] = validSkills[i];
+	}
+
+	sendPacket(t, packet);
+}
+
+void Match::getSkillRange(std::shared_ptr<Player>& player, int heroIdx, int skillIdx)
+{
+	int t = getPlayerIndex(player);
+
+	printf("[player %d]: get Skill Range\n", t);
+
+	auto heroPos = heroData[t][heroIdx]->getPos();
+	auto skill = heroData[t][heroIdx]->getSkill(skillIdx);
+
+	//skill 쓸 수 있는 위치 아니면 무시
+	if (!skill->isActEnable(heroPos))
+	{
+		return;
+	}
+
+	auto range = skill->getRange(heroPos);
+	auto effect = skill->getEffectRange(heroPos);
+
+	SkillRangeResponse packet;
+
+	packet.type = Type::SKILL_RANGE_RESPONSE;
+	packet.rangeNum = range.pos.size();
+	packet.isMyField = range.isMyField;
+	
+	for (int i = 0; i < range.pos.size(); i++)
+	{
+		packet.rangeX[i] = range.pos[i].x;
+		packet.rangeY[i] = range.pos[i].y;
+	}
+
+	packet.effectNum = effect.size();
+
+	for (int i = 0; i < effect.size(); i++)
+	{
+		packet.effectX[i] = effect[i].x;
+		packet.effectY[i] = effect[i].y;
+	}
+
+	sendPacket(t, packet);
+}
+
 void Match::turnChange(std::shared_ptr<Player>& player)
 {
 	int t = getPlayerIndex(player);
@@ -187,6 +243,70 @@ void Match::turnChange(std::shared_ptr<Player>& player)
 	packet.nowTurn = nowTurn;
 
 	broadcastPacket(packet);
+}
+
+void Match::actHero(std::shared_ptr<Player>& player, int heroIdx, int skillIdx, Point pos)
+{
+	int t = getPlayerIndex(player);
+
+	auto skill = heroData[t][heroIdx]->getSkill(skillIdx);
+	auto heroPos = heroData[t][heroIdx]->getPos();
+
+	//skill 사용에 필요한 act 포인트 남아있지 않은 경우 무시
+	if (skill->getAct() > heroData[t][heroIdx]->getAct())
+		return;
+
+	//skill이 아직 cool인 경우 무시
+	if (heroData[t][heroIdx]->getSkillCool(skillIdx) > 0)
+		return;
+
+	//skill 사용 불가능한 위치일 경우 무시
+	if (!skill->isActEnable(heroPos))
+		return;
+
+	bool isEffect = false;
+
+	for (int p = 0; p < playerNum; p++)
+	{
+		for (int idx = 0; idx < 4; idx++)
+		{
+			if (skill->doSkill(pos, heroData[t][idx].get(), p == t))
+			{
+				isEffect = true;
+				
+				//스킬 효과 받았으므로 갱신된 hero 상태 돌려준다
+				sendHeroState(p, idx);
+				break;
+			}
+		}
+
+		if (isEffect)
+			break;
+	}
+
+	//skill 효과 범위에 들어가는 캐릭터가 하나도 없을 경우 무시
+	if (!isEffect)
+		return;
+
+	//skill 효과 받은 애가 있다면 스킬 사용했으므로 사용한 놈 act 감소시키고 스킬 쿨 돌게 만든다
+	heroData[t][heroIdx]->setSkillCool(skillIdx, skill->getCool());
+	heroData[t][heroIdx]->consumeAct(skill->getAct());
+
+	sendHeroState(t, heroIdx);
+}
+
+void Match::sendHeroState(int t, int heroIdx)
+{
+	ChangeHeroState state;
+
+	state.type = Type::CHANGE_HERO_STATE;
+	state.idx = heroIdx;
+	state.hp = heroData[t][heroIdx]->getHp();
+	state.act = heroData[t][heroIdx]->getAct();
+	state.x = heroData[t][heroIdx]->getPos().x;
+	state.y = heroData[t][heroIdx]->getPos().y;
+
+	sendPacket(t, state);
 }
 
 bool Match::isAllReady()

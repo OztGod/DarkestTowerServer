@@ -20,11 +20,16 @@ enum class Type : uint8_t
 	RANDOM_HERO_RESPONSE = 4,
 	MATCH_START = 5,
 	GAME_DATA = 6,
-	MOVE_HERO = 7,
-	CHANGE_HERO_STATE = 8,
-	TURN_END = 9,
-	UPDATE_TURN = 10,
-	TYPE_NUM = 11,
+	CHANGE_HERO_STATE = 7,
+	SELECT_HERO = 8,
+	VALID_SKILLS = 9,
+	SKILL_RANGE_REQUEST = 10,
+	SKILL_RANGE_RESPONSE = 11,
+	MOVE_HERO = 12,
+	ACT_HERO = 13,
+	TURN_END = 14,
+	UPDATE_TURN = 15,
+	TYPE_NUM = 16,
 };
 enum class SkillType : uint8_t
 {
@@ -148,5 +153,46 @@ struct TurnEnd : Header
 struct UpdateTurn : Header
 {
 	int8_t nowTurn;
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct SelectHero : Header
+{
+	int8_t idx;
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct ValidSkills : Header
+{
+	int8_t num;
+	int8_t idx[6];
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct SkillRangeRequest : Header
+{
+	int8_t heroIdx;
+	int8_t skillIdx;
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct SkillRangeResponse : Header
+{
+	int8_t isMyField;
+	int8_t rangeNum;
+	int8_t rangeX[9];
+	int8_t rangeY[9];
+	int8_t effectNum;
+	int8_t effectX[9];
+	int8_t effectY[9];
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct ActHero : Header
+{
+	int8_t heroIdx;
+	int8_t skillIdx;
+	int8_t x;
+	int8_t y;
 };
 #pragma pack(pop)

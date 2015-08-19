@@ -24,6 +24,9 @@ public:
 	void onAllocHero(const AllocHero& packet);
 	void onMoveHero(const MoveHero& packet);
 	void onTurnEnd(const TurnEnd& packet);
+	void onSelectHero(const SelectHero& packet);
+	void onSkillRangeRequest(const SkillRangeRequest& packet);
+	void onActHero(const ActHero& packet);
 
 private:
 	std::shared_ptr<Player> player = nullptr;

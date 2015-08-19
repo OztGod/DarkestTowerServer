@@ -4,6 +4,11 @@
 #include "Player.h"
 #include "LogicContext.h"
 #include "HmmoApplication.h"
+#define REGISTER(type, enumValue)\
+handler.registerHandler<type>(static_cast<int>(Type::enumValue), [this](const type& packet)\
+{\
+	on ## type ## (packet); \
+});
 
 ClientSession::ClientSession(skylark::CompletionPort * port, std::size_t sendBufSize, std::size_t recvBufSize)
 	:Session(port, sendBufSize, recvBufSize)
@@ -13,30 +18,14 @@ ClientSession::ClientSession(skylark::CompletionPort * port, std::size_t sendBuf
 		return static_cast<int>(header.type);
 	});
 
-	handler.registerHandler<LoginRequest>(static_cast<int>(Type::LOGIN_REQUEST), [this](const LoginRequest& packet)
-	{
-		onLoginRequest(packet);
-	});
-
-	handler.registerHandler<RandomHeroRequest>(static_cast<int>(Type::RANDOM_HERO_REQUEST), [this](const RandomHeroRequest& packet)
-	{
-		onRandomHeroRequest(packet);
-	});
-
-	handler.registerHandler<AllocHero>(static_cast<int>(Type::ALLOC_HERO), [this](const AllocHero& packet)
-	{
-		onAllocHero(packet);
-	});
-
-	handler.registerHandler<TurnEnd>(static_cast<int>(Type::TURN_END), [this](const TurnEnd& packet)
-	{
-		onTurnEnd(packet);
-	});
-
-	handler.registerHandler<MoveHero>(static_cast<int>(Type::MOVE_HERO), [this](const MoveHero& packet)
-	{
-		onMoveHero(packet);
-	});
+	REGISTER(LoginRequest, LOGIN_REQUEST);
+	REGISTER(RandomHeroRequest, RANDOM_HERO_REQUEST);
+	REGISTER(AllocHero, ALLOC_HERO);
+	REGISTER(TurnEnd, TURN_END);
+	REGISTER(MoveHero, MOVE_HERO);
+	REGISTER(SelectHero, SELECT_HERO);
+	REGISTER(SkillRangeRequest, SKILL_RANGE_REQUEST);
+	REGISTER(ActHero, ACT_HERO);
 }
 
 ClientSession::~ClientSession()
@@ -149,7 +138,7 @@ void ClientSession::onAllocHero(const AllocHero & packet)
 		context->pos[i].y = packet.y[i];
 	}
 
-	skylark::postContext(HmmoApplication::getInstance()->getLogicPort(), context, 0);
+	HmmoApplication::getInstance()->getLogicPort()->take(context, 0);
 }
 
 void ClientSession::onMoveHero(const MoveHero & packet)
@@ -160,7 +149,7 @@ void ClientSession::onMoveHero(const MoveHero & packet)
 	context->pos.y = packet.y;
 	context->idx = packet.idx;
 
-	skylark::postContext(HmmoApplication::getInstance()->getLogicPort(), context, 0);
+	HmmoApplication::getInstance()->getLogicPort()->take(context, 0);
 }
 
 void ClientSession::onTurnEnd(const TurnEnd & packet)
@@ -168,5 +157,39 @@ void ClientSession::onTurnEnd(const TurnEnd & packet)
 	auto context = new TurnEndContext();
 	context->player = player;
 
-	skylark::postContext(HmmoApplication::getInstance()->getLogicPort(), context, 0);
+	HmmoApplication::getInstance()->getLogicPort()->take(context, 0);
+}
+
+void ClientSession::onSelectHero(const SelectHero & packet)
+{
+	auto context = new SelectHeroContext();
+
+	context->player = player;
+	context->idx = packet.idx;
+
+	HmmoApplication::getInstance()->getLogicPort()->take(context, 0);
+}
+
+void ClientSession::onSkillRangeRequest(const SkillRangeRequest & packet)
+{
+	auto context = new SkillRangeContext();
+
+	context->player = player;
+	context->heroIdx = packet.heroIdx;
+	context->skillIdx = packet.skillIdx;
+
+	HmmoApplication::getInstance()->getLogicPort()->take(context, 0);
+}
+
+void ClientSession::onActHero(const ActHero & packet)
+{
+	auto context = new ActHeroContext();
+
+	context->player = player;
+	context->heroIdx = packet.heroIdx;
+	context->skillIdx = packet.skillIdx;
+	context->pos.x = packet.x;
+	context->pos.y = packet.y;
+
+	HmmoApplication::getInstance()->getLogicPort()->take(context, 0);
 }

@@ -1,17 +1,30 @@
 enum Type : uint8
 {
-	LOGIN_REQUEST = 0
-	LOGIN_RESPONSE = 1
-    ALLOC_HERO = 2
-    RANDOM_HERO_REQUEST = 3
-    RANDOM_HERO_RESPONSE = 4
-    MATCH_START = 5
-    GAME_DATA = 6
-    MOVE_HERO = 7
-    CHANGE_HERO_STATE = 8
-    TURN_END = 9
-    UPDATE_TURN = 10
-	TYPE_NUM = 11
+	LOGIN_REQUEST
+	LOGIN_RESPONSE
+    
+    ALLOC_HERO
+    
+    RANDOM_HERO_REQUEST
+    RANDOM_HERO_RESPONSE
+    
+    MATCH_START
+    
+    GAME_DATA
+    CHANGE_HERO_STATE
+    
+    SELECT_HERO
+    VALID_SKILLS
+    SKILL_RANGE_REQUEST
+    SKILL_RANGE_RESPONSE
+    
+    MOVE_HERO
+    ACT_HERO
+    
+    TURN_END
+    UPDATE_TURN
+	
+    TYPE_NUM
 }
 
 enum HeroClass : uint8
@@ -142,4 +155,40 @@ packet TurnEnd : Header
 packet UpdateTurn : Header
 {
     int8 nowTurn
+}
+
+packet SelectHero : Header
+{
+    int8 idx
+}
+
+packet ValidSkills : Header
+{
+    int8 num
+    int8 idx arr 6
+}
+
+packet SkillRangeRequest : Header
+{
+    int8 heroIdx
+    int8 skillIdx
+}
+
+packet SkillRangeResponse : Header
+{
+    int8 isMyField
+    int8 rangeNum
+    int8 rangeX arr 9
+    int8 rangeY arr 9
+    int8 effectNum
+    int8 effectX arr 9
+    int8 effectY arr 9
+}
+
+packet ActHero : Header
+{
+    int8 heroIdx
+    int8 skillIdx
+    int8 x
+    int8 y
 }

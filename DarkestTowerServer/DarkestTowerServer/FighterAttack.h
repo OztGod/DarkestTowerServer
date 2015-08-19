@@ -13,7 +13,7 @@ public:
 
 	std::vector<Point> getEffectRange(Point pos) const override;
 
-	void doSkill(Point pos, Hero* target, bool isAlly) override;
+	bool doSkill(Point pos, Hero* target, bool isAlly) const override;
 
 private:
 };

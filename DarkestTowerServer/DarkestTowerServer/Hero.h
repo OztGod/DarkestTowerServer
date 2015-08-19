@@ -5,6 +5,17 @@
 #include <memory>
 #include "Skill.h"
 
+struct SkillInfo
+{
+	SkillInfo(std::unique_ptr<Skill> skill_)
+		:skill(std::move(skill_)), cool(0)
+	{
+	}
+
+	std::unique_ptr<Skill> skill;
+	int cool;
+};
+
 class Hero
 {
 public:
@@ -18,10 +29,13 @@ public:
 	int getLevel() const { return level; }
 	Point getPos() const { return pos; }
 	int getSkillNum() const { return skills.size(); }
-	const Skill* getSkill(int idx) const { return skills[idx].get(); }
+	const Skill* getSkill(int idx) const { return skills[idx].skill.get(); }
 	bool setPos(Point pos_);
 	bool consumeAct(int value);
 	void damage(int value);
+	void setSkillCool(int idx, int cool);
+	int getSkillCool(int idx) const { return skills[idx].cool; }
+	void turnUpdate();
 
 protected:
 	HeroClass type;
@@ -31,7 +45,7 @@ protected:
 	int maxAct;
 	int level = 1;
 	Point pos;
-	std::vector<std::unique_ptr<Skill> > skills;
+	std::vector<SkillInfo> skills;
 };
 
 std::unique_ptr<Hero> getRandomHero();

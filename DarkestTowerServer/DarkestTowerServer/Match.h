@@ -22,9 +22,15 @@ public:
 	void randomHero(std::shared_ptr<Player>& player);
 	void getHeroData(std::shared_ptr<Player>& player, OUT std::vector<const Hero*>& data);
 
+	void selectHero(std::shared_ptr<Player>& player, int idx);
+	void getSkillRange(std::shared_ptr<Player>& player, int heroIdx, int skillIdx);
+
 	void turnChange(std::shared_ptr<Player>& player);
+	void actHero(std::shared_ptr<Player>& player, int heroIdx, int skillIdx, Point pos);
 
 private:
+	void sendHeroState(int t, int heroIdx);
+
 	template<typename Packet>
 	void sendPacket(int idx, Packet& p)
 	{
@@ -33,7 +39,7 @@ private:
 		context->packet = p;
 		context->session = players[idx]->getSession();
 
-		skylark::postContext(HmmoApplication::getInstance()->getIoPort(), context, 0);
+		HmmoApplication::getInstance()->getIoPort()->take(context, 0);
 	}
 
 	template<typename Packet>

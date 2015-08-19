@@ -14,7 +14,7 @@ bool Skill::isValidActPos(Point pos) const
 	return false;
 }
 
-bool Skill::isHeroInEffect(Point pos, Hero * target, bool isAlly)
+bool Skill::isHeroInEffect(Point pos, const Hero * target, bool isAlly) const
 {
 	std::vector<Point> attackPos = getEffectRange(pos);
 

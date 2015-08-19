@@ -77,3 +77,45 @@ struct TurnEndContext : skylark::Context
 
 	std::shared_ptr<Player> player;
 };
+
+struct SelectHeroContext : skylark::Context
+{
+	SelectHeroContext() = default;
+	~SelectHeroContext() override = default;
+
+	bool onComplete(int transferred, int key) override;
+
+	bool onFailure() override;
+
+	std::shared_ptr<Player> player;
+	int idx;
+};
+
+struct SkillRangeContext : skylark::Context
+{
+	SkillRangeContext() = default;
+	~SkillRangeContext() override = default;
+
+	bool onComplete(int transferred, int key) override;
+	
+	bool onFailure() override;
+
+	std::shared_ptr<Player> player;
+	int heroIdx;
+	int skillIdx;
+};
+
+struct ActHeroContext : skylark::Context
+{
+	ActHeroContext() = default;
+	~ActHeroContext() override = default;
+
+	bool onComplete(int transferred, int key) override;
+	
+	bool onFailure() override;
+
+	std::shared_ptr<Player> player;
+	int heroIdx;
+	int skillIdx;
+	Point pos;
+};
