@@ -14,20 +14,20 @@ class Match
 {
 public:
 	Match();
-	void registerPlayer(std::shared_ptr<Player>& player);
-	void ready(std::shared_ptr<Player>& player);
+	void registerPlayer(std::shared_ptr<Player> player);
+	void ready(std::shared_ptr<Player> player);
 
-	void placeHero(std::shared_ptr<Player>& player, int num, Point* points);
-	void moveHero(std::shared_ptr<Player>& player, int idx, Point pos);
+	void placeHero(std::shared_ptr<Player> player, std::vector<Point>& points);
+	void moveHero(std::shared_ptr<Player> player, int idx, Point pos);
 
-	void randomHero(std::shared_ptr<Player>& player);
-	void getHeroData(std::shared_ptr<Player>& player, OUT std::vector<const Hero*>& data);
+	void randomHero(std::shared_ptr<Player> player);
+	void getHeroData(std::shared_ptr<Player> player, OUT std::vector<const Hero*>& data);
 
-	void selectHero(std::shared_ptr<Player>& player, int idx);
-	void getSkillRange(std::shared_ptr<Player>& player, int heroIdx, int skillIdx);
+	void selectHero(std::shared_ptr<Player> player, int idx);
+	void getSkillRange(std::shared_ptr<Player> player, int heroIdx, int skillIdx);
 
-	void turnChange(std::shared_ptr<Player>& player);
-	void actHero(std::shared_ptr<Player>& player, int heroIdx, int skillIdx, Point pos);
+	void turnChange(std::shared_ptr<Player> player);
+	void actHero(std::shared_ptr<Player> player, int heroIdx, int skillIdx, Point pos);
 
 	bool isEnd();
 
@@ -56,13 +56,7 @@ private:
 		}
 	}
 
-	void sendReject(int idx)
-	{
-		Reject packet;
-		packet.type = Type::REJECT;
-
-		sendPacket(idx, packet);
-	}
+	void sendReject(int idx);
 
 	bool isAllReady();
 

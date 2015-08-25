@@ -33,10 +33,11 @@ public enum Type
 	ENEMY_SKILL_SHOT = 13,
 	MOVE_HERO = 14,
 	ACT_HERO = 15,
-	TURN_END = 16,
-	UPDATE_TURN = 17,
-	REJECT = 18,
-	TYPE_NUM = 19,
+	DEAD_HERO = 16,
+	TURN_END = 17,
+	UPDATE_TURN = 18,
+	REJECT = 19,
+	TYPE_NUM = 20,
 }
 public enum SkillType
 {
@@ -253,5 +254,11 @@ public class MatchEnd : Header
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public class Reject : Header
 {
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class DeadHero : Header
+{
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte heroIdx;
 }
 }

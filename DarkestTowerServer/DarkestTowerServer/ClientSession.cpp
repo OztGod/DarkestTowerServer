@@ -2,30 +2,25 @@
 #include "ClientSessionManager.h"
 #include "GameManager.h"
 #include "Player.h"
-#include "LogicContext.h"
+#include "Match.h"
 #include "HmmoApplication.h"
-#define REGISTER(type, enumValue)\
-handler.registerHandler<type>(static_cast<int>(Type::enumValue), [this](const type& packet)\
-{\
-	on ## type ## (packet); \
-});
+#include "LogicContext.h"
 
 ClientSession::ClientSession(skylark::CompletionPort * port, std::size_t sendBufSize, std::size_t recvBufSize)
-	:Session(port, sendBufSize, recvBufSize)
+	:Session(port, sendBufSize, recvBufSize), handler(this)
 {
 	handler.registerSelector([](Header header)
 	{
 		return static_cast<int>(header.type);
 	});
 
-	REGISTER(LoginRequest, LOGIN_REQUEST);
-	REGISTER(RandomHeroRequest, RANDOM_HERO_REQUEST);
-	REGISTER(AllocHero, ALLOC_HERO);
-	REGISTER(TurnEnd, TURN_END);
-	REGISTER(MoveHero, MOVE_HERO);
-	REGISTER(SelectHero, SELECT_HERO);
-	REGISTER(SkillRangeRequest, SKILL_RANGE_REQUEST);
-	REGISTER(ActHero, ACT_HERO);
+	handler.registerHandler(Type::LOGIN_REQUEST, &ClientSession::onLoginRequest);
+	handler.registerHandler(Type::RANDOM_HERO_REQUEST, &ClientSession::onRandomHeroRequest);
+	handler.registerHandler(Type::ALLOC_HERO, &ClientSession::onAllocHero);
+	handler.registerHandler(Type::TURN_END, &ClientSession::onTurnEnd);
+	handler.registerHandler(Type::MOVE_HERO, &ClientSession::onMoveHero);
+	handler.registerHandler(Type::SELECT_HERO, &ClientSession::onSelectHero);
+	handler.registerHandler(Type::ACT_HERO, &ClientSession::onActHero);
 }
 
 ClientSession::~ClientSession()
@@ -92,8 +87,11 @@ void ClientSession::onLoginRequest(const LoginRequest& packet)
 		player = std::make_shared<Player>(pid, this);
 
 		//일단 로그인 성공하면 무조건 match pending list에 넣는다
-		auto context = new AddMatchPendingContext();
-		context->player = player;
+		auto context = new skylark::FunctionContext([p = this->player]()
+		{
+			GameManager::getInstance()->addMatchPendingList(p);
+			return true;
+		});
 
 		HmmoApplication::getInstance()->getLogicPort()->take(context, 0);
 	}
@@ -107,87 +105,113 @@ void ClientSession::onLoginRequest(const LoginRequest& packet)
 
 void ClientSession::onRandomHeroRequest(const RandomHeroRequest & packet)
 {
-	std::vector<HeroClass> classes;
+	auto context = new skylark::FunctionContext([p = this->player]()
+	{
+		std::vector<HeroClass> classes;
 
-	GameManager::getInstance()->getRandomHeros(player, classes);
+		GameManager::getInstance()->getRandomHeros(p, classes);
 
-	RandomHeroResponse randomResponse;
+		RandomHeroResponse randomResponse;
 
-	randomResponse.type = Type::RANDOM_HERO_RESPONSE;
-	randomResponse.heroClass[0] = classes[0];
-	randomResponse.heroClass[1] = classes[1];
-	randomResponse.heroClass[2] = classes[2];
-	randomResponse.heroClass[3] = classes[3];
+		randomResponse.type = Type::RANDOM_HERO_RESPONSE;
+		randomResponse.heroClass[0] = classes[0];
+		randomResponse.heroClass[1] = classes[1];
+		randomResponse.heroClass[2] = classes[2];
+		randomResponse.heroClass[3] = classes[3];
+		
+		auto sendContext = new PacketContext<RandomHeroResponse>();
 
-	sendPacket(randomResponse);
+		sendContext->packet = randomResponse;
+		sendContext->session = p->getSession();
+
+		if (p->getSession()->isConnected())
+		{
+			HmmoApplication::getInstance()->getIoPort()->take(sendContext, 0);
+			return true;
+		}
+
+		return false;
+	});
+
+	HmmoApplication::getInstance()->getLogicPort()->take(context, 0);
 }
 
 void ClientSession::onAllocHero(const AllocHero & packet)
 {
-	auto context = new AllocHeroContext();
-	context->player = player;
-	context->posNum = packet.allocNum;
-
-	printf("allocNum : %d x,y = %d,%d \n", packet.allocNum, packet.x[0], packet.y[0]);
-	
-	for (int i = 0; i < packet.allocNum; i++)
+	auto context = new skylark::FunctionContext([p = this->player, packet]()
 	{
-		context->pos[i].x = packet.x[i];
-		context->pos[i].y = packet.y[i];
-	}
+		std::vector<Point> pos;
+
+		for (int i = 0; i < packet.allocNum; i++)
+		{
+			pos.push_back(Point(packet.x[i], packet.y[i]));
+		}
+
+		p->getMatch()->placeHero(p, pos);
+
+		return true;
+	});
 
 	HmmoApplication::getInstance()->getLogicPort()->take(context, 0);
 }
 
 void ClientSession::onMoveHero(const MoveHero & packet)
 {
-	auto context = new MoveHeroContext();
-	context->player = player;
-	context->pos.x = packet.x;
-	context->pos.y = packet.y;
-	context->idx = packet.idx;
+	auto context = new skylark::FunctionContext([p = this->player, idx = packet.idx, x = packet.x, y = packet.y]()
+	{
+		p->getMatch()->moveHero(p, idx, Point(x, y));
+
+		return true;
+	});
 
 	HmmoApplication::getInstance()->getLogicPort()->take(context, 0);
 }
 
 void ClientSession::onTurnEnd(const TurnEnd & packet)
 {
-	auto context = new TurnEndContext();
-	context->player = player;
+	auto context = new skylark::FunctionContext([p = this->player]()
+	{
+		p->getMatch()->turnChange(p);
+
+		return true;
+	});
 
 	HmmoApplication::getInstance()->getLogicPort()->take(context, 0);
 }
 
 void ClientSession::onSelectHero(const SelectHero & packet)
 {
-	auto context = new SelectHeroContext();
+	auto context = new skylark::FunctionContext([p = this->player, idx = packet.idx]()
+	{
+		p->getMatch()->selectHero(p, idx);
 
-	context->player = player;
-	context->idx = packet.idx;
+		return true;
+	});
 
 	HmmoApplication::getInstance()->getLogicPort()->take(context, 0);
 }
 
 void ClientSession::onSkillRangeRequest(const SkillRangeRequest & packet)
 {
-	auto context = new SkillRangeContext();
+	auto context = new skylark::FunctionContext([p = this->player, heroIdx = packet.heroIdx, skillIdx = packet.skillIdx]()
+	{
+		p->getMatch()->getSkillRange(p, heroIdx, skillIdx);
 
-	context->player = player;
-	context->heroIdx = packet.heroIdx;
-	context->skillIdx = packet.skillIdx;
+		return true;
+	});
 
 	HmmoApplication::getInstance()->getLogicPort()->take(context, 0);
 }
 
 void ClientSession::onActHero(const ActHero & packet)
 {
-	auto context = new ActHeroContext();
+	auto context = new skylark::FunctionContext([p = this->player, heroIdx = packet.heroIdx, skillIdx = packet.skillIdx,
+												pos = Point(packet.x,packet.y)]()
+	{
+		p->getMatch()->actHero(p, heroIdx, skillIdx, pos);
 
-	context->player = player;
-	context->heroIdx = packet.heroIdx;
-	context->skillIdx = packet.skillIdx;
-	context->pos.x = packet.x;
-	context->pos.y = packet.y;
+		return true;
+	});
 
 	HmmoApplication::getInstance()->getLogicPort()->take(context, 0);
 }

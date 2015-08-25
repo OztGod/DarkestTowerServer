@@ -22,6 +22,7 @@ enum Type : uint8
     
     MOVE_HERO
     ACT_HERO
+    DEAD_HERO
     
     TURN_END
     UPDATE_TURN
@@ -211,4 +212,9 @@ packet MatchEnd : Header
 
 packet Reject : Header
 {
+}
+
+packet DeadHero : Header
+{
+    int8 heroIdx
 }

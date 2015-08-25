@@ -31,6 +31,5 @@ public:
 private:
 	std::shared_ptr<Player> player = nullptr;
 
-	//TODO : static으로 바꾸자
-	skylark::PacketHandler<Header, static_cast<int>(Type::TYPE_NUM)> handler;
+	skylark::PacketHandler<Header, ClientSession, static_cast<int>(Type::TYPE_NUM)> handler;
 };

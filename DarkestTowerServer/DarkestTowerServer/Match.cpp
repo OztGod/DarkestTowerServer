@@ -11,7 +11,7 @@ Match::Match()
 	map.reset();
 }
 
-void Match::registerPlayer(std::shared_ptr<Player>& player)
+void Match::registerPlayer(std::shared_ptr<Player> player)
 {
 	isReady[playerNum] = false;
 	players[playerNum] = player;
@@ -19,7 +19,7 @@ void Match::registerPlayer(std::shared_ptr<Player>& player)
 	playerNum++;
 }
 
-void Match::ready(std::shared_ptr<Player>& player)
+void Match::ready(std::shared_ptr<Player> player)
 {
 	int t = getPlayerIndex(player);
 
@@ -77,7 +77,7 @@ void Match::ready(std::shared_ptr<Player>& player)
 	}
 }
 
-void Match::placeHero(std::shared_ptr<Player>& player, int num, Point * points)
+void Match::placeHero(std::shared_ptr<Player> player, std::vector<Point>& points)
 {
 	int t = getPlayerIndex(player);
 
@@ -88,7 +88,7 @@ void Match::placeHero(std::shared_ptr<Player>& player, int num, Point * points)
 		return;
 	}
 
-	for (int i = 0; i < num; i++)
+	for (int i = 0; i < points.size(); i++)
 	{
 		heroData[t][i]->setPos(points[i]);
 	}
@@ -96,7 +96,7 @@ void Match::placeHero(std::shared_ptr<Player>& player, int num, Point * points)
 	ready(player);
 }
 
-void Match::moveHero(std::shared_ptr<Player>& player, int idx, Point pos)
+void Match::moveHero(std::shared_ptr<Player> player, int idx, Point pos)
 {
 	//겜 시작했을 때만 이동 가능
 	int t = getPlayerIndex(player);
@@ -156,7 +156,7 @@ void Match::moveHero(std::shared_ptr<Player>& player, int idx, Point pos)
 	sendHeroState(t, idx);
 }
 
-void Match::randomHero(std::shared_ptr<Player>& player)
+void Match::randomHero(std::shared_ptr<Player> player)
 {
 	int t = getPlayerIndex(player);
 
@@ -175,7 +175,7 @@ void Match::randomHero(std::shared_ptr<Player>& player)
 	}
 }
 
-void Match::getHeroData(std::shared_ptr<Player>& player, OUT std::vector<const Hero*>& data)
+void Match::getHeroData(std::shared_ptr<Player> player, OUT std::vector<const Hero*>& data)
 {
 	int t = getPlayerIndex(player);
 
@@ -185,7 +185,7 @@ void Match::getHeroData(std::shared_ptr<Player>& player, OUT std::vector<const H
 	}
 }
 
-void Match::selectHero(std::shared_ptr<Player>& player, int idx)
+void Match::selectHero(std::shared_ptr<Player> player, int idx)
 {
 	//해당 플레이어의 idx번째 영웅에 대해 해당 위치에서 사용 가능한 모든 스킬을 돌려준다
 	int t = getPlayerIndex(player);
@@ -218,7 +218,7 @@ void Match::selectHero(std::shared_ptr<Player>& player, int idx)
 	sendPacket(t, packet);
 }
 
-void Match::getSkillRange(std::shared_ptr<Player>& player, int heroIdx, int skillIdx)
+void Match::getSkillRange(std::shared_ptr<Player> player, int heroIdx, int skillIdx)
 {
 	int t = getPlayerIndex(player);
 
@@ -260,7 +260,7 @@ void Match::getSkillRange(std::shared_ptr<Player>& player, int heroIdx, int skil
 	sendPacket(t, packet);
 }
 
-void Match::turnChange(std::shared_ptr<Player>& player)
+void Match::turnChange(std::shared_ptr<Player> player)
 {
 	int t = getPlayerIndex(player);
 
@@ -287,7 +287,7 @@ void Match::turnChange(std::shared_ptr<Player>& player)
 	broadcastPacket(packet);
 }
 
-void Match::actHero(std::shared_ptr<Player>& player, int heroIdx, int skillIdx, Point pos)
+void Match::actHero(std::shared_ptr<Player> player, int heroIdx, int skillIdx, Point pos)
 {
 	int t = getPlayerIndex(player);
 
@@ -401,6 +401,14 @@ void Match::sendHeroState(int t, int heroIdx)
 	state.y = heroData[t][heroIdx]->getPos().y;
 
 	broadcastPacket(state);
+}
+
+void Match::sendReject(int idx)
+{
+	Reject packet;
+	packet.type = Type::REJECT;
+
+	sendPacket(idx, packet);
 }
 
 bool Match::isAllReady()

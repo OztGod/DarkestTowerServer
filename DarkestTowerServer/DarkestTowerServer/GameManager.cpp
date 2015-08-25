@@ -15,7 +15,7 @@ GameManager * GameManager::getInstance()
 	return instance;
 }
 
-void GameManager::getRandomHeros(std::shared_ptr<Player>& player, OUT std::vector<HeroClass>& classes)
+void GameManager::getRandomHeros(std::shared_ptr<Player> player, OUT std::vector<HeroClass>& classes)
 {
 	//TODO : 나중에 DB에서 받아온 데이터 기반으로 랜덤 데이터 돌려주게끔
 	classes.clear();
@@ -47,7 +47,7 @@ int GameManager::isValidAccount(const char * id, int idLength, const char * pass
 	return -1;
 }
 
-void GameManager::addMatchPendingList(std::shared_ptr<Player>& player)
+void GameManager::addMatchPendingList(std::shared_ptr<Player> player)
 {
 	matchPendingList.push_back(player);
 }
@@ -151,7 +151,7 @@ void GameManager::updateMatch()
 	}
 }
 
-void GameManager::removePlayerMatchMap(std::shared_ptr<Player>& player)
+void GameManager::removePlayerMatchMap(std::shared_ptr<Player> player)
 {
 	playerMatchMap.erase(player->getId());
 }

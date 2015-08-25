@@ -22,9 +22,6 @@
     <Filter Include="소스 파일\io">
       <UniqueIdentifier>{390a4931-22a6-4392-b1d7-c157a4921b3d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\io\context">
-      <UniqueIdentifier>{76abae46-d64a-4132-b175-ca28966d260b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\main">
       <UniqueIdentifier>{150a1809-1be8-4199-9fee-0178c06c1e43}</UniqueIdentifier>
     </Filter>
@@ -52,6 +49,9 @@
     <Filter Include="소스 파일\gameData\Hero\Thief">
       <UniqueIdentifier>{127b7fc7-3684-46a8-820d-4a52af632ebb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\io\context">
+      <UniqueIdentifier>{28082ff6-a56b-4b1d-bcf7-b9d375a18f7e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Packet\pcPacket.h">
@@ -68,9 +68,6 @@
     </ClCompile>
     <ClCompile Include="LogicThread.cpp">
       <Filter>소스 파일\io</Filter>
-    </ClCompile>
-    <ClCompile Include="LogicContext.cpp">
-      <Filter>소스 파일\io\context</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>소스 파일\main</Filter>
@@ -129,6 +126,9 @@
     <ClCompile Include="Heal.cpp">
       <Filter>소스 파일\gameData\Hero\Priest</Filter>
     </ClCompile>
+    <ClCompile Include="LogicContext.cpp">
+      <Filter>소스 파일\io\context</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientSession.h">
@@ -142,9 +142,6 @@
     </ClInclude>
     <ClInclude Include="LogicThread.h">
       <Filter>소스 파일\io</Filter>
-    </ClInclude>
-    <ClInclude Include="LogicContext.h">
-      <Filter>소스 파일\io\context</Filter>
     </ClInclude>
     <ClInclude Include="GameManager.h">
       <Filter>소스 파일\game</Filter>
@@ -202,6 +199,9 @@
     </ClInclude>
     <ClInclude Include="Heal.h">
       <Filter>소스 파일\gameData\Hero\Priest</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicContext.h">
+      <Filter>소스 파일\io\context</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
