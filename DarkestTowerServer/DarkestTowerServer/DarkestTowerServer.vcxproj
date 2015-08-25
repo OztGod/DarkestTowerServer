@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\Packet\pcPacket.h" />
     <ClCompile Include="Archer.cpp" />
     <ClCompile Include="ArcherAttack.cpp" />
+    <ClCompile Include="Charge.cpp" />
     <ClCompile Include="ClientSession.cpp" />
     <ClCompile Include="ClientSessionManager.cpp" />
     <ClCompile Include="Fighter.cpp" />
@@ -34,7 +35,6 @@
     <ClCompile Include="LogicThread.cpp" />
     <ClCompile Include="Magician.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Map.cpp" />
     <ClCompile Include="Match.cpp" />
     <ClCompile Include="Monk.cpp" />
     <ClCompile Include="MonkAttack.cpp" />
@@ -48,6 +48,7 @@
   <ItemGroup>
     <ClInclude Include="Archer.h" />
     <ClInclude Include="ArcherAttack.h" />
+    <ClInclude Include="Charge.h" />
     <ClInclude Include="ClientSession.h" />
     <ClInclude Include="ClientSessionManager.h" />
     <ClInclude Include="Fighter.h" />
@@ -59,7 +60,6 @@
     <ClInclude Include="LogicContext.h" />
     <ClInclude Include="LogicThread.h" />
     <ClInclude Include="Magician.h" />
-    <ClInclude Include="Map.h" />
     <ClInclude Include="Match.h" />
     <ClInclude Include="Monk.h" />
     <ClInclude Include="MonkAttack.h" />

@@ -52,6 +52,24 @@
     <Filter Include="소스 파일\io\context">
       <UniqueIdentifier>{28082ff6-a56b-4b1d-bcf7-b9d375a18f7e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\gameData\Hero\Archer\skill">
+      <UniqueIdentifier>{1fd74a29-d599-4a3a-8edb-18d9f8974d85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\gameData\Hero\Fighter\skill">
+      <UniqueIdentifier>{4938833b-c868-4fdb-8537-38a7e73cb447}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\gameData\Hero\Magician\skill">
+      <UniqueIdentifier>{aa764192-9647-4cc5-bfcd-8203803673c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\gameData\Hero\Monk\skill">
+      <UniqueIdentifier>{c750edc3-73c9-4657-a5fc-aa3ecdd90d21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\gameData\Hero\Priest\skill">
+      <UniqueIdentifier>{f97b1508-9d66-4fef-b202-72c16786b298}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\gameData\Hero\Thief\skill">
+      <UniqueIdentifier>{6e6c531f-7d50-42bb-82c0-5d3f98256043}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Packet\pcPacket.h">
@@ -102,32 +120,32 @@
     <ClCompile Include="Thief.cpp">
       <Filter>소스 파일\gameData\Hero\Thief</Filter>
     </ClCompile>
-    <ClCompile Include="FighterAttack.cpp">
-      <Filter>소스 파일\gameData\Hero\Fighter</Filter>
-    </ClCompile>
     <ClCompile Include="Skill.cpp">
       <Filter>소스 파일\gameData</Filter>
     </ClCompile>
-    <ClCompile Include="ArcherAttack.cpp">
-      <Filter>소스 파일\gameData\Hero\Archer</Filter>
-    </ClCompile>
-    <ClCompile Include="ThunderStorm.cpp">
-      <Filter>소스 파일\gameData\Hero\Magician</Filter>
-    </ClCompile>
-    <ClCompile Include="MonkAttack.cpp">
-      <Filter>소스 파일\gameData\Hero\Monk</Filter>
-    </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>소스 파일\game</Filter>
-    </ClCompile>
-    <ClCompile Include="ThiefAttack.cpp">
-      <Filter>소스 파일\gameData\Hero\Thief</Filter>
-    </ClCompile>
-    <ClCompile Include="Heal.cpp">
-      <Filter>소스 파일\gameData\Hero\Priest</Filter>
-    </ClCompile>
     <ClCompile Include="LogicContext.cpp">
       <Filter>소스 파일\io\context</Filter>
+    </ClCompile>
+    <ClCompile Include="ThiefAttack.cpp">
+      <Filter>소스 파일\gameData\Hero\Thief\skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Heal.cpp">
+      <Filter>소스 파일\gameData\Hero\Priest\skill</Filter>
+    </ClCompile>
+    <ClCompile Include="MonkAttack.cpp">
+      <Filter>소스 파일\gameData\Hero\Monk\skill</Filter>
+    </ClCompile>
+    <ClCompile Include="ThunderStorm.cpp">
+      <Filter>소스 파일\gameData\Hero\Magician\skill</Filter>
+    </ClCompile>
+    <ClCompile Include="FighterAttack.cpp">
+      <Filter>소스 파일\gameData\Hero\Fighter\skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Charge.cpp">
+      <Filter>소스 파일\gameData\Hero\Fighter\skill</Filter>
+    </ClCompile>
+    <ClCompile Include="ArcherAttack.cpp">
+      <Filter>소스 파일\gameData\Hero\Archer\skill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -179,29 +197,29 @@
     <ClInclude Include="Thief.h">
       <Filter>소스 파일\gameData\Hero\Thief</Filter>
     </ClInclude>
-    <ClInclude Include="FighterAttack.h">
-      <Filter>소스 파일\gameData\Hero\Fighter</Filter>
-    </ClInclude>
-    <ClInclude Include="ArcherAttack.h">
-      <Filter>소스 파일\gameData\Hero\Archer</Filter>
-    </ClInclude>
-    <ClInclude Include="ThunderStorm.h">
-      <Filter>소스 파일\gameData\Hero\Magician</Filter>
-    </ClInclude>
-    <ClInclude Include="MonkAttack.h">
-      <Filter>소스 파일\gameData\Hero\Monk</Filter>
-    </ClInclude>
-    <ClInclude Include="Map.h">
-      <Filter>소스 파일\game</Filter>
-    </ClInclude>
-    <ClInclude Include="ThiefAttack.h">
-      <Filter>소스 파일\gameData\Hero\Thief</Filter>
-    </ClInclude>
-    <ClInclude Include="Heal.h">
-      <Filter>소스 파일\gameData\Hero\Priest</Filter>
-    </ClInclude>
     <ClInclude Include="LogicContext.h">
       <Filter>소스 파일\io\context</Filter>
+    </ClInclude>
+    <ClInclude Include="ThiefAttack.h">
+      <Filter>소스 파일\gameData\Hero\Thief\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Heal.h">
+      <Filter>소스 파일\gameData\Hero\Priest\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="MonkAttack.h">
+      <Filter>소스 파일\gameData\Hero\Monk\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="ThunderStorm.h">
+      <Filter>소스 파일\gameData\Hero\Magician\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="FighterAttack.h">
+      <Filter>소스 파일\gameData\Hero\Fighter\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Charge.h">
+      <Filter>소스 파일\gameData\Hero\Fighter\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="ArcherAttack.h">
+      <Filter>소스 파일\gameData\Hero\Archer\skill</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
