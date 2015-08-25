@@ -8,7 +8,6 @@
 
 Match::Match()
 {
-	map.reset();
 }
 
 void Match::registerPlayer(std::shared_ptr<Player> player)
@@ -59,8 +58,6 @@ void Match::ready(std::shared_ptr<Player> player)
 
 				data.x[i] = heroData[t][i]->getPos().x;
 				data.y[i] = heroData[t][i]->getPos().y;
-
-				map.set(heroData[t][i]->getPos().x, heroData[t][i]->getPos().y, t, true);
 			}
 
 			broadcastPacket(data);
@@ -109,7 +106,10 @@ void Match::moveHero(std::shared_ptr<Player> player, int idx, Point pos)
 
 	//자기 턴도 아닌데 움직일려고 하면 거부
 	if (t != nowTurn)
+	{
+		sendReject(t);
 		return;
+	}
 
 	int swapIdx = -1;
 
@@ -142,8 +142,6 @@ void Match::moveHero(std::shared_ptr<Player> player, int idx, Point pos)
 		sendReject(t);
 		return;
 	}
-
-	map.move(prevPos, pos, t);
 
 	if (swapIdx != -1)
 	{		
