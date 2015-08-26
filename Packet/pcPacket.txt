@@ -28,6 +28,9 @@ enum Type : uint8
     UPDATE_TURN
     
     REJECT
+    
+    HERO_STATE
+    HERO_REMOVE_STATE
 	
     TYPE_NUM
 }
@@ -74,6 +77,20 @@ enum SkillType : uint8
     MONK_SACRIFICE
     MONK_PRAY
     MONK_KICK
+}
+
+enum StateType : uint8
+{
+    STATE_MOVE_IMMUNE
+    STATE_IRON
+    STATE_POSION
+    STATE_ICE
+    STATE_BURN
+    STATE_POLYMOPH
+    STATE_BUFF
+    STATE_TAUNT
+    STATE_SACRIFICE
+    STATE_PRAY
 }
 
 packet Header
@@ -217,4 +234,26 @@ packet Reject : Header
 packet DeadHero : Header
 {
     int8 heroIdx
+}
+
+packet HeroState : Header
+{
+    StateType type
+    int8 isTargetMyHero
+    int8 targetIdx
+    int8 isExecuterMyHero
+    int8 executerIdx
+    int8 damage
+    int8 hp
+    int8 act
+    int8 attack
+    int8 defence
+    int8 duration
+}
+
+packet RemoveHeroState : Header
+{
+    int8 isTargetMyHero
+    int8 targetIdx
+    StateType type
 }

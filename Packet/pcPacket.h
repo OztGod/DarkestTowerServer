@@ -33,7 +33,22 @@ enum class Type : uint8_t
 	TURN_END = 17,
 	UPDATE_TURN = 18,
 	REJECT = 19,
-	TYPE_NUM = 20,
+	HERO_STATE = 20,
+	HERO_REMOVE_STATE = 21,
+	TYPE_NUM = 22,
+};
+enum class StateType : uint8_t
+{
+	STATE_MOVE_IMMUNE = 0,
+	STATE_IRON = 1,
+	STATE_POSION = 2,
+	STATE_ICE = 3,
+	STATE_BURN = 4,
+	STATE_POLYMOPH = 5,
+	STATE_BUFF = 6,
+	STATE_TAUNT = 7,
+	STATE_SACRIFICE = 8,
+	STATE_PRAY = 9,
 };
 enum class SkillType : uint8_t
 {
@@ -223,5 +238,29 @@ struct Reject : Header
 struct DeadHero : Header
 {
 	int8_t heroIdx;
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct HeroState : Header
+{
+	StateType type;
+	int8_t isTargetMyHero;
+	int8_t targetIdx;
+	int8_t isExecuterMyHero;
+	int8_t executerIdx;
+	int8_t damage;
+	int8_t hp;
+	int8_t act;
+	int8_t attack;
+	int8_t defence;
+	int8_t duration;
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct RemoveHeroState : Header
+{
+	int8_t isTargetMyHero;
+	int8_t targetIdx;
+	StateType type;
 };
 #pragma pack(pop)

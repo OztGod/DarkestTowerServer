@@ -37,7 +37,22 @@ public enum Type
 	TURN_END = 17,
 	UPDATE_TURN = 18,
 	REJECT = 19,
-	TYPE_NUM = 20,
+	HERO_STATE = 20,
+	HERO_REMOVE_STATE = 21,
+	TYPE_NUM = 22,
+}
+public enum StateType
+{
+	STATE_MOVE_IMMUNE = 0,
+	STATE_IRON = 1,
+	STATE_POSION = 2,
+	STATE_ICE = 3,
+	STATE_BURN = 4,
+	STATE_POLYMOPH = 5,
+	STATE_BUFF = 6,
+	STATE_TAUNT = 7,
+	STATE_SACRIFICE = 8,
+	STATE_PRAY = 9,
 }
 public enum SkillType
 {
@@ -260,5 +275,41 @@ public class DeadHero : Header
 {
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte heroIdx;
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class HeroState : Header
+{
+	[MarshalAs(UnmanagedType.U1)]
+	public byte type;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte isTargetMyHero;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte targetIdx;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte isExecuterMyHero;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte executerIdx;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte damage;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte hp;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte act;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte attack;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte defence;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte duration;
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class RemoveHeroState : Header
+{
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte isTargetMyHero;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte targetIdx;
+	[MarshalAs(UnmanagedType.U1)]
+	public byte type;
 }
 }
