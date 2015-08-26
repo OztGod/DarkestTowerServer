@@ -37,6 +37,7 @@ private:
 	template<typename Packet>
 	void sendPacket(int idx, Packet& p)
 	{
+		printf("send packet type : %d\n", p.type);
 		auto context = new PacketContext<Packet>();
 		
 		context->packet = p;
@@ -48,7 +49,7 @@ private:
 	template<typename Packet>
 	void broadcastPacket(Packet& p)
 	{
-		printf("send packet type : %d\n", p.type);
+		printf("broadcast packet type : %d\n", p.type);
 		for (int i = 0; i < playerNum; i++)
 		{
 			sendPacket(i, p);

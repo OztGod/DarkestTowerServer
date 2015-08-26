@@ -21,6 +21,12 @@ void GameManager::getRandomHeros(std::shared_ptr<Player> player, OUT std::vector
 	classes.clear();
 	std::vector<const Hero*> heros;
 
+	//match가 없는 경우 무시한다.
+	if (playerMatchMap.find(player->getId()) == playerMatchMap.end())
+	{
+		return;
+	}
+
 	playerMatchMap[player->getId()]->randomHero(player);
 	playerMatchMap[player->getId()]->getHeroData(player, heros);
 

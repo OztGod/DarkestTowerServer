@@ -1,17 +1,9 @@
 #include "Skill.h"
 #include "Hero.h"
 
-bool Skill::isValidActPos(Point pos, const UHeroVec& ally, const UHeroVec& enemy) const
+bool Skill::isValidActPos(Point pos, Hero* user, const UHeroVec& ally, const UHeroVec& enemy) const
 {
-	Range res = getRange(pos, ally, enemy);
-
-	//range 범위 내에 주어진 좌표가 있다 -> 올바른 위치다
-	if (std::find(res.pos.begin(), res.pos.end(), pos) != res.pos.end())
-	{
-		return true;
-	}
-
-	return false;
+	return isActEnable(pos, ally, enemy) && user->getAct() >= act;
 }
 
 std::vector<int> Skill::getHeroInEffect(Point pos, const UHeroVec& ally, const UHeroVec& enemy) const

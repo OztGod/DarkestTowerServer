@@ -22,7 +22,7 @@ public:
 	SkillType getType() const { return type; }
 
 	//skill 해당 위치가 시전이 적절한 위치인지
-	bool isValidActPos(Point pos, const UHeroVec& ally, const UHeroVec& enemy) const;
+	bool isValidActPos(Point pos, Hero* user, const UHeroVec& ally, const UHeroVec& enemy) const;
 
 	//해당 영웅이 스킬 효과 범위 내에 존재하는지
 	std::vector<int> getHeroInEffect(Point pos, const UHeroVec& ally, const UHeroVec& enemy) const;

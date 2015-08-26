@@ -59,6 +59,8 @@ void Match::ready(std::shared_ptr<Player> player)
 
 				skills.type = Type::SKILL_DATA;
 				skills.heroIdx = i;
+				skills.skillNum = heroData[t][i]->getSkillNum();
+
 				for (int s = 0; s < heroData[t][i]->getSkillNum(); s++)
 				{
 					skills.skillType[i] = heroData[t][i]->getSkill(s)->getType();
@@ -157,6 +159,8 @@ void Match::moveHero(std::shared_ptr<Player> player, int idx, Point pos)
 	}
 
 	broadcastHeroState(t, idx);
+
+	selectHero(player, idx);
 }
 
 void Match::randomHero(std::shared_ptr<Player> player)
@@ -194,19 +198,23 @@ void Match::selectHero(std::shared_ptr<Player> player, int idx)
 	int t = getPlayerIndex(player);
 	std::vector<int> validSkills;
 
-	printf("[player %d] : select hero..", t);
+	printf("[player %d] : select hero..\n", t);
 
 	auto heroPos = heroData[t][idx]->getPos();
+
+	printf("valid skills : ");
 
 	for (int i = 0; i < heroData[t][idx]->getSkillNum(); i++)
 	{
 		auto skill = heroData[t][idx]->getSkill(i);
 
-		if (skill->isValidActPos(heroPos, heroData[t], heroData[(t + 1) % 2]) && heroData[t][idx]->getSkillCool(i) == 0)
+		if (skill->isValidActPos(heroPos, heroData[t][idx].get(), heroData[t], heroData[(t + 1) % 2]) && heroData[t][idx]->getSkillCool(i) == 0)
 		{
+			printf("%d ", i);
 			validSkills.push_back(i);
 		}
 	}
+	printf("\n");
 
 	ValidSkills packet;
 
