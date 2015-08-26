@@ -39,6 +39,7 @@ public:
 	virtual bool doSkill(Point pos, Hero* user, Hero* target, const UHeroVec& ally, const UHeroVec& enemy) const = 0;
 
 protected:
+	void damage(int value, Hero* user, Hero* target) const;
 
 	SkillType type;
 	int level;

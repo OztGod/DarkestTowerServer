@@ -41,6 +41,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Priest.cpp" />
     <ClCompile Include="Skill.cpp" />
+    <ClCompile Include="State.cpp" />
     <ClCompile Include="Thief.cpp" />
     <ClCompile Include="ThiefAttack.cpp" />
     <ClCompile Include="ThunderStorm.cpp" />
@@ -66,6 +67,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Priest.h" />
     <ClInclude Include="Skill.h" />
+    <ClInclude Include="State.h" />
     <ClInclude Include="Thief.h" />
     <ClInclude Include="ThiefAttack.h" />
     <ClInclude Include="ThunderStorm.h" />

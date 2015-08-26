@@ -12,6 +12,7 @@ enum Type : uint8
     MATCH_END
     
     GAME_DATA
+    SKILL_DATA
     CHANGE_HERO_STATE
     
     SELECT_HERO
@@ -146,11 +147,16 @@ packet GameData : Header
     HeroClass classes arr 4
     int8 hp arr 4
     int8 act arr 4
-    int8 skillNum arr 4
-    SkillType skillType arr 4
-    int8 skillLevel arr 4
     int8 x arr 4
     int8 y arr 4
+}
+
+packet SkillData : Header
+{
+    int8 heroIdx
+    int8 skillNum
+    SkillType skillType arr 4
+    int8 skillLevel arr 4
 }
 
 packet MoveHero : Header
@@ -233,17 +239,18 @@ packet Reject : Header
 
 packet DeadHero : Header
 {
+    int8 turn;
     int8 heroIdx
 }
 
 packet HeroState : Header
 {
     StateType type
-    int8 isTargetMyHero
+    int8 targetTurn
     int8 targetIdx
-    int8 isExecuterMyHero
+    int8 executerTurn
     int8 executerIdx
-    int8 damage
+    int8 damaged
     int8 hp
     int8 act
     int8 attack
@@ -253,7 +260,7 @@ packet HeroState : Header
 
 packet RemoveHeroState : Header
 {
-    int8 isTargetMyHero
+    int8 targetTurn
     int8 targetIdx
     StateType type
 }

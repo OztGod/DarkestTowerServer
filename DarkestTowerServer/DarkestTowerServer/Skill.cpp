@@ -39,3 +39,13 @@ std::vector<int> Skill::getHeroInEffect(Point pos, const UHeroVec& ally, const U
 
 	return res;
 }
+
+void Skill::damage(int value, Hero* user, Hero* target) const
+{
+	int d = value + user->getAttack() - target->getDefence();
+
+	if (d <= 0)
+		d = 1;
+
+	user->damage(d);
+}

@@ -36,7 +36,7 @@ std::vector<Point> ThunderStorm::getEffectRange(Point pos, const UHeroVec& ally,
 
 bool ThunderStorm::doSkill(Point pos, Hero* user, Hero * target, const UHeroVec& ally, const UHeroVec& enemy) const
 {
-	target->damage(5);
+	damage(5, user, target);
 
 	return true;
 }

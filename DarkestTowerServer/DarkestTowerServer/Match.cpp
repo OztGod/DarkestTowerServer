@@ -34,7 +34,6 @@ void Match::ready(std::shared_ptr<Player> player)
 	//둘 다 ready(영웅 배치 제출)면 진짜 게임 시작(게임 시작 패킷 전송)
 	if (isAllReady())
 	{
-		printf("send gameData...\n");
 		GameData data;
 		data.type = Type::GAME_DATA;
 
@@ -48,19 +47,25 @@ void Match::ready(std::shared_ptr<Player> player)
 				data.classes[i] = heroData[t][i]->getType();
 				data.hp[i] = heroData[t][i]->getMaxHp();
 				data.act[i] = heroData[t][i]->getMaxAct();
-				data.skillNum[i] = heroData[t][i]->getSkillNum();
-
-				for (int s = 0; s < heroData[t][i]->getSkillNum(); s++)
-				{
-					data.skillType[i] = heroData[t][i]->getSkill(s)->getType();
-					data.skillLevel[i] = heroData[t][i]->getSkill(s)->getLevel();
-				}
-
 				data.x[i] = heroData[t][i]->getPos().x;
 				data.y[i] = heroData[t][i]->getPos().y;
 			}
 
 			broadcastPacket(data);
+
+			for (int i = 0; i < heroData[t].size(); i++)
+			{
+				SkillData skills;
+
+				skills.type = Type::SKILL_DATA;
+				skills.heroIdx = i;
+				for (int s = 0; s < heroData[t][i]->getSkillNum(); s++)
+				{
+					skills.skillType[i] = heroData[t][i]->getSkill(s)->getType();
+					skills.skillLevel[i] = heroData[t][i]->getSkill(s)->getLevel();
+				}
+				sendPacket(t, skills);
+			}
 		}
 		
 		isStart = true;
@@ -148,10 +153,10 @@ void Match::moveHero(std::shared_ptr<Player> player, int idx, Point pos)
 		heroData[t][swapIdx]->setPos(prevPos);
 
 		//자리 바뀐 애도 바뀌었다는 패킷 보내주기
-		sendHeroState(t, swapIdx);
+		broadcastHeroState(t, swapIdx);
 	}
 
-	sendHeroState(t, idx);
+	broadcastHeroState(t, idx);
 }
 
 void Match::randomHero(std::shared_ptr<Player> player)
@@ -274,7 +279,7 @@ void Match::turnChange(std::shared_ptr<Player> player)
 	for (int i = 0; i < heroData[t].size(); i++)
 	{
 		heroData[nowTurn][i]->turnUpdate();
-		sendHeroState(t, i);
+		broadcastHeroState(t, i);
 	}
 
 	UpdateTurn packet;
@@ -334,14 +339,26 @@ void Match::actHero(std::shared_ptr<Player> player, int heroIdx, int skillIdx, P
 	//상대에게 스킬 사용했음을 나타내는 패킷 보냄
 	sendPacket((t + 1) % 2, packet);
 
-	sendHeroState(t, heroIdx);
+	broadcastHeroState(t, heroIdx);
 
 	for (auto& target : heroList)
 	{
 		int turn = skill->myField() ? turn : (turn + 1) % 2;
 		skill->doSkill(pos, heroData[t][heroIdx].get(), heroData[turn][target].get(), heroData[t], heroData[(t + 1) % 2]);
+		
 		//스킬 효과 받았으므로 갱신된 hero 상태 돌려준다
-		sendHeroState(turn, target);
+		broadcastHeroState(turn, target);
+		
+		if (heroData[turn][target]->isDead())
+		{
+			DeadHero dead;
+
+			dead.type = Type::DEAD_HERO;
+			dead.turn = turn;
+			dead.heroIdx = target;
+
+			broadcastPacket(dead);
+		}
 	}
 }
 
@@ -386,7 +403,7 @@ void Match::resetPlayer()
 	GameManager::getInstance()->removePlayerMatchMap(players[1]);
 }
 
-void Match::sendHeroState(int t, int heroIdx)
+void Match::broadcastHeroState(int t, int heroIdx)
 {
 	ChangeHeroState state;
 

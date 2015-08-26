@@ -44,7 +44,7 @@ std::vector<Point> MonkAttack::getEffectRange(Point pos, const UHeroVec& ally, c
 
 bool MonkAttack::doSkill(Point pos, Hero* user, Hero * target, const UHeroVec& ally, const UHeroVec& enemy) const
 {
-	target->damage(2);
+	damage(2, user, target);
 
 	return true;
 }

@@ -4,6 +4,9 @@
 #include <vector>
 #include <memory>
 #include "Skill.h"
+#include "State.h"
+
+const int INVALID_POS = -1;
 
 struct SkillInfo
 {
@@ -37,16 +40,24 @@ public:
 	void setSkillCool(int idx, int cool);
 	int getSkillCool(int idx) const { return skills[idx].cool; }
 	void turnUpdate();
+	bool isDead() const { return !isAlive; }
+	int getAttack() const;
+	int getDefence() const;
+
+	void addState(std::unique_ptr<State>&& state);
 
 protected:
+	void dead();
 	HeroClass type;
 	int hp;
 	int maxHp;
 	int act;
 	int maxAct;
 	int level = 1;
+	bool isAlive = true;
 	Point pos;
 	std::vector<SkillInfo> skills;
+	std::vector<std::unique_ptr<State>> states;
 };
 
 std::unique_ptr<Hero> getRandomHero();

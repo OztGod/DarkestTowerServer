@@ -32,7 +32,7 @@ public:
 
 private:
 	void resetPlayer();
-	void sendHeroState(int t, int heroIdx);
+	void broadcastHeroState(int t, int heroIdx);
 
 	template<typename Packet>
 	void sendPacket(int idx, Packet& p)

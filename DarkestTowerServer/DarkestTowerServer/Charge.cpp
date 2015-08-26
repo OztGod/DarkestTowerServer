@@ -30,7 +30,7 @@ std::vector<Point> Charge::getEffectRange(Point pos, const UHeroVec & ally, cons
 
 bool Charge::doSkill(Point pos, Hero * user, Hero * target, const UHeroVec & ally, const UHeroVec & enemy) const
 {
-	target->damage(1);
+	damage(1, user, target);
 	for (auto& h : ally)
 	{
 		//같은 줄에 있고 user보다 앞에 있으면 한칸씩 뒤로 민다

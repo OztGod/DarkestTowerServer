@@ -52,7 +52,7 @@ std::vector<Point> ThiefAttack::getEffectRange(Point pos, const UHeroVec& ally, 
 	return { Point(0,0) };
 }
 
-bool ThiefAttack::doSkill(Point pos, Hero * user, Hero * target, const UHeroVec& ally, const UHeroVec& enemy) const
+bool ThiefAttack::doSkill(Point pos, Hero* user, Hero * target, const UHeroVec& ally, const UHeroVec& enemy) const
 {
 	target->damage(1);
 

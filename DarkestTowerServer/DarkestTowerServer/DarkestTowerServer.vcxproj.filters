@@ -70,6 +70,9 @@
     <Filter Include="소스 파일\gameData\Hero\Thief\skill">
       <UniqueIdentifier>{6e6c531f-7d50-42bb-82c0-5d3f98256043}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\gameData\State">
+      <UniqueIdentifier>{55579138-43ed-4086-a475-09f99c7df623}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Packet\pcPacket.h">
@@ -147,6 +150,9 @@
     <ClCompile Include="ArcherAttack.cpp">
       <Filter>소스 파일\gameData\Hero\Archer\skill</Filter>
     </ClCompile>
+    <ClCompile Include="State.cpp">
+      <Filter>소스 파일\gameData</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientSession.h">
@@ -220,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="ArcherAttack.h">
       <Filter>소스 파일\gameData\Hero\Archer\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>소스 파일\gameData</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

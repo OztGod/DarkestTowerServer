@@ -25,21 +25,22 @@ public enum Type
 	MATCH_START = 5,
 	MATCH_END = 6,
 	GAME_DATA = 7,
-	CHANGE_HERO_STATE = 8,
-	SELECT_HERO = 9,
-	VALID_SKILLS = 10,
-	SKILL_RANGE_REQUEST = 11,
-	SKILL_RANGE_RESPONSE = 12,
-	ENEMY_SKILL_SHOT = 13,
-	MOVE_HERO = 14,
-	ACT_HERO = 15,
-	DEAD_HERO = 16,
-	TURN_END = 17,
-	UPDATE_TURN = 18,
-	REJECT = 19,
-	HERO_STATE = 20,
-	HERO_REMOVE_STATE = 21,
-	TYPE_NUM = 22,
+	SKILL_DATA = 8,
+	CHANGE_HERO_STATE = 9,
+	SELECT_HERO = 10,
+	VALID_SKILLS = 11,
+	SKILL_RANGE_REQUEST = 12,
+	SKILL_RANGE_RESPONSE = 13,
+	ENEMY_SKILL_SHOT = 14,
+	MOVE_HERO = 15,
+	ACT_HERO = 16,
+	DEAD_HERO = 17,
+	TURN_END = 18,
+	UPDATE_TURN = 19,
+	REJECT = 20,
+	HERO_STATE = 21,
+	HERO_REMOVE_STATE = 22,
+	TYPE_NUM = 23,
 }
 public enum StateType
 {
@@ -152,15 +153,21 @@ public class GameData : Header
 	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
 	public sbyte[] act= new sbyte[4];
 	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-	public sbyte[] skillNum= new sbyte[4];
+	public sbyte[] x= new sbyte[4];
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+	public sbyte[] y= new sbyte[4];
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class SkillData : Header
+{
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte heroIdx;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte skillNum;
 	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
 	public byte[] skillType= new byte[4];
 	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
 	public sbyte[] skillLevel= new sbyte[4];
-	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-	public sbyte[] x= new sbyte[4];
-	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-	public sbyte[] y= new sbyte[4];
 }
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public class MoveHero : Header
@@ -274,6 +281,8 @@ public class Reject : Header
 public class DeadHero : Header
 {
 	[MarshalAs(UnmanagedType.U1)]
+	public sbyte turn;;
+	[MarshalAs(UnmanagedType.U1)]
 	public sbyte heroIdx;
 }
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -282,15 +291,15 @@ public class HeroState : Header
 	[MarshalAs(UnmanagedType.U1)]
 	public byte type;
 	[MarshalAs(UnmanagedType.U1)]
-	public sbyte isTargetMyHero;
+	public sbyte targetTurn;
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte targetIdx;
 	[MarshalAs(UnmanagedType.U1)]
-	public sbyte isExecuterMyHero;
+	public sbyte executerTurn;
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte executerIdx;
 	[MarshalAs(UnmanagedType.U1)]
-	public sbyte damage;
+	public sbyte damaged;
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte hp;
 	[MarshalAs(UnmanagedType.U1)]
@@ -306,7 +315,7 @@ public class HeroState : Header
 public class RemoveHeroState : Header
 {
 	[MarshalAs(UnmanagedType.U1)]
-	public sbyte isTargetMyHero;
+	public sbyte targetTurn;
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte targetIdx;
 	[MarshalAs(UnmanagedType.U1)]

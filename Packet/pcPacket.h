@@ -21,21 +21,22 @@ enum class Type : uint8_t
 	MATCH_START = 5,
 	MATCH_END = 6,
 	GAME_DATA = 7,
-	CHANGE_HERO_STATE = 8,
-	SELECT_HERO = 9,
-	VALID_SKILLS = 10,
-	SKILL_RANGE_REQUEST = 11,
-	SKILL_RANGE_RESPONSE = 12,
-	ENEMY_SKILL_SHOT = 13,
-	MOVE_HERO = 14,
-	ACT_HERO = 15,
-	DEAD_HERO = 16,
-	TURN_END = 17,
-	UPDATE_TURN = 18,
-	REJECT = 19,
-	HERO_STATE = 20,
-	HERO_REMOVE_STATE = 21,
-	TYPE_NUM = 22,
+	SKILL_DATA = 8,
+	CHANGE_HERO_STATE = 9,
+	SELECT_HERO = 10,
+	VALID_SKILLS = 11,
+	SKILL_RANGE_REQUEST = 12,
+	SKILL_RANGE_RESPONSE = 13,
+	ENEMY_SKILL_SHOT = 14,
+	MOVE_HERO = 15,
+	ACT_HERO = 16,
+	DEAD_HERO = 17,
+	TURN_END = 18,
+	UPDATE_TURN = 19,
+	REJECT = 20,
+	HERO_STATE = 21,
+	HERO_REMOVE_STATE = 22,
+	TYPE_NUM = 23,
 };
 enum class StateType : uint8_t
 {
@@ -137,11 +138,17 @@ struct GameData : Header
 	HeroClass classes[4];
 	int8_t hp[4];
 	int8_t act[4];
-	int8_t skillNum[4];
-	SkillType skillType[4];
-	int8_t skillLevel[4];
 	int8_t x[4];
 	int8_t y[4];
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct SkillData : Header
+{
+	int8_t heroIdx;
+	int8_t skillNum;
+	SkillType skillType[4];
+	int8_t skillLevel[4];
 };
 #pragma pack(pop)
 #pragma pack(push, 1)
@@ -237,6 +244,7 @@ struct Reject : Header
 #pragma pack(push, 1)
 struct DeadHero : Header
 {
+	int8_t turn;;
 	int8_t heroIdx;
 };
 #pragma pack(pop)
@@ -244,11 +252,11 @@ struct DeadHero : Header
 struct HeroState : Header
 {
 	StateType type;
-	int8_t isTargetMyHero;
+	int8_t targetTurn;
 	int8_t targetIdx;
-	int8_t isExecuterMyHero;
+	int8_t executerTurn;
 	int8_t executerIdx;
-	int8_t damage;
+	int8_t damaged;
 	int8_t hp;
 	int8_t act;
 	int8_t attack;
@@ -259,7 +267,7 @@ struct HeroState : Header
 #pragma pack(push, 1)
 struct RemoveHeroState : Header
 {
-	int8_t isTargetMyHero;
+	int8_t targetTurn;
 	int8_t targetIdx;
 	StateType type;
 };

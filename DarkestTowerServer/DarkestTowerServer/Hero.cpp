@@ -42,6 +42,11 @@ bool Hero::consumeAct(int value)
 void Hero::damage(int value)
 {
 	hp -= value;
+
+	if (hp <= 0)
+	{
+		dead();
+	}
 }
 
 void Hero::setSkillCool(int idx, int cool)
@@ -58,6 +63,42 @@ void Hero::turnUpdate()
 		if (skill.cool > 0)
 			skill.cool--;
 	}
+}
+
+int Hero::getAttack() const
+{
+	int attack = 0;
+
+	for (auto& state : states)
+	{
+		attack += state->getAttack();
+	}
+
+	return attack;
+}
+
+int Hero::getDefence() const
+{
+	int defence = 0;
+
+	for (auto& state : states)
+	{
+		defence += state->getDefence();
+	}
+	
+	return defence;
+}
+
+void Hero::addState(std::unique_ptr<State>&& state)
+{
+	states.push_back(std::move(state));
+}
+
+void Hero::dead()
+{
+	isAlive = false;
+	pos.x = INVALID_POS;
+	pos.y = INVALID_POS;
 }
 
 std::unique_ptr<Hero> getRandomHero()

@@ -32,7 +32,7 @@ std::vector<Point> ArcherAttack::getEffectRange(Point pos, const UHeroVec& ally,
 
 bool ArcherAttack::doSkill(Point pos, Hero* user, Hero * target, const UHeroVec& ally, const UHeroVec& enemy) const
 {
-	target->damage(2);
+	damage(2, user, target);
 
 	return true;
 }
