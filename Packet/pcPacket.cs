@@ -31,7 +31,7 @@ public enum Type
 	VALID_SKILLS = 11,
 	SKILL_RANGE_REQUEST = 12,
 	SKILL_RANGE_RESPONSE = 13,
-	ENEMY_SKILL_SHOT = 14,
+	SKILL_SHOT = 14,
 	MOVE_HERO = 15,
 	ACT_HERO = 16,
 	DEAD_HERO = 17,
@@ -260,12 +260,20 @@ public class ActHero : Header
 	public sbyte y;
 }
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public class EnemySkillShot : Header
+public class SkillShot : Header
 {
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte turn;
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte heroIdx;
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte skillIdx;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte num;
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+	public sbyte[] x= new sbyte[8];
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+	public sbyte[] y= new sbyte[8];
 }
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public class MatchEnd : Header

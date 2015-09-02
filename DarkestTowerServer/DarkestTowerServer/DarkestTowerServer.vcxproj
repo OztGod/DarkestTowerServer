@@ -78,6 +78,9 @@
       <Project>{21f2d9c4-a881-40ec-a8b0-ecaad2efb37b}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Packet\simplePacket.py" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6FF43BF4-A45A-4815-B66A-A5650E699266}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

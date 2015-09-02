@@ -19,7 +19,7 @@ enum Type : uint8
     VALID_SKILLS
     SKILL_RANGE_REQUEST
     SKILL_RANGE_RESPONSE
-    ENEMY_SKILL_SHOT
+    SKILL_SHOT
     
     MOVE_HERO
     ACT_HERO
@@ -222,10 +222,14 @@ packet ActHero : Header
     int8 y
 }
 
-packet EnemySkillShot : Header
+packet SkillShot : Header
 {
+    int8 turn
     int8 heroIdx
     int8 skillIdx
+    int8 num
+    int8 x arr 8
+    int8 y arr 8
 }
 
 packet MatchEnd : Header

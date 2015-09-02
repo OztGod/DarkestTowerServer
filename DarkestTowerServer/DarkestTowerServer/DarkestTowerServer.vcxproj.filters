@@ -231,4 +231,9 @@
       <Filter>소스 파일\gameData</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Packet\simplePacket.py">
+      <Filter>소스 파일\packet</Filter>
+    </None>
+  </ItemGroup>
 </Project>

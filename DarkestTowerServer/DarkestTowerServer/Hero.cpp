@@ -105,7 +105,7 @@ std::unique_ptr<Hero> getRandomHero()
 {
 	std::unique_ptr<Hero> hero = nullptr;
 	int heroNum = static_cast<int>(HeroClass::NUM);
-	HeroClass heroClass = static_cast<HeroClass>(rand() % heroNum);
+	HeroClass heroClass = static_cast<HeroClass>(rand() % 3 /*heroNum*/);
 
 	switch (heroClass)
 	{

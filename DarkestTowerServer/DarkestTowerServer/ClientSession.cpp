@@ -20,6 +20,7 @@ ClientSession::ClientSession(skylark::CompletionPort * port, std::size_t sendBuf
 	handler.registerHandler(Type::TURN_END, &ClientSession::onTurnEnd);
 	handler.registerHandler(Type::MOVE_HERO, &ClientSession::onMoveHero);
 	handler.registerHandler(Type::SELECT_HERO, &ClientSession::onSelectHero);
+	handler.registerHandler(Type::SKILL_RANGE_REQUEST, &ClientSession::onSkillRangeRequest);
 	handler.registerHandler(Type::ACT_HERO, &ClientSession::onActHero);
 }
 

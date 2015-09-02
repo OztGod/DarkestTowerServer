@@ -63,8 +63,8 @@ void Match::ready(std::shared_ptr<Player> player)
 
 				for (int s = 0; s < heroData[t][i]->getSkillNum(); s++)
 				{
-					skills.skillType[i] = heroData[t][i]->getSkill(s)->getType();
-					skills.skillLevel[i] = heroData[t][i]->getSkill(s)->getLevel();
+					skills.skillType[s] = heroData[t][i]->getSkill(s)->getType();
+					skills.skillLevel[s] = heroData[t][i]->getSkill(s)->getLevel();
 				}
 				sendPacket(t, skills);
 			}
@@ -252,7 +252,7 @@ void Match::getSkillRange(std::shared_ptr<Player> player, int heroIdx, int skill
 
 	packet.type = Type::SKILL_RANGE_RESPONSE;
 	packet.rangeNum = range.pos.size();
-	packet.isMyField = range.isMyField;
+	packet.isMyField = range.isMyField ? 1 : 0;
 	
 	for (int i = 0; i < range.pos.size(); i++)
 	{
@@ -339,18 +339,26 @@ void Match::actHero(std::shared_ptr<Player> player, int heroIdx, int skillIdx, P
 	heroData[t][heroIdx]->setSkillCool(skillIdx, skill->getCool());
 	heroData[t][heroIdx]->consumeAct(skill->getAct());
 
-	EnemySkillShot packet;
-	packet.type = Type::ENEMY_SKILL_SHOT;
-	packet.heroIdx = heroIdx;
-	packet.skillIdx = skillIdx;
+	SkillShot shot;
 
-	//상대에게 스킬 사용했음을 나타내는 패킷 보냄
-	sendPacket((t + 1) % 2, packet);
+	shot.type = Type::SKILL_SHOT;
+	shot.turn = t;
+	shot.heroIdx = heroIdx;
+	shot.skillIdx = skillIdx;
+	shot.num = heroList.size();
+
+	for (int i = 0; i < heroList.size(); i++)
+	{
+		shot.x[i] = heroData[t][heroIdx].get()->getPos().x;
+		shot.y[i] = heroData[t][heroIdx].get()->getPos().y;
+	}
+
+	broadcastPacket(shot);
 
 	broadcastHeroState(t, heroIdx);
 
 	for (auto& target : heroList)
-	{
+	{ 
 		int turn = skill->myField() ? turn : (turn + 1) % 2;
 		skill->doSkill(pos, heroData[t][heroIdx].get(), heroData[turn][target].get(), heroData[t], heroData[(t + 1) % 2]);
 		
@@ -368,6 +376,8 @@ void Match::actHero(std::shared_ptr<Player> player, int heroIdx, int skillIdx, P
 			broadcastPacket(dead);
 		}
 	}
+
+
 }
 
 bool Match::isEnd()
