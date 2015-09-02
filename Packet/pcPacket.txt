@@ -227,9 +227,10 @@ packet SkillShot : Header
     int8 turn
     int8 heroIdx
     int8 skillIdx
-    int8 num
-    int8 x arr 8
-    int8 y arr 8
+    int8 effectNum
+    int8 effectTurn arr 8
+    int8 effectX arr 8
+    int8 effectY arr 8
 }
 
 packet MatchEnd : Header

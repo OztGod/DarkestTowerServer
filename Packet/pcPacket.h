@@ -229,9 +229,10 @@ struct SkillShot : Header
 	int8_t turn;
 	int8_t heroIdx;
 	int8_t skillIdx;
-	int8_t num;
-	int8_t x[8];
-	int8_t y[8];
+	int8_t effectNum;
+	int8_t effectTurn[8];
+	int8_t effectX[8];
+	int8_t effectY[8];
 };
 #pragma pack(pop)
 #pragma pack(push, 1)

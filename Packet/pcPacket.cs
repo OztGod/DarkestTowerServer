@@ -269,11 +269,13 @@ public class SkillShot : Header
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte skillIdx;
 	[MarshalAs(UnmanagedType.U1)]
-	public sbyte num;
+	public sbyte effectNum;
 	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-	public sbyte[] x= new sbyte[8];
+	public sbyte[] effectTurn= new sbyte[8];
 	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-	public sbyte[] y= new sbyte[8];
+	public sbyte[] effectX= new sbyte[8];
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+	public sbyte[] effectY= new sbyte[8];
 }
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public class MatchEnd : Header

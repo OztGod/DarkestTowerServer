@@ -345,12 +345,13 @@ void Match::actHero(std::shared_ptr<Player> player, int heroIdx, int skillIdx, P
 	shot.turn = t;
 	shot.heroIdx = heroIdx;
 	shot.skillIdx = skillIdx;
-	shot.num = heroList.size();
+	shot.effectNum = heroList.size();
 
 	for (int i = 0; i < heroList.size(); i++)
 	{
-		shot.x[i] = heroData[t][heroIdx].get()->getPos().x;
-		shot.y[i] = heroData[t][heroIdx].get()->getPos().y;
+		shot.effectTurn[i] = skill->myField() ? t : ((t + 1) % 2);
+		shot.effectX[i] = heroData[t][heroIdx].get()->getPos().x;
+		shot.effectY[i] = heroData[t][heroIdx].get()->getPos().y;
 	}
 
 	broadcastPacket(shot);
