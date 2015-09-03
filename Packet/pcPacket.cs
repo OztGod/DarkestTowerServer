@@ -194,6 +194,8 @@ public class ChangeHeroState : Header
 	public sbyte x;
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte y;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte isMove;
 }
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public class TurnEnd : Header

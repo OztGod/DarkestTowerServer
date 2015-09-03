@@ -155,10 +155,10 @@ void Match::moveHero(std::shared_ptr<Player> player, int idx, Point pos)
 		heroData[t][swapIdx]->setPos(prevPos);
 
 		//자리 바뀐 애도 바뀌었다는 패킷 보내주기
-		broadcastHeroState(t, swapIdx);
+		broadcastHeroState(t, swapIdx, true);
 	}
 
-	broadcastHeroState(t, idx);
+	broadcastHeroState(t, idx, true);
 
 	selectHero(player, idx);
 }
@@ -299,7 +299,7 @@ void Match::turnChange(std::shared_ptr<Player> player)
 	for (int i = 0; i < heroData[t].size(); i++)
 	{
 		heroData[nowTurn][i]->turnUpdate();
-		broadcastHeroState(nowTurn, i);
+		broadcastHeroState(nowTurn, i, false);
 	}
 
 	UpdateTurn packet;
@@ -380,7 +380,7 @@ void Match::actHero(std::shared_ptr<Player> player, int heroIdx, int skillIdx, P
 
 	broadcastPacket(shot);
 
-	broadcastHeroState(t, heroIdx);
+	broadcastHeroState(t, heroIdx, false);
 
 	for (auto& target : heroList)
 	{ 
@@ -388,7 +388,7 @@ void Match::actHero(std::shared_ptr<Player> player, int heroIdx, int skillIdx, P
 		skill->doSkill(pos, heroData[t][heroIdx].get(), heroData[turn][target].get(), heroData[t], heroData[turn]);
 		
 		//스킬 효과 받았으므로 갱신된 hero 상태 돌려준다
-		broadcastHeroState(turn, target);
+		broadcastHeroState(turn, target, false);
 		
 		if (heroData[turn][target]->isDead())
 		{
@@ -446,7 +446,7 @@ void Match::resetPlayer()
 	GameManager::getInstance()->removePlayerMatchMap(players[1]);
 }
 
-void Match::broadcastHeroState(int t, int heroIdx)
+void Match::broadcastHeroState(int t, int heroIdx, bool isMove)
 {
 	ChangeHeroState state;
 
@@ -457,6 +457,7 @@ void Match::broadcastHeroState(int t, int heroIdx)
 	state.act = heroData[t][heroIdx]->getAct();
 	state.x = heroData[t][heroIdx]->getPos().x;
 	state.y = heroData[t][heroIdx]->getPos().y;
+	state.isMove = isMove ? 1 : 0;
 
 	broadcastPacket(state);
 }
