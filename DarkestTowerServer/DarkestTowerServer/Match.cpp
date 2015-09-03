@@ -233,6 +233,18 @@ void Match::getSkillRange(std::shared_ptr<Player> player, int heroIdx, int skill
 {
 	int t = getPlayerIndex(player);
 
+	if (heroIdx < 0 || heroIdx >= 4)
+	{
+		sendReject(t);
+		return;
+	}
+
+	if (skillIdx < 0 || skillIdx >= heroData[t][heroIdx]->getSkillNum())
+	{
+		sendReject(t);
+		return;
+	}
+
 	printf("[player %d]: get Skill Range\n", t);
 
 	auto heroPos = heroData[t][heroIdx]->getPos();
@@ -287,7 +299,7 @@ void Match::turnChange(std::shared_ptr<Player> player)
 	for (int i = 0; i < heroData[t].size(); i++)
 	{
 		heroData[nowTurn][i]->turnUpdate();
-		broadcastHeroState(t, i);
+		broadcastHeroState(nowTurn, i);
 	}
 
 	UpdateTurn packet;
@@ -301,6 +313,18 @@ void Match::turnChange(std::shared_ptr<Player> player)
 void Match::actHero(std::shared_ptr<Player> player, int heroIdx, int skillIdx, Point pos)
 {
 	int t = getPlayerIndex(player);
+
+	if (heroIdx < 0 || heroIdx >= 4)
+	{
+		sendReject(t);
+		return;
+	}
+
+	if (skillIdx < 0 || skillIdx >= heroData[t][heroIdx]->getSkillNum())
+	{
+		sendReject(t);
+		return;
+	}
 
 	auto skill = heroData[t][heroIdx]->getSkill(skillIdx);
 	auto heroPos = heroData[t][heroIdx]->getPos();
@@ -350,8 +374,8 @@ void Match::actHero(std::shared_ptr<Player> player, int heroIdx, int skillIdx, P
 	for (int i = 0; i < heroList.size(); i++)
 	{
 		shot.effectTurn[i] = skill->myField() ? t : ((t + 1) % 2);
-		shot.effectX[i] = heroData[t][heroIdx].get()->getPos().x;
-		shot.effectY[i] = heroData[t][heroIdx].get()->getPos().y;
+		shot.effectX[i] = heroData[shot.effectTurn[i]][heroList[i]].get()->getPos().x;
+		shot.effectY[i] = heroData[shot.effectTurn[i]][heroList[i]].get()->getPos().y;
 	}
 
 	broadcastPacket(shot);
@@ -360,8 +384,8 @@ void Match::actHero(std::shared_ptr<Player> player, int heroIdx, int skillIdx, P
 
 	for (auto& target : heroList)
 	{ 
-		int turn = skill->myField() ? turn : (turn + 1) % 2;
-		skill->doSkill(pos, heroData[t][heroIdx].get(), heroData[turn][target].get(), heroData[t], heroData[(t + 1) % 2]);
+		int turn = skill->myField() ? t : (t + 1) % 2;
+		skill->doSkill(pos, heroData[t][heroIdx].get(), heroData[turn][target].get(), heroData[t], heroData[turn]);
 		
 		//스킬 효과 받았으므로 갱신된 hero 상태 돌려준다
 		broadcastHeroState(turn, target);

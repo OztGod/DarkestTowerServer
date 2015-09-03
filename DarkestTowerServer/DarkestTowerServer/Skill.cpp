@@ -23,7 +23,7 @@ std::vector<int> Skill::getHeroInEffect(Point pos, const UHeroVec& ally, const U
 	const UHeroVec& target = isMyField ? ally : enemy;
 
 	//hero 위치가 skill 범위 내부인 것 리턴.
-	for (int i = 0; target.size(); i++)
+	for (int i = 0; i < target.size(); i++)
 	{
 		if (std::find(attackPos.begin(), attackPos.end(), target[i]->getPos()) != attackPos.end())
 			res.push_back(i);
@@ -39,5 +39,5 @@ void Skill::damage(int value, Hero* user, Hero* target) const
 	if (d <= 0)
 		d = 1;
 
-	user->damage(d);
+	target->damage(d);
 }
