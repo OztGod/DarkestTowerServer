@@ -40,19 +40,19 @@ public enum Type
 	REJECT = 20,
 	HERO_STATE = 21,
 	HERO_REMOVE_STATE = 22,
-	TYPE_NUM = 23,
+	EFFECT_RESPONSE = 23,
+	TYPE_NUM = 24,
 }
 public enum StateType
 {
-	STATE_MOVE_IMMUNE = 0,
-	STATE_IRON = 1,
-	STATE_POSION = 2,
-	STATE_ICE = 3,
-	STATE_BURN = 4,
-	STATE_BUFF = 5,
-	STATE_TAUNT = 6,
-	STATE_SACRIFICE = 7,
-	STATE_PRAY = 8,
+	STATE_IRON = 0,
+	STATE_POISON = 1,
+	STATE_ICE = 2,
+	STATE_BURN = 3,
+	STATE_BUFF = 4,
+	STATE_TAUNT = 5,
+	STATE_SACRIFICE = 6,
+	STATE_PRAY = 7,
 }
 public enum SkillType
 {
@@ -241,6 +241,14 @@ public class SkillRangeResponse : Header
 	public sbyte[] rangeX= new sbyte[9];
 	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
 	public sbyte[] rangeY= new sbyte[9];
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class EffectResponse : Header
+{
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte heroIdx;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte skillIdx;
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte effectNum;
 	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]

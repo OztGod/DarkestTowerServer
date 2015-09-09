@@ -32,6 +32,8 @@ enum Type : uint8
     
     HERO_STATE
     HERO_REMOVE_STATE
+
+    EFFECT_RESPONSE
 	
     TYPE_NUM
 }
@@ -82,9 +84,8 @@ enum SkillType : uint8
 
 enum StateType : uint8
 {
-    STATE_MOVE_IMMUNE
     STATE_IRON
-    STATE_POSION
+    STATE_POISON
     STATE_ICE
     STATE_BURN
     STATE_BUFF
@@ -209,6 +210,12 @@ packet SkillRangeResponse : Header
     int8 rangeNum
     int8 rangeX arr 9
     int8 rangeY arr 9
+}
+
+packet EffectResponse : Header
+{
+    int8 heroIdx
+    int8 skillIdx
     int8 effectNum
     int8 effectX arr 9
     int8 effectY arr 9

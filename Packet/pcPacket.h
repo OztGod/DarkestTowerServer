@@ -36,19 +36,19 @@ enum class Type : uint8_t
 	REJECT = 20,
 	HERO_STATE = 21,
 	HERO_REMOVE_STATE = 22,
-	TYPE_NUM = 23,
+	EFFECT_RESPONSE = 23,
+	TYPE_NUM = 24,
 };
 enum class StateType : uint8_t
 {
-	STATE_MOVE_IMMUNE = 0,
-	STATE_IRON = 1,
-	STATE_POSION = 2,
-	STATE_ICE = 3,
-	STATE_BURN = 4,
-	STATE_BUFF = 5,
-	STATE_TAUNT = 6,
-	STATE_SACRIFICE = 7,
-	STATE_PRAY = 8,
+	STATE_IRON = 0,
+	STATE_POISON = 1,
+	STATE_ICE = 2,
+	STATE_BURN = 3,
+	STATE_BUFF = 4,
+	STATE_TAUNT = 5,
+	STATE_SACRIFICE = 6,
+	STATE_PRAY = 7,
 };
 enum class SkillType : uint8_t
 {
@@ -209,6 +209,13 @@ struct SkillRangeResponse : Header
 	int8_t rangeNum;
 	int8_t rangeX[9];
 	int8_t rangeY[9];
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct EffectResponse : Header
+{
+	int8_t heroIdx;
+	int8_t skillIdx;
 	int8_t effectNum;
 	int8_t effectX[9];
 	int8_t effectY[9];
