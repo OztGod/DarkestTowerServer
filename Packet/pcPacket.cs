@@ -234,6 +234,10 @@ public class SkillRangeRequest : Header
 public class SkillRangeResponse : Header
 {
 	[MarshalAs(UnmanagedType.U1)]
+	public sbyte heroIdx;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte skillIdx;
+	[MarshalAs(UnmanagedType.U1)]
 	public sbyte isMyField;
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte rangeNum;

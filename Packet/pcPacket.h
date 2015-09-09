@@ -205,6 +205,8 @@ struct SkillRangeRequest : Header
 #pragma pack(push, 1)
 struct SkillRangeResponse : Header
 {
+	int8_t heroIdx;
+	int8_t skillIdx;
 	int8_t isMyField;
 	int8_t rangeNum;
 	int8_t rangeX[9];

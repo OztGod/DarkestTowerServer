@@ -206,6 +206,8 @@ packet SkillRangeRequest : Header
 
 packet SkillRangeResponse : Header
 {
+    int8 heroIdx
+    int8 skillIdx
     int8 isMyField
     int8 rangeNum
     int8 rangeX arr 9
