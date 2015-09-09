@@ -48,6 +48,7 @@
     <ClCompile Include="PenetrateShot.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Poison.cpp" />
+    <ClCompile Include="PoisonState.cpp" />
     <ClCompile Include="Pray.cpp" />
     <ClCompile Include="Priest.cpp" />
     <ClCompile Include="PriestAttack.cpp" />
@@ -88,6 +89,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Burn.h" />
     <ClInclude Include="Poison.h" />
+    <ClInclude Include="PoisonState.h" />
     <ClInclude Include="Pray.h" />
     <ClInclude Include="Priest.h" />
     <ClInclude Include="PriestAttack.h" />

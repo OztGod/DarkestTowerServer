@@ -195,6 +195,9 @@
     <ClCompile Include="IceArrow.cpp">
       <Filter>소스 파일\gameData\Hero\Magician\skill</Filter>
     </ClCompile>
+    <ClCompile Include="PoisonState.cpp">
+      <Filter>소스 파일\gameData\State</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientSession.h">
@@ -313,6 +316,9 @@
     </ClInclude>
     <ClInclude Include="IceArrow.h">
       <Filter>소스 파일\gameData\Hero\Magician\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="PoisonState.h">
+      <Filter>소스 파일\gameData\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
