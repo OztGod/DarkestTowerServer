@@ -36,6 +36,7 @@
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="HmmoApplication.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Ice.cpp" />
     <ClCompile Include="IceArrow.cpp" />
     <ClCompile Include="Kick.cpp" />
     <ClCompile Include="LogicContext.cpp" />
@@ -77,6 +78,7 @@
     <ClInclude Include="Hero.h" />
     <ClInclude Include="HmmoApplication.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Ice.h" />
     <ClInclude Include="IceArrow.h" />
     <ClInclude Include="Kick.h" />
     <ClInclude Include="LogicContext.h" />

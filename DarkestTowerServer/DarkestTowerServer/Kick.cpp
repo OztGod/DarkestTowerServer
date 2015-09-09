@@ -39,7 +39,7 @@ bool Kick::doSkill(Point pos, Hero * user, Hero * target, const UHeroVec & ally,
 	}
 
 	//맨 뒤로 이동
-	target->setPos({ user->getPos().x, 2 });
+	target->setPos({ target->getPos().x, 2 });
 
 	return true;
 }

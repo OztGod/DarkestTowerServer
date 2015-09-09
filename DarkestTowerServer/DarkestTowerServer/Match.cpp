@@ -587,6 +587,7 @@ void Match::broadcastHeroState(int t, int heroIdx, bool isMove)
 			s.stateId = state.getId();
 
 			broadcastPacket(s);
+			++it;
 		}
 	}
 

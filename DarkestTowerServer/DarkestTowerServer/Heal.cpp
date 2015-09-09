@@ -23,6 +23,7 @@ Range Heal::getRange(Point pos, const UHeroVec& ally, const UHeroVec& enemy) con
 	{
 		Point(pos.x - 1,pos.y),
 		Point(pos.x + 1,pos.y),
+		Point(pos.x,pos.y),
 		Point(pos.x,pos.y - 1),
 		Point(pos.x,pos.y + 1)
 	};

@@ -8,7 +8,7 @@ Snipe::Snipe()
 bool Snipe::isActEnable(Point pos, const UHeroVec & ally, const UHeroVec & enemy) const
 {
 	if (pos.y == 2)
-		true;
+		return true;
 
 	return false;
 }

@@ -26,9 +26,9 @@ std::vector<Point> PenetrateShot::getEffectRange(Point pos, const UHeroVec & all
 {
 	return
 	{
-		Point(pos.x,0 - pos.y),
-		Point(pos.x,1 - pos.y),
-		Point(pos.x,2 - pos.y)
+		Point(0,0 - pos.y),
+		Point(0,1 - pos.y),
+		Point(0,2 - pos.y)
 	};
 }
 
