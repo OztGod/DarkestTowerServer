@@ -300,7 +300,7 @@ public class DeadHero : Header
 public class HeroState : Header
 {
 	[MarshalAs(UnmanagedType.U1)]
-	public byte type;
+	public byte stateType;
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte targetTurn;
 	[MarshalAs(UnmanagedType.U1)]

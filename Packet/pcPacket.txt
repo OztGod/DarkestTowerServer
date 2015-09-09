@@ -250,7 +250,7 @@ packet DeadHero : Header
 
 packet HeroState : Header
 {
-    StateType type
+    StateType stateType
     int8 targetTurn
     int8 targetIdx
     int8 executerTurn

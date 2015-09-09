@@ -256,7 +256,7 @@ struct DeadHero : Header
 #pragma pack(push, 1)
 struct HeroState : Header
 {
-	StateType type;
+	StateType stateType;
 	int8_t targetTurn;
 	int8_t targetIdx;
 	int8_t executerTurn;
