@@ -159,6 +159,42 @@
     <ClCompile Include="FireBlast.cpp">
       <Filter>소스 파일\gameData\Hero\Magician\skill</Filter>
     </ClCompile>
+    <ClCompile Include="BackStep.cpp">
+      <Filter>소스 파일\gameData\Hero\Thief\skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Poison.cpp">
+      <Filter>소스 파일\gameData\Hero\Thief\skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Taunt.cpp">
+      <Filter>소스 파일\gameData\Hero\Thief\skill</Filter>
+    </ClCompile>
+    <ClCompile Include="BackAttack.cpp">
+      <Filter>소스 파일\gameData\Hero\Archer\skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Snipe.cpp">
+      <Filter>소스 파일\gameData\Hero\Archer\skill</Filter>
+    </ClCompile>
+    <ClCompile Include="PriestAttack.cpp">
+      <Filter>소스 파일\gameData\Hero\Priest\skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Buff.cpp">
+      <Filter>소스 파일\gameData\Hero\Priest\skill</Filter>
+    </ClCompile>
+    <ClCompile Include="RemoveMagic.cpp">
+      <Filter>소스 파일\gameData\Hero\Priest\skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Pray.cpp">
+      <Filter>소스 파일\gameData\Hero\Monk\skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Kick.cpp">
+      <Filter>소스 파일\gameData\Hero\Monk\skill</Filter>
+    </ClCompile>
+    <ClCompile Include="PenetrateShot.cpp">
+      <Filter>소스 파일\gameData\Hero\Archer\skill</Filter>
+    </ClCompile>
+    <ClCompile Include="IceArrow.cpp">
+      <Filter>소스 파일\gameData\Hero\Magician\skill</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientSession.h">
@@ -240,6 +276,42 @@
       <Filter>소스 파일\gameData\State</Filter>
     </ClInclude>
     <ClInclude Include="FireBlast.h">
+      <Filter>소스 파일\gameData\Hero\Magician\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="BackStep.h">
+      <Filter>소스 파일\gameData\Hero\Thief\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Poison.h">
+      <Filter>소스 파일\gameData\Hero\Thief\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Taunt.h">
+      <Filter>소스 파일\gameData\Hero\Thief\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="BackAttack.h">
+      <Filter>소스 파일\gameData\Hero\Archer\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="PenetrateShot.h">
+      <Filter>소스 파일\gameData\Hero\Archer\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Snipe.h">
+      <Filter>소스 파일\gameData\Hero\Archer\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="PriestAttack.h">
+      <Filter>소스 파일\gameData\Hero\Priest\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Buff.h">
+      <Filter>소스 파일\gameData\Hero\Priest\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="RemoveMagic.h">
+      <Filter>소스 파일\gameData\Hero\Priest\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Pray.h">
+      <Filter>소스 파일\gameData\Hero\Monk\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Kick.h">
+      <Filter>소스 파일\gameData\Hero\Monk\skill</Filter>
+    </ClInclude>
+    <ClInclude Include="IceArrow.h">
       <Filter>소스 파일\gameData\Hero\Magician\skill</Filter>
     </ClInclude>
   </ItemGroup>

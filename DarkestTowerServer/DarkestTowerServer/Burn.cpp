@@ -1,7 +1,7 @@
 #include "Burn.h"
 #include "Hero.h"
 
-void Burn::apply(Hero* hero, bool isAct)
+void Burn::apply(Hero* hero, Hero* enemy, bool isAct)
 {
 }
 

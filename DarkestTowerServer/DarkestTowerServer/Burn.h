@@ -13,7 +13,7 @@ public:
 	~Burn() override = default;
 
 	//해당 상태에 걸린 캐릭터가 공격하거나 공격 당할 때마다 발동
-	void apply(Hero* hero, bool isAct) override;
+	void apply(Hero* hero, Hero* enemy, bool isAct) override;
 
 	//해당 상태에 걸린 캐릭터의 턴이 돌아올 때마다 발동
 	void update(Hero* hero) override;

@@ -34,7 +34,7 @@ public:
 	StateType getType() const { return type; }
 
 	//해당 상태에 걸린 캐릭터가 공격하거나 공격 당할 때마다 발동
-	virtual void apply(Hero* hero, bool isAct) = 0;
+	virtual void apply(Hero* hero, Hero* enemy, bool isAct) = 0;
 
 	//해당 상태에 걸린 캐릭터의 턴이 돌아올 때마다 발동
 	virtual void update(Hero* hero) = 0;

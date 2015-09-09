@@ -270,11 +270,12 @@ void Match::getSkillRange(std::shared_ptr<Player> player, int heroIdx, int skill
 	}
 
 	auto range = skill->getRange(heroPos, heroData[t], heroData[(t + 1) % 2]);
-	auto effect = skill->getEffectRange({ 2 - heroPos.x, heroPos.y }, heroData[t], heroData[(t + 1) % 2]);
-
+	
 	SkillRangeResponse packet;
 
 	packet.type = Type::SKILL_RANGE_RESPONSE;
+	packet.heroIdx = heroIdx;
+	packet.skillIdx = skillIdx;
 	packet.rangeNum = range.pos.size();
 	packet.isMyField = range.isMyField ? 1 : 0;
 	
@@ -284,15 +285,25 @@ void Match::getSkillRange(std::shared_ptr<Player> player, int heroIdx, int skill
 		packet.rangeY[i] = range.pos[i].y;
 	}
 
-	packet.effectNum = effect.size();
-
-	for (int i = 0; i < effect.size(); i++)
-	{
-		packet.effectX[i] = effect[i].x;
-		packet.effectY[i] = effect[i].y;
-	}
-
 	sendPacket(t, packet);
+
+	for (int i = 0; i < range.pos.size(); i++)
+	{
+		auto effect = skill->getEffectRange(range.pos[i], heroData[t], heroData[(t + 1) % 2]);
+
+		EffectResponse e;
+		e.type = Type::EFFECT_RESPONSE;
+		e.heroIdx = heroIdx;
+		e.skillIdx = skillIdx;
+		e.effectNum = effect.size();
+		for (int j = 0; j < effect.size(); j++)
+		{
+			e.effectX[j] = effect[j].x;
+			e.effectY[j] = effect[j].y;
+		}
+
+		sendPacket(t, e);
+	}
 }
 
 void Match::turnChange(std::shared_ptr<Player> player)
