@@ -87,7 +87,6 @@ enum StateType : uint8
     STATE_POSION
     STATE_ICE
     STATE_BURN
-    STATE_POLYMOPH
     STATE_BUFF
     STATE_TAUNT
     STATE_SACRIFICE
@@ -256,6 +255,7 @@ packet HeroState : Header
     int8 targetIdx
     int8 executerTurn
     int8 executerIdx
+    int8 stateId
     int8 damaged
     int8 hp
     int8 act
@@ -268,5 +268,6 @@ packet RemoveHeroState : Header
 {
     int8 targetTurn
     int8 targetIdx
-    StateType type
+    int8 stateId
+    StateType stateType
 }

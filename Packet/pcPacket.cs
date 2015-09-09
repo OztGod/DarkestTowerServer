@@ -49,11 +49,10 @@ public enum StateType
 	STATE_POSION = 2,
 	STATE_ICE = 3,
 	STATE_BURN = 4,
-	STATE_POLYMOPH = 5,
-	STATE_BUFF = 6,
-	STATE_TAUNT = 7,
-	STATE_SACRIFICE = 8,
-	STATE_PRAY = 9,
+	STATE_BUFF = 5,
+	STATE_TAUNT = 6,
+	STATE_SACRIFICE = 7,
+	STATE_PRAY = 8,
 }
 public enum SkillType
 {
@@ -311,6 +310,8 @@ public class HeroState : Header
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte executerIdx;
 	[MarshalAs(UnmanagedType.U1)]
+	public sbyte stateId;
+	[MarshalAs(UnmanagedType.U1)]
 	public sbyte damaged;
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte hp;
@@ -331,6 +332,8 @@ public class RemoveHeroState : Header
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte targetIdx;
 	[MarshalAs(UnmanagedType.U1)]
-	public byte type;
+	public sbyte stateId;
+	[MarshalAs(UnmanagedType.U1)]
+	public byte stateType;
 }
 }
