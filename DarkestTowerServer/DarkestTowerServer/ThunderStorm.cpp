@@ -28,9 +28,9 @@ std::vector<Point> ThunderStorm::getEffectRange(Point pos, const UHeroVec& ally,
 {
 	return
 	{
-		Point(pos.x - 2, 0),
-		Point(pos.x - 1, 0),
-		Point(pos.x, 0)
+		Point(2 - pos.x, 0),
+		Point(1 - pos.x, 0),
+		Point(0 - pos.x, 0)
 	};
 }
 

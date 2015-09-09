@@ -160,6 +160,18 @@ void Match::moveHero(std::shared_ptr<Player> player, int idx, Point pos)
 
 	broadcastHeroState(t, idx, true);
 
+	//빈 자리가 있는지 확인
+	removeEmptyLine();
+
+	for (int t = 0; t < 2; t++)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			if (!heroData[t][i]->isDead())
+				broadcastHeroState(t, i, false);
+		}
+	}
+
 	selectHero(player, idx);
 }
 
@@ -178,7 +190,7 @@ void Match::randomHero(std::shared_ptr<Player> player)
 
 	for (int i = 0; i < 4; i++)
 	{
-		heroData[t].push_back(getRandomHero());
+		heroData[t].push_back(getRandomHero(i));
 	}
 }
 
@@ -258,7 +270,7 @@ void Match::getSkillRange(std::shared_ptr<Player> player, int heroIdx, int skill
 	}
 
 	auto range = skill->getRange(heroPos, heroData[t], heroData[(t + 1) % 2]);
-	auto effect = skill->getEffectRange(heroPos, heroData[t], heroData[(t + 1) % 2]);
+	auto effect = skill->getEffectRange({ 2 - heroPos.x, heroPos.y }, heroData[t], heroData[(t + 1) % 2]);
 
 	SkillRangeResponse packet;
 
@@ -298,6 +310,10 @@ void Match::turnChange(std::shared_ptr<Player> player)
 
 	for (int i = 0; i < heroData[t].size(); i++)
 	{
+		//죽은 애는 생략
+		if (heroData[nowTurn][i]->isDead())
+			continue;
+
 		heroData[nowTurn][i]->turnUpdate();
 		broadcastHeroState(nowTurn, i, false);
 	}
@@ -380,15 +396,10 @@ void Match::actHero(std::shared_ptr<Player> player, int heroIdx, int skillIdx, P
 
 	broadcastPacket(shot);
 
-	broadcastHeroState(t, heroIdx, false);
-
 	for (auto& target : heroList)
 	{ 
 		int turn = skill->myField() ? t : (t + 1) % 2;
 		skill->doSkill(pos, heroData[t][heroIdx].get(), heroData[turn][target].get(), heroData[t], heroData[turn]);
-		
-		//스킬 효과 받았으므로 갱신된 hero 상태 돌려준다
-		broadcastHeroState(turn, target, false);
 		
 		if (heroData[turn][target]->isDead())
 		{
@@ -402,7 +413,17 @@ void Match::actHero(std::shared_ptr<Player> player, int heroIdx, int skillIdx, P
 		}
 	}
 
+	//스킬 사용후 빈 라인이 생기는지 확인.
+	removeEmptyLine();
 
+	for (int t = 0; t < 2; t++)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			if(!heroData[t][i]->isDead())
+				broadcastHeroState(t, i, false);
+		}
+	}
 }
 
 bool Match::isEnd()
@@ -435,7 +456,66 @@ bool Match::isEnd()
 		return true;
 	}
 
+	for (int t = 0; t < 2; t++)
+	{
+		bool isEnd = true;
+
+		if (heroData[t].size() == 0)
+			continue;
+
+		for (int i = 0; i < heroData[t].size(); i++)
+		{
+			if (!heroData[t][i]->isDead())
+			{
+				isEnd = false;
+			}
+		}
+
+		if (isEnd)
+		{
+			MatchEnd end;
+			end.type = Type::MATCH_END;
+			end.winner = (t + 1) % 2;
+
+			resetPlayer();
+
+			broadcastPacket(end);
+
+			return true;
+		}
+	}
+
 	return false;
+}
+
+void Match::removeEmptyLine()
+{
+	for (int t = 0; t < 2; t++)
+	{
+		for (int y = 1; y >= 0; y--)
+		{
+			bool isEmptyLine = true;
+			for (int i = 0; i < 4; i++)
+			{
+				if (heroData[t][i]->getPos().y == y)
+				{
+					isEmptyLine = false;
+				}
+			}
+
+			if (isEmptyLine)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					Point pos = heroData[t][i]->getPos();
+					if (pos.y > y)
+					{
+						heroData[t][i]->setPos({ pos.x, pos.y - 1 });
+					}
+				}
+			}
+		}
+	}
 }
 
 void Match::resetPlayer()
@@ -458,6 +538,46 @@ void Match::broadcastHeroState(int t, int heroIdx, bool isMove)
 	state.x = heroData[t][heroIdx]->getPos().x;
 	state.y = heroData[t][heroIdx]->getPos().y;
 	state.isMove = isMove ? 1 : 0;
+
+	//현재 hero한테 걸린 state 같이 전송.
+	for (auto& it = heroData[t][heroIdx]->states.begin(); it != heroData[t][heroIdx]->states.end();)
+	{
+		State& state = *it->get();
+
+		if (state.isEnded())
+		{
+			it = heroData[t][heroIdx]->states.erase(it);
+			RemoveHeroState remove;
+
+			remove.type = Type::HERO_REMOVE_STATE;
+			remove.stateType = state.getType();
+			remove.targetTurn = t;
+			remove.targetIdx = heroIdx;
+			remove.stateId = state.getId();
+
+			broadcastPacket(remove);
+		}
+		else
+		{
+			HeroState s;
+
+			s.type = Type::HERO_STATE;
+			s.stateType = state.getType();
+			s.act = state.getAct();
+			s.attack = state.getAttack();
+			s.damaged = state.getDamage();
+			s.defence = state.getDefence();
+			s.duration = state.getDuration();
+			s.executerIdx = state.getExecuter();
+			s.executerTurn = state.isMyField() ? t : (t + 1) % 2;
+			s.targetIdx = state.getTarget();
+			s.targetTurn = t;
+			s.hp = state.getHp();
+			s.stateId = state.getId();
+
+			broadcastPacket(s);
+		}
+	}
 
 	broadcastPacket(state);
 }

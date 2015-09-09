@@ -6,8 +6,8 @@
 #include "Priest.h"
 #include "Thief.h"
 
-Hero::Hero(HeroClass type_, int maxHp_, int maxAct_)
-	: type(type_), maxHp(maxHp_), hp(maxHp_), maxAct(maxAct_), act(maxAct_)
+Hero::Hero(HeroClass type_, int maxHp_, int maxAct_, int idx_)
+	: type(type_), maxHp(maxHp_), hp(maxHp_), maxAct(maxAct_), act(maxAct_), idx(idx_)
 {
 }
 
@@ -43,6 +43,11 @@ void Hero::damage(int value)
 {
 	hp -= value;
 
+	if (hp >= maxHp)
+	{
+		hp = maxHp;
+	}
+
 	if (hp <= 0)
 	{
 		dead();
@@ -56,6 +61,12 @@ void Hero::setSkillCool(int idx, int cool)
 
 void Hero::turnUpdate()
 {
+	//state ¹Ý¿µ
+	for (auto& state : states)
+	{
+		state->update(this);
+	}
+
 	act = maxAct;
 
 	for (auto& skill : skills)
@@ -101,31 +112,31 @@ void Hero::dead()
 	pos.y = INVALID_POS;
 }
 
-std::unique_ptr<Hero> getRandomHero()
+std::unique_ptr<Hero> getRandomHero(int idx)
 {
 	std::unique_ptr<Hero> hero = nullptr;
 	int heroNum = static_cast<int>(HeroClass::NUM);
-	HeroClass heroClass = static_cast<HeroClass>(rand() % 3 /*heroNum*/);
+	HeroClass heroClass = static_cast<HeroClass>(rand() % heroNum);
 
 	switch (heroClass)
 	{
 	case HeroClass::FIGHTER:
-		hero = std::make_unique<Fighter>();
+		hero = std::make_unique<Fighter>(idx);
 		break;
 	case HeroClass::ARCHER:
-		hero = std::make_unique<Archer>();
+		hero = std::make_unique<Archer>(idx);
 		break;
 	case HeroClass::MAGICIAN:
-		hero = std::make_unique<Magician>();
+		hero = std::make_unique<Magician>(idx);
 		break;
 	case HeroClass::MONK:
-		hero = std::make_unique<Monk>();
+		hero = std::make_unique<Monk>(idx);
 		break;
 	case HeroClass::PRIEST:
-		hero = std::make_unique<Priest>();
+		hero = std::make_unique<Priest>(idx);
 		break;
 	case HeroClass::THIEF:
-		hero = std::make_unique<Thief>();
+		hero = std::make_unique<Thief>(idx);
 		break;
 	}
 

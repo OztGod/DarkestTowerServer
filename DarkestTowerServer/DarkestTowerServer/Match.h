@@ -30,6 +30,8 @@ public:
 
 	bool isEnd();
 
+	void removeEmptyLine();
+
 private:
 	void resetPlayer();
 	void broadcastHeroState(int t, int heroIdx, bool isMove);

@@ -4,6 +4,6 @@
 class Priest : public Hero
 {
 public:
-	Priest();
+	Priest(int idx);
 	~Priest() override = default;
 };

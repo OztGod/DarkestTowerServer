@@ -4,7 +4,7 @@
 class Magician : public Hero
 {
 public:
-	Magician();
+	Magician(int idx);
 	~Magician() override = default;
 
 private:

@@ -4,6 +4,6 @@
 class Monk : public Hero
 {
 public:
-	Monk();
+	Monk(int idx);
 	~Monk() override = default;
 };

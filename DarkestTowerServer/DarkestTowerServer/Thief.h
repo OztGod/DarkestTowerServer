@@ -4,6 +4,6 @@
 class Thief : public Hero
 {
 public:
-	Thief();
+	Thief(int idx);
 	~Thief() override = default;
 };

@@ -8,6 +8,8 @@
 
 const int INVALID_POS = -1;
 
+class Match;
+
 struct SkillInfo
 {
 	SkillInfo(std::unique_ptr<Skill> skill_)
@@ -21,8 +23,10 @@ struct SkillInfo
 
 class Hero
 {
+	friend class Match;
+
 public:
-	Hero(HeroClass type_, int maxHp_, int maxAct_);
+	Hero(HeroClass type_, int maxHp_, int maxAct_, int idx_);
 	virtual ~Hero() = default;
 	HeroClass getType() const { return type; }
 	int getHp() const { return hp; }
@@ -43,12 +47,14 @@ public:
 	bool isDead() const { return !isAlive; }
 	int getAttack() const;
 	int getDefence() const;
+	int getIdx() const { return idx; }
 
 	void addState(std::unique_ptr<State>&& state);
 
 protected:
 	void dead();
 	HeroClass type;
+	int idx;
 	int hp;
 	int maxHp;
 	int act;
@@ -60,4 +66,4 @@ protected:
 	std::vector<std::unique_ptr<State>> states;
 };
 
-std::unique_ptr<Hero> getRandomHero();
+std::unique_ptr<Hero> getRandomHero(int idx);

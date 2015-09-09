@@ -153,6 +153,12 @@
     <ClCompile Include="State.cpp">
       <Filter>소스 파일\gameData</Filter>
     </ClCompile>
+    <ClCompile Include="Burn.cpp">
+      <Filter>소스 파일\gameData\State</Filter>
+    </ClCompile>
+    <ClCompile Include="FireBlast.cpp">
+      <Filter>소스 파일\gameData\Hero\Magician\skill</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientSession.h">
@@ -229,6 +235,12 @@
     </ClInclude>
     <ClInclude Include="State.h">
       <Filter>소스 파일\gameData</Filter>
+    </ClInclude>
+    <ClInclude Include="Burn.h">
+      <Filter>소스 파일\gameData\State</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBlast.h">
+      <Filter>소스 파일\gameData\Hero\Magician\skill</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
