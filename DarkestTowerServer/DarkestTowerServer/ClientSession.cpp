@@ -7,25 +7,30 @@
 #include "LogicContext.h"
 
 ClientSession::ClientSession(skylark::CompletionPort * port, std::size_t sendBufSize, std::size_t recvBufSize)
-	:Session(port, sendBufSize, recvBufSize), handler(this)
+	:Session(port, sendBufSize, recvBufSize)
 {
-	handler.registerSelector([](Header header)
-	{
-		return static_cast<int>(header.type);
-	});
-
-	handler.registerHandler(Type::LOGIN_REQUEST, &ClientSession::onLoginRequest);
-	handler.registerHandler(Type::RANDOM_HERO_REQUEST, &ClientSession::onRandomHeroRequest);
-	handler.registerHandler(Type::ALLOC_HERO, &ClientSession::onAllocHero);
-	handler.registerHandler(Type::TURN_END, &ClientSession::onTurnEnd);
-	handler.registerHandler(Type::MOVE_HERO, &ClientSession::onMoveHero);
-	handler.registerHandler(Type::SELECT_HERO, &ClientSession::onSelectHero);
-	handler.registerHandler(Type::SKILL_RANGE_REQUEST, &ClientSession::onSkillRangeRequest);
-	handler.registerHandler(Type::ACT_HERO, &ClientSession::onActHero);
 }
 
 ClientSession::~ClientSession()
 {
+}
+
+int ClientSession::select(Header header)
+{
+	return static_cast<int>(header.type);
+}
+
+
+void ClientSession::initHandler()
+{
+	registerHandler(Type::LOGIN_REQUEST, &ClientSession::onLoginRequest);
+	registerHandler(Type::RANDOM_HERO_REQUEST, &ClientSession::onRandomHeroRequest);
+	registerHandler(Type::ALLOC_HERO, &ClientSession::onAllocHero);
+	registerHandler(Type::TURN_END, &ClientSession::onTurnEnd);
+	registerHandler(Type::MOVE_HERO, &ClientSession::onMoveHero);
+	registerHandler(Type::SELECT_HERO, &ClientSession::onSelectHero);
+	registerHandler(Type::SKILL_RANGE_REQUEST, &ClientSession::onSkillRangeRequest);
+	registerHandler(Type::ACT_HERO, &ClientSession::onActHero);
 }
 
 bool ClientSession::onAccept()
@@ -43,7 +48,7 @@ bool ClientSession::onDisconnect(int reason)
 
 bool ClientSession::onRead()
 {
-	handler.packetHandle(this);
+	packetHandle(this);
 
 	return preRecv();
 }

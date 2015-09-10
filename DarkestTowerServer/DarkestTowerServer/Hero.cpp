@@ -61,13 +61,13 @@ void Hero::setSkillCool(int idx, int cool)
 
 void Hero::turnUpdate()
 {
+	act = maxAct;
+
 	//state ¹Ý¿µ
 	for (auto& state : states)
 	{
 		state->update(this);
 	}
-
-	act = maxAct;
 
 	for (auto& skill : skills)
 	{

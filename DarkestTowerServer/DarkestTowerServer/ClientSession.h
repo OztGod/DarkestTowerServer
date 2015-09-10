@@ -4,11 +4,15 @@
 
 class Player;
 
-class ClientSession : public skylark::Session
+class ClientSession : public skylark::Session, public skylark::PacketHandler<Header, ClientSession, static_cast<int>(Type::TYPE_NUM)>
 {
 public:
 	ClientSession(skylark::CompletionPort* port, std::size_t sendBufSize, std::size_t recvBufSize);
 	~ClientSession() override;
+
+	int select(Header header) override;
+	
+	static void initHandler();
 
 	bool onAccept() override;
 	bool onDisconnect(int reason) override;
@@ -30,6 +34,4 @@ public:
 
 private:
 	std::shared_ptr<Player> player = nullptr;
-
-	skylark::PacketHandler<Header, ClientSession, static_cast<int>(Type::TYPE_NUM)> handler;
 };
