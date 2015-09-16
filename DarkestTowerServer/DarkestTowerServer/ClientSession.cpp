@@ -245,7 +245,7 @@ void ClientSession::onRegisterAccount(const RegisterAccountRequest & packet)
 
 		if (dbHelper.execute(L"{ call dbo.spCreateAccount (? , ?) }"))
 		{
-			if (dbHelper.fetchRow())
+			if (dbHelper.fetchRow() && res != 0)
 			{
 				HmmoApplication::getInstance()->getIoPort()->doLambda([session]()
 				{
@@ -254,20 +254,20 @@ void ClientSession::onRegisterAccount(const RegisterAccountRequest & packet)
 					response.isSuccess = 1;
 					return session->sendPacket(response);
 				});
-			}
-			else
-			{
-				HmmoApplication::getInstance()->getIoPort()->doLambda([session]()
-				{
-					RegisterAccountResponse response;
-					response.type = Type::REGISTER_ACCOUNT_RESPONSE;
-					response.isSuccess = 0;
-					return session->sendPacket(response);
-				});
+
+				return true;
 			}
 		}
 
+		HmmoApplication::getInstance()->getIoPort()->doLambda([session]()
+		{
+			RegisterAccountResponse response;
+			response.type = Type::REGISTER_ACCOUNT_RESPONSE;
+			response.isSuccess = 0;
+			return session->sendPacket(response);
+		});
 
-		return true;
+
+		return false;
 	});
 }

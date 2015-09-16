@@ -249,7 +249,7 @@ packet SkillShot : Header
 
 packet MatchEnd : Header
 {
-    int8 winner;
+    int8 winner
 }
 
 packet Reject : Header
@@ -258,7 +258,7 @@ packet Reject : Header
 
 packet DeadHero : Header
 {
-    int8 turn;
+    int8 turn
     int8 heroIdx
 }
 
