@@ -1,7 +1,7 @@
 enum Type : uint8
 {
-	LOGIN_REQUEST
-	LOGIN_RESPONSE
+    LOGIN_REQUEST
+    LOGIN_RESPONSE
     
     ALLOC_HERO
     
@@ -34,6 +34,9 @@ enum Type : uint8
     HERO_REMOVE_STATE
 
     EFFECT_RESPONSE
+
+    REGISTER_ACCOUNT_REQUEST
+    REGISTER_ACCOUNT_RESPONSE
 	
     TYPE_NUM
 }
@@ -170,7 +173,9 @@ packet ChangeHeroState : Header
 {
     int8 turn
     int8 idx
+    int8 maxHp
     int8 hp
+    int8 maxAct
     int8 act
     int8 x
     int8 y
@@ -279,4 +284,17 @@ packet RemoveHeroState : Header
     int8 targetIdx
     int8 stateId
     StateType stateType
+}
+
+packet RegisterAccountRequest : Header
+{
+    int8 idLength
+    char id arr 16
+    int8 passwordLength
+    char password arr 16
+}
+
+packet RegisterAccountResponse : Header
+{
+    int8 isSuccess
 }

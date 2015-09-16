@@ -37,7 +37,9 @@ enum class Type : uint8_t
 	HERO_STATE = 21,
 	HERO_REMOVE_STATE = 22,
 	EFFECT_RESPONSE = 23,
-	TYPE_NUM = 24,
+	REGISTER_ACCOUNT_REQUEST = 24,
+	REGISTER_ACCOUNT_RESPONSE = 25,
+	TYPE_NUM = 26,
 };
 enum class StateType : uint8_t
 {
@@ -163,7 +165,9 @@ struct ChangeHeroState : Header
 {
 	int8_t turn;
 	int8_t idx;
+	int8_t maxHp;
 	int8_t hp;
+	int8_t maxAct;
 	int8_t act;
 	int8_t x;
 	int8_t y;
@@ -286,5 +290,20 @@ struct RemoveHeroState : Header
 	int8_t targetIdx;
 	int8_t stateId;
 	StateType stateType;
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct RegisterAccountRequest : Header
+{
+	int8_t idLength;
+	char id[16];
+	int8_t passwordLength;
+	char password[16];
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct RegisterAccountResponse : Header
+{
+	int8_t isSuccess;
 };
 #pragma pack(pop)

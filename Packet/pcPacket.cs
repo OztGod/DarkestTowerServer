@@ -41,7 +41,9 @@ public enum Type
 	HERO_STATE = 21,
 	HERO_REMOVE_STATE = 22,
 	EFFECT_RESPONSE = 23,
-	TYPE_NUM = 24,
+	REGISTER_ACCOUNT_REQUEST = 24,
+	REGISTER_ACCOUNT_RESPONSE = 25,
+	TYPE_NUM = 26,
 }
 public enum StateType
 {
@@ -186,7 +188,11 @@ public class ChangeHeroState : Header
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte idx;
 	[MarshalAs(UnmanagedType.U1)]
+	public sbyte maxHp;
+	[MarshalAs(UnmanagedType.U1)]
 	public sbyte hp;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte maxAct;
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte act;
 	[MarshalAs(UnmanagedType.U1)]
@@ -347,5 +353,23 @@ public class RemoveHeroState : Header
 	public sbyte stateId;
 	[MarshalAs(UnmanagedType.U1)]
 	public byte stateType;
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class RegisterAccountRequest : Header
+{
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte idLength;
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
+	public char[] id= new char[16];
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte passwordLength;
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
+	public char[] password= new char[16];
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class RegisterAccountResponse : Header
+{
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte isSuccess;
 }
 }
