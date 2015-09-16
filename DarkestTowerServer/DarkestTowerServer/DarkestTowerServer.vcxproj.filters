@@ -73,6 +73,9 @@
     <Filter Include="소스 파일\gameData\State">
       <UniqueIdentifier>{55579138-43ed-4086-a475-09f99c7df623}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\io\db">
+      <UniqueIdentifier>{72a30d52-0dae-4a9a-aca1-4b93b53ab904}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Packet\pcPacket.h">
@@ -165,9 +168,6 @@
     <ClCompile Include="Poison.cpp">
       <Filter>소스 파일\gameData\Hero\Thief\skill</Filter>
     </ClCompile>
-    <ClCompile Include="Taunt.cpp">
-      <Filter>소스 파일\gameData\Hero\Thief\skill</Filter>
-    </ClCompile>
     <ClCompile Include="BackAttack.cpp">
       <Filter>소스 파일\gameData\Hero\Archer\skill</Filter>
     </ClCompile>
@@ -176,15 +176,6 @@
     </ClCompile>
     <ClCompile Include="PriestAttack.cpp">
       <Filter>소스 파일\gameData\Hero\Priest\skill</Filter>
-    </ClCompile>
-    <ClCompile Include="Buff.cpp">
-      <Filter>소스 파일\gameData\Hero\Priest\skill</Filter>
-    </ClCompile>
-    <ClCompile Include="RemoveMagic.cpp">
-      <Filter>소스 파일\gameData\Hero\Priest\skill</Filter>
-    </ClCompile>
-    <ClCompile Include="Pray.cpp">
-      <Filter>소스 파일\gameData\Hero\Monk\skill</Filter>
     </ClCompile>
     <ClCompile Include="Kick.cpp">
       <Filter>소스 파일\gameData\Hero\Monk\skill</Filter>
@@ -200,6 +191,12 @@
     </ClCompile>
     <ClCompile Include="Ice.cpp">
       <Filter>소스 파일\gameData\State</Filter>
+    </ClCompile>
+    <ClCompile Include="DBThread.cpp">
+      <Filter>소스 파일\io</Filter>
+    </ClCompile>
+    <ClCompile Include="DBHelper.cpp">
+      <Filter>소스 파일\io\db</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -290,9 +287,6 @@
     <ClInclude Include="Poison.h">
       <Filter>소스 파일\gameData\Hero\Thief\skill</Filter>
     </ClInclude>
-    <ClInclude Include="Taunt.h">
-      <Filter>소스 파일\gameData\Hero\Thief\skill</Filter>
-    </ClInclude>
     <ClInclude Include="BackAttack.h">
       <Filter>소스 파일\gameData\Hero\Archer\skill</Filter>
     </ClInclude>
@@ -304,15 +298,6 @@
     </ClInclude>
     <ClInclude Include="PriestAttack.h">
       <Filter>소스 파일\gameData\Hero\Priest\skill</Filter>
-    </ClInclude>
-    <ClInclude Include="Buff.h">
-      <Filter>소스 파일\gameData\Hero\Priest\skill</Filter>
-    </ClInclude>
-    <ClInclude Include="RemoveMagic.h">
-      <Filter>소스 파일\gameData\Hero\Priest\skill</Filter>
-    </ClInclude>
-    <ClInclude Include="Pray.h">
-      <Filter>소스 파일\gameData\Hero\Monk\skill</Filter>
     </ClInclude>
     <ClInclude Include="Kick.h">
       <Filter>소스 파일\gameData\Hero\Monk\skill</Filter>
@@ -326,10 +311,19 @@
     <ClInclude Include="Ice.h">
       <Filter>소스 파일\gameData\State</Filter>
     </ClInclude>
+    <ClInclude Include="DBThread.h">
+      <Filter>소스 파일\io</Filter>
+    </ClInclude>
+    <ClInclude Include="DBHelper.h">
+      <Filter>소스 파일\io\db</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Packet\simplePacket.py">
       <Filter>소스 파일\packet</Filter>
+    </None>
+    <None Include="GameDB.sql">
+      <Filter>소스 파일\io\db</Filter>
     </None>
   </ItemGroup>
 </Project>

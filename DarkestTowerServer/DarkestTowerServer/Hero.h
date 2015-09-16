@@ -21,6 +21,8 @@ struct SkillInfo
 	int cool;
 };
 
+SkillInfo makeSkillInfo(SkillType type);
+
 class Hero
 {
 	friend class Match;

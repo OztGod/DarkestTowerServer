@@ -24,11 +24,12 @@
     <ClCompile Include="ArcherAttack.cpp" />
     <ClCompile Include="BackAttack.cpp" />
     <ClCompile Include="BackStep.cpp" />
-    <ClCompile Include="Buff.cpp" />
     <ClCompile Include="Burn.cpp" />
     <ClCompile Include="Charge.cpp" />
     <ClCompile Include="ClientSession.cpp" />
     <ClCompile Include="ClientSessionManager.cpp" />
+    <ClCompile Include="DBHelper.cpp" />
+    <ClCompile Include="DBThread.cpp" />
     <ClCompile Include="Fighter.cpp" />
     <ClCompile Include="FighterAttack.cpp" />
     <ClCompile Include="FireBlast.cpp" />
@@ -50,14 +51,11 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Poison.cpp" />
     <ClCompile Include="PoisonState.cpp" />
-    <ClCompile Include="Pray.cpp" />
     <ClCompile Include="Priest.cpp" />
     <ClCompile Include="PriestAttack.cpp" />
-    <ClCompile Include="RemoveMagic.cpp" />
     <ClCompile Include="Skill.cpp" />
     <ClCompile Include="Snipe.cpp" />
     <ClCompile Include="State.cpp" />
-    <ClCompile Include="Taunt.cpp" />
     <ClCompile Include="Thief.cpp" />
     <ClCompile Include="ThiefAttack.cpp" />
     <ClCompile Include="ThunderStorm.cpp" />
@@ -67,10 +65,11 @@
     <ClInclude Include="ArcherAttack.h" />
     <ClInclude Include="BackAttack.h" />
     <ClInclude Include="BackStep.h" />
-    <ClInclude Include="Buff.h" />
     <ClInclude Include="Charge.h" />
     <ClInclude Include="ClientSession.h" />
     <ClInclude Include="ClientSessionManager.h" />
+    <ClInclude Include="DBHelper.h" />
+    <ClInclude Include="DBThread.h" />
     <ClInclude Include="Fighter.h" />
     <ClInclude Include="FighterAttack.h" />
     <ClInclude Include="FireBlast.h" />
@@ -92,14 +91,11 @@
     <ClInclude Include="Burn.h" />
     <ClInclude Include="Poison.h" />
     <ClInclude Include="PoisonState.h" />
-    <ClInclude Include="Pray.h" />
     <ClInclude Include="Priest.h" />
     <ClInclude Include="PriestAttack.h" />
-    <ClInclude Include="RemoveMagic.h" />
     <ClInclude Include="Skill.h" />
     <ClInclude Include="Snipe.h" />
     <ClInclude Include="State.h" />
-    <ClInclude Include="Taunt.h" />
     <ClInclude Include="Thief.h" />
     <ClInclude Include="ThiefAttack.h" />
     <ClInclude Include="ThunderStorm.h" />
@@ -112,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Packet\simplePacket.py" />
+    <None Include="GameDB.sql" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6FF43BF4-A45A-4815-B66A-A5650E699266}</ProjectGuid>

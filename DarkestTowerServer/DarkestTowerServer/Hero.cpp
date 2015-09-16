@@ -5,6 +5,22 @@
 #include "Monk.h"
 #include "Priest.h"
 #include "Thief.h"
+#include "ArcherAttack.h"
+#include "BackAttack.h"
+#include "PenetrateShot.h"
+#include "Snipe.h"
+#include "Charge.h"
+#include "FighterAttack.h"
+#include "FireBlast.h"
+#include "IceArrow.h"
+#include "ThunderStorm.h"
+#include "MonkAttack.h"
+#include "Kick.h"
+#include "Heal.h"
+#include "PriestAttack.h"
+#include "BackStep.h"
+#include "Poison.h"
+#include "ThiefAttack.h"
 
 Hero::Hero(HeroClass type_, int maxHp_, int maxAct_, int idx_)
 	: type(type_), maxHp(maxHp_), hp(maxHp_), maxAct(maxAct_), act(maxAct_), idx(idx_)
@@ -141,4 +157,63 @@ std::unique_ptr<Hero> getRandomHero(int idx)
 	}
 
 	return hero;
+}
+
+SkillInfo makeSkillInfo(SkillType type)
+{
+	SkillInfo info(nullptr);
+
+	switch (type)
+	{
+	case SkillType::ARCHER_ATTACK:
+		info.skill = std::make_unique<ArcherAttack>();
+		break;
+	case SkillType::ARCHER_BACK_ATTACK:
+		info.skill = std::make_unique<BackAttack>();
+		break;
+	case SkillType::ARCHER_PENETRATE_SHOT:
+		info.skill = std::make_unique<PenetrateShot>();
+		break;
+	case SkillType::ARCHER_SNIPE:
+		info.skill = std::make_unique<Snipe>();
+		break;
+	case SkillType::FIGHTER_ATTACK:
+		info.skill = std::make_unique<FighterAttack>();
+		break;
+	case SkillType::FIGHTER_CHARGE:
+		info.skill = std::make_unique<Charge>();
+		break;
+	case SkillType::MAGICIAN_FIRE_BLAST:
+		info.skill = std::make_unique<FireBlast>();
+		break;
+	case SkillType::MAGICIAN_ICE_ARROW:
+		info.skill = std::make_unique<IceArrow>();
+		break;
+	case SkillType::MAGICIAN_THUNDER_STORM:
+		info.skill = std::make_unique<ThunderStorm>();
+		break;
+	case SkillType::MONK_ATTACK:
+		info.skill = std::make_unique<MonkAttack>();
+		break;
+	case SkillType::MONK_KICK:
+		info.skill = std::make_unique<Kick>();
+		break;
+	case SkillType::PRIEST_ATTACK:
+		info.skill = std::make_unique<PriestAttack>();
+		break;
+	case SkillType::PRIEST_HEAL:
+		info.skill = std::make_unique<Heal>();
+		break;
+	case SkillType::THIEF_ATTACK:
+		info.skill = std::make_unique<ThiefAttack>();
+		break;
+	case SkillType::THIEF_BACK_STEP:
+		info.skill = std::make_unique<BackStep>();
+		break;
+	case SkillType::THIEF_POISON:
+		info.skill = std::make_unique<Poison>();
+		break;
+	}
+
+	return info;
 }

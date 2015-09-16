@@ -5,7 +5,7 @@
 class HmmoApplication : public skylark::Application
 {
 public:
-	HmmoApplication(int threadNum_);
+	HmmoApplication(int threadNum_, int dbThreadNum_);
 	~HmmoApplication();
 
 	int run() override;
@@ -19,7 +19,9 @@ public:
 private:
 	skylark::CompletionPort* ioPort;
 	skylark::CompletionPort* logicPort;
+	skylark::CompletionPort* dbPort;
 	int threadNum;
+	int dbThreadNum;
 	skylark::Socket* listen;
 	std::vector<skylark::IOThread*> threads;
 
