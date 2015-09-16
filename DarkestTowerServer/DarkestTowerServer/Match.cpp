@@ -544,7 +544,9 @@ void Match::broadcastHeroState(int t, int heroIdx, bool isMove)
 	state.type = Type::CHANGE_HERO_STATE;
 	state.turn = t;
 	state.idx = heroIdx;
+	state.maxHp = heroData[t][heroIdx]->getMaxHp();
 	state.hp = heroData[t][heroIdx]->getHp();
+	state.maxAct = heroData[t][heroIdx]->getMaxAct();
 	state.act = heroData[t][heroIdx]->getAct();
 	state.x = heroData[t][heroIdx]->getPos().x;
 	state.y = heroData[t][heroIdx]->getPos().y;

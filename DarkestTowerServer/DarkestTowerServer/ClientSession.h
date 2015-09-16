@@ -31,6 +31,7 @@ public:
 	void onSelectHero(const SelectHero& packet);
 	void onSkillRangeRequest(const SkillRangeRequest& packet);
 	void onActHero(const ActHero& packet);
+	void onRegisterAccount(const RegisterAccountRequest& packet);
 
 private:
 	std::shared_ptr<Player> player = nullptr;

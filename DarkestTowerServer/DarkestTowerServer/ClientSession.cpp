@@ -5,6 +5,9 @@
 #include "Match.h"
 #include "HmmoApplication.h"
 #include "LogicContext.h"
+#include "DBHelper.h"
+#include <locale>
+#include <codecvt>
 
 ClientSession::ClientSession(skylark::CompletionPort * port, std::size_t sendBufSize, std::size_t recvBufSize)
 	:Session(port, sendBufSize, recvBufSize)
@@ -31,6 +34,7 @@ void ClientSession::initHandler()
 	registerHandler(Type::SELECT_HERO, &ClientSession::onSelectHero);
 	registerHandler(Type::SKILL_RANGE_REQUEST, &ClientSession::onSkillRangeRequest);
 	registerHandler(Type::ACT_HERO, &ClientSession::onActHero);
+	registerHandler(Type::REGISTER_ACCOUNT_REQUEST, &ClientSession::onRegisterAccount);
 }
 
 bool ClientSession::onAccept()
@@ -79,34 +83,31 @@ void ClientSession::sessionReset()
 
 void ClientSession::onLoginRequest(const LoginRequest& packet)
 {
-	int pid = GameManager::getInstance()
-		->isValidAccount(packet.id, packet.idLength,
-			packet.password, packet.passwordLength);
-
-
-	LoginResponse response;
-	response.type = Type::LOGIN_RESPONSE;
-
-	if (pid != -1)
+	GameManager::getInstance()->isValidAccount(packet.id, packet.idLength,
+		packet.password, packet.passwordLength, [session = this](int pid)
 	{
-		response.result = LoginResult::SUCCESS;
-		player = std::make_shared<Player>(pid, this);
+		LoginResponse response;
+		response.type = Type::LOGIN_RESPONSE;
 
-		//일단 로그인 성공하면 무조건 match pending list에 넣는다
-		auto context = new skylark::FunctionContext([p = this->player]()
+		if (pid != -1)
 		{
-			GameManager::getInstance()->addMatchPendingList(p);
-			return true;
-		});
+			response.result = LoginResult::SUCCESS;
+			session->player = std::make_shared<Player>(pid, session);
 
-		HmmoApplication::getInstance()->getLogicPort()->take(context, 0);
-	}
-	else
-	{
-		response.result = LoginResult::FAILED;
-	}
+			//일단 로그인 성공하면 무조건 match pending list에 넣는다
+			HmmoApplication::getInstance()->getLogicPort()->doLambda([p = session->player]()
+			{
+				GameManager::getInstance()->addMatchPendingList(p);
+				return true;
+			});
+		}
+		else
+		{
+			response.result = LoginResult::FAILED;
+		}
 
-	sendPacket(response);
+		return session->sendPacket(response);
+	});
 }
 
 void ClientSession::onRandomHeroRequest(const RandomHeroRequest & packet)
@@ -220,4 +221,53 @@ void ClientSession::onActHero(const ActHero & packet)
 	});
 
 	HmmoApplication::getInstance()->getLogicPort()->take(context, 0);
+}
+
+void ClientSession::onRegisterAccount(const RegisterAccountRequest & packet)
+{
+	HmmoApplication::getInstance()->getDBPort()->doLambda([session = this, packet]()
+	{
+		std::string idStr(packet.id, packet.id + packet.idLength);
+		std::string pwdStr(packet.password, packet.password + packet.passwordLength);
+
+		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+
+		std::wstring wid = converter.from_bytes(idStr);
+		std::wstring wpassword = converter.from_bytes(pwdStr);
+
+		DBHelper dbHelper;
+		int res = 0;
+
+		dbHelper.bindParamText(wid.c_str());
+		dbHelper.bindParamText(wpassword.c_str());
+
+		dbHelper.bindResultColumnInt(&res);
+
+		if (dbHelper.execute(L"{ call dbo.spCreateAccount (? , ?) }"))
+		{
+			if (dbHelper.fetchRow())
+			{
+				HmmoApplication::getInstance()->getIoPort()->doLambda([session]()
+				{
+					RegisterAccountResponse response;
+					response.type = Type::REGISTER_ACCOUNT_RESPONSE;
+					response.isSuccess = 1;
+					return session->sendPacket(response);
+				});
+			}
+			else
+			{
+				HmmoApplication::getInstance()->getIoPort()->doLambda([session]()
+				{
+					RegisterAccountResponse response;
+					response.type = Type::REGISTER_ACCOUNT_RESPONSE;
+					response.isSuccess = 0;
+					return session->sendPacket(response);
+				});
+			}
+		}
+
+
+		return true;
+	});
 }

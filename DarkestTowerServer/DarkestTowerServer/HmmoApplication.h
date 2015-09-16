@@ -15,6 +15,7 @@ public:
 
 	skylark::CompletionPort* getIoPort() const { return ioPort; }
 	skylark::CompletionPort* getLogicPort() const { return logicPort; }
+	skylark::CompletionPort* getDBPort() const { return dbPort; }
 
 private:
 	skylark::CompletionPort* ioPort;

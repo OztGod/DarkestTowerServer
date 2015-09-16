@@ -1,9 +1,12 @@
+#include <locale>
+#include <codecvt>
 #include "GameManager.h"
 #include "Player.h"
 #include "ClientSession.h"
 #include "LogicContext.h"
 #include "HmmoApplication.h"
 #include "Match.h"
+#include "DBHelper.h"
 
 GameManager* GameManager::instance = nullptr;
 
@@ -36,21 +39,57 @@ void GameManager::getRandomHeros(std::shared_ptr<Player> player, OUT std::vector
 	}
 }
 
-int GameManager::isValidAccount(const char * id, int idLength, const char * password, int pwdLength)
+void GameManager::isValidAccount(const char * id, int idLength, const char * password, int pwdLength, std::function<void(int)> complete)
 {
-	//계정 정보 체크 - 나중에 DB에서 체크하게끔 변경
-
-	for (int i = 0; i < 5; i++)
+	std::string idStr(id, id + idLength);
+	std::string passwordStr(password, password + pwdLength);
+	HmmoApplication::getInstance()->getDBPort()->doLambda([id = idStr, password = passwordStr, complete]()
 	{
-		if (strncmp(accounts[i].name.c_str(), id, idLength) == 0 &&
-			strncmp(accounts[i].pwd.c_str(), password, pwdLength) == 0 &&
-			accounts[i].isConnected == false)
-		{
-			return i;
-		}
-	}
+		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+		
+		std::wstring wid = converter.from_bytes(id);
+		std::wstring wpassword = converter.from_bytes(password);
 
-	return -1;
+		DBHelper dbHelper;
+		int pid = 0;
+		int win = 0;
+		int lose = 0;
+		int elo = 0;
+		bool isValid = false;
+		wchar_t comment[256] = { 0, };
+
+		dbHelper.bindParamText(wid.c_str());
+		dbHelper.bindParamText(wpassword.c_str());
+
+		dbHelper.bindResultColumnInt(&pid);
+		dbHelper.bindResultColumnInt(&win);
+		dbHelper.bindResultColumnInt(&lose);
+		dbHelper.bindResultColumnInt(&elo);
+		dbHelper.bindResultColumnBool(&isValid);
+		dbHelper.bindResultColumnText(comment, 256);
+
+		if (dbHelper.execute(L"{ call dbo.spLoadPlayer (? , ?) }"))
+		{
+			if (dbHelper.fetchRow())
+			{
+				HmmoApplication::getInstance()->getIoPort()->doLambda([pid, complete]()
+				{
+					complete(pid);
+					return true;
+				});
+			}
+			else
+			{
+				HmmoApplication::getInstance()->getIoPort()->doLambda([pid, complete]()
+				{
+					complete(-1);
+					return true;
+				});
+			}
+		}
+
+		return true;
+	});
 }
 
 void GameManager::addMatchPendingList(std::shared_ptr<Player> player)
@@ -61,13 +100,46 @@ void GameManager::addMatchPendingList(std::shared_ptr<Player> player)
 void GameManager::login(int pid)
 {
 	printf("login! id = %d\n", pid);
-	accounts[pid].isConnected = true;
+	HmmoApplication::getInstance()->getDBPort()->doLambda([pid]()
+	{
+		DBHelper dbHelper;
+		int id = pid;
+		int res = 0;
+		bool valid = false;
+
+		dbHelper.bindParamInt(&id);
+		dbHelper.bindParamBool(&valid);
+		dbHelper.bindResultColumnInt(&res);
+
+		if (dbHelper.execute(L"{ call dbo.spUpdatePlayerValid (? , ?) }"))
+		{
+			return dbHelper.fetchRow();
+		}
+
+		return false;
+	});
 }
 
 void GameManager::logout(int pid)
 {
 	printf("logout! id = %d\n", pid);
-	accounts[pid].isConnected = false;
+	HmmoApplication::getInstance()->getDBPort()->doLambda([pid]()
+	{
+		DBHelper dbHelper;
+		int id = pid;
+		int res = 0;
+		bool valid = true;
+
+		dbHelper.bindParamInt(&id);
+		dbHelper.bindParamBool(&valid);
+		dbHelper.bindResultColumnInt(&res);
+
+		if (dbHelper.execute(L"{ call dbo.spUpdatePlayerValid (? , ?) }"))
+		{
+			return dbHelper.fetchRow();
+		}
+		return false;
+	});
 }
 
 void GameManager::update()
@@ -164,13 +236,4 @@ void GameManager::removePlayerMatchMap(std::shared_ptr<Player> player)
 
 GameManager::GameManager()
 {
-	for (int i = 0; i < 5; i++)
-	{
-		Account account;
-
-		account.name = "test" + std::to_string(i);
-		account.pwd = "12345";
-
-		accounts.push_back(account);
-	}
 }
