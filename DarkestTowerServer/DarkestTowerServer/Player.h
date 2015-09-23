@@ -62,7 +62,7 @@ private:
 	ClientSession* session = nullptr;
 	Match* nowMatch = nullptr;
 	std::vector<HeroInfo> heroInfo;
-	PlayerState state = PlayerState::NONE;
+	PlayerState state = PlayerState::LOBBY;
 	int win;
 	int lose;
 	int heroNum;

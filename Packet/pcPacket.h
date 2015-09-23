@@ -351,7 +351,7 @@ struct PickData : Header
 {
 	int8_t turn;
 	int8_t heroNum;
-	int8_t heroIdx[2];
+	HeroClass heroType[2];
 };
 #pragma pack(pop)
 #pragma pack(push, 1)

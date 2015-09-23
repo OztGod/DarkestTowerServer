@@ -100,6 +100,12 @@ void Hero::turnUpdate()
 		state->update(this);
 	}
 
+	//state에 의해 사망하는 경우
+	if (hp <= 0)
+	{
+		dead();
+	}
+
 	for (auto& skill : skills)
 	{
 		if (skill.cool > 0)

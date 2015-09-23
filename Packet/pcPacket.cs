@@ -427,7 +427,7 @@ public class PickData : Header
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte heroNum;
 	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
-	public sbyte[] heroIdx= new sbyte[2];
+	public byte[] heroType= new byte[2];
 }
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public class PickEnd : Header

@@ -36,6 +36,8 @@ void ClientSession::initHandler()
 	registerHandler(Type::REGISTER_ACCOUNT_REQUEST, &ClientSession::onRegisterAccount);
 	registerHandler(Type::PICK, &ClientSession::onPick);
 	registerHandler(Type::SURRENDER, &ClientSession::onSurrender);
+	registerHandler(Type::REQUEST_MATCH, &ClientSession::onRequestMatch);
+	registerHandler(Type::CANCEL_MATCH, &ClientSession::onCancelMatch);
 }
 
 bool ClientSession::onAccept()

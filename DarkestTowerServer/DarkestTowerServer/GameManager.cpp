@@ -164,22 +164,6 @@ void GameManager::createMatch()
 		matchList.push_back(newMatch);
 		playerMatchMap[player->getId()] = newMatch;
 		playerMatchMap[player2->getId()] = newMatch;
-
-		MatchStart start;
-		start.type = Type::MATCH_START;
-		start.turn = 0;
-
-		auto context = new PacketContext<MatchStart>();
-		context->packet = start;
-		context->session = player->getSession();
-		HmmoApplication::getInstance()->getIoPort()->take(context, 0);
-
-		start.turn = 1;
-
-		auto context2 = new PacketContext<MatchStart>();
-		context2->packet = start;
-		context2->session = player2->getSession();
-		HmmoApplication::getInstance()->getIoPort()->take(context2, 0);
 	}
 }
 

@@ -341,7 +341,7 @@ packet PickData : Header
 {
     int8 turn
     int8 heroNum
-    int8 heroIdx arr 2
+    HeroClass heroType arr 2
 }
 
 packet PickEnd : Header

@@ -323,7 +323,22 @@ void Match::turnChange(std::shared_ptr<Player> player)
 			continue;
 
 		heroData[nowTurn][i]->turnUpdate();
-		broadcastHeroState(nowTurn, i, false);
+
+		//죽었으면 죽었다는 패킷, 아니면 hero state 나타내는 패킷 발송
+		if (heroData[nowTurn][i]->isDead())
+		{
+			DeadHero dead;
+
+			dead.type = Type::DEAD_HERO;
+			dead.turn = nowTurn;
+			dead.heroIdx = i;
+
+			broadcastPacket(dead);
+		}
+		else
+		{
+			broadcastHeroState(nowTurn, i, false);
+		}
 	}
 
 	UpdateTurn packet;
@@ -515,6 +530,10 @@ void Match::pickHero(std::shared_ptr<Player> player, int pick1, int pick2)
 	PickTurn packet;
 	packet.type = Type::PICK_TURN;
 
+	PickData data;
+
+	data.type = Type::PICK_DATA;
+
 	switch (pick)
 	{
 	case 0:
@@ -522,6 +541,11 @@ void Match::pickHero(std::shared_ptr<Player> player, int pick1, int pick2)
 		heroIndex[0][0] = pick1;
 		packet.pickNum = 2;
 		sendPacket(1, packet);
+
+		data.turn = 0;
+		data.heroNum = 1;
+		data.heroType[0] = heroData[0][0]->getType();
+		broadcastPacket(data);
 		break;
 	case 1:
 		heroData[1][0] = getHeroFromInfo(player->getHeroInfo(pick1), 0);
@@ -530,6 +554,12 @@ void Match::pickHero(std::shared_ptr<Player> player, int pick1, int pick2)
 		heroIndex[1][1] = pick2;
 		packet.pickNum = 2;
 		sendPacket(0, packet);
+
+		data.turn = 1;
+		data.heroNum = 2;
+		data.heroType[0] = heroData[1][0]->getType();
+		data.heroType[1] = heroData[1][1]->getType();
+		broadcastPacket(data);
 		break;
 	case 2:
 		heroData[0][1] = getHeroFromInfo(player->getHeroInfo(pick1), 1);
@@ -538,6 +568,12 @@ void Match::pickHero(std::shared_ptr<Player> player, int pick1, int pick2)
 		heroIndex[0][2] = pick2;
 		packet.pickNum = 2;
 		sendPacket(1, packet);
+
+		data.turn = 0;
+		data.heroNum = 2;
+		data.heroType[0] = heroData[0][1]->getType();
+		data.heroType[1] = heroData[0][2]->getType();
+		broadcastPacket(data);
 		break;
 	case 3:
 		heroData[1][2] = getHeroFromInfo(player->getHeroInfo(pick1), 2);
@@ -546,10 +582,21 @@ void Match::pickHero(std::shared_ptr<Player> player, int pick1, int pick2)
 		heroIndex[1][3] = pick2;
 		packet.pickNum = 1;
 		sendPacket(0, packet);
+
+		data.turn = 1;
+		data.heroNum = 2;
+		data.heroType[0] = heroData[1][2]->getType();
+		data.heroType[1] = heroData[1][3]->getType();
+		broadcastPacket(data);
 		break;
 	case 4:
 		heroData[0][3] = getHeroFromInfo(player->getHeroInfo(pick1), 3);
 		heroIndex[0][3] = pick1;
+
+		data.turn = 0;
+		data.heroNum = 1;
+		data.heroType[0] = heroData[0][3]->getType();
+		broadcastPacket(data);
 		break;
 	}
 
@@ -578,6 +625,16 @@ void Match::pickHero(std::shared_ptr<Player> player, int pick1, int pick2)
 
 void Match::begin()
 {
+	MatchStart start;
+
+	start.type = Type::MATCH_START;
+	start.turn = 0;
+
+	sendPacket(0, start);
+
+	start.turn = 1;
+	sendPacket(1, start);
+
 	PickTurn packet;
 
 	packet.type = Type::PICK_TURN;
