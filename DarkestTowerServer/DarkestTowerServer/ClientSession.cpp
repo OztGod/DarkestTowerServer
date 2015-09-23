@@ -252,6 +252,9 @@ void ClientSession::onRegisterAccount(const RegisterAccountRequest & packet)
 
 void ClientSession::onRequestMatch(const RequestMatch & packet)
 {
+	if (player->getState() != PlayerState::LOBBY)
+		return;
+
 	HmmoApplication::getInstance()->getLogicPort()->doLambda([p = player]()
 	{
 		GameManager::getInstance()->addMatchPendingList(p);
@@ -261,6 +264,9 @@ void ClientSession::onRequestMatch(const RequestMatch & packet)
 
 void ClientSession::onCancelMatch(const CancelMatch & packet)
 {
+	if (player->getState() != PlayerState::LOBBY)
+		return;
+
 	HmmoApplication::getInstance()->getLogicPort()->doLambda([p = player]()
 	{
 		GameManager::getInstance()->removeMatchPendingList(p);

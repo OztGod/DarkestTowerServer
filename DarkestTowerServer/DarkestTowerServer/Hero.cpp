@@ -180,6 +180,9 @@ HeroInfo makeRandomHeroInfo()
 	HeroInfo info;
 	std::vector<SkillType> skills;
 
+	info.type = type;
+	info.level = 0;
+
 	switch (type)
 	{
 	case HeroClass::ARCHER:
@@ -312,4 +315,65 @@ SkillInfo makeSkillInfo(SkillType type)
 	}
 
 	return info;
+}
+
+void HeroInfo::levelup()
+{
+	while (exp > level * level * 10)
+	{
+		exp -= level * level * 10;
+		level++;
+
+		int t = rand() % 3;
+
+		switch (t)
+		{
+		case 0: //HP GROW
+			maxHp += hpGrow;
+			break;
+		case 1: //AP GROW
+			maxAct += actGrow;
+			break;
+		case 2: //SKILL GROW
+			skillup();
+			break;
+		}
+	}
+}
+
+void HeroInfo::skillup()
+{
+	std::vector<SkillType> types;
+
+	//현재는 스킬 레벨업은 무시
+	//새 스킬 습득 가능한 직업에 한해 새 스킬 습득하게 해줌
+	switch (type)
+	{
+	case HeroClass::ARCHER:
+		types.push_back(SkillType::ARCHER_BACK_ATTACK);
+		types.push_back(SkillType::ARCHER_PENETRATE_SHOT);
+		types.push_back(SkillType::ARCHER_SNIPE);
+		break;
+	case HeroClass::MAGICIAN:
+		types.push_back(SkillType::MAGICIAN_ICE_ARROW);
+		types.push_back(SkillType::MAGICIAN_THUNDER_STORM);
+		break;
+	case HeroClass::THIEF:
+		types.push_back(SkillType::THIEF_BACK_STEP);
+		types.push_back(SkillType::THIEF_POISON);
+		break;
+	}
+
+	//모든 스킬 다 습득한 경우
+	if (skillType.size() > types.size())
+		return;
+
+	int idx = rand() % types.size();
+
+	while (std::find(skillType.begin(), skillType.end(), types[idx]) != skillType.end())
+	{
+		idx = rand() % types.size();
+	}
+
+	skillType.push_back(types[idx]);
 }

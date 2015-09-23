@@ -36,6 +36,9 @@ struct HeroInfo
 	int actGrow;
 	bool isValid = true;
 	std::vector<SkillType> skillType;
+
+	void levelup();
+	void skillup();
 };
 
 HeroInfo makeRandomHeroInfo();

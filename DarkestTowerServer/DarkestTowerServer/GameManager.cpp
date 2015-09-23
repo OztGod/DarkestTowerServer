@@ -227,21 +227,24 @@ void GameManager::initAccount(int pid)
 	{
 		HeroInfo info = makeRandomHeroInfo();
 
-		int pid;
+		int hid;
 		
 		{
 			int t = static_cast<int>(info.type);
 
 			DBHelper dbHelper;
 
+			dbHelper.bindParamInt(&pid);
 			dbHelper.bindParamInt(&t);
 			dbHelper.bindParamInt(&info.level);
 			dbHelper.bindParamInt(&info.maxHp);
 			dbHelper.bindParamInt(&info.maxAct);
+			dbHelper.bindParamInt(&info.hpGrow);
+			dbHelper.bindParamInt(&info.actGrow);
 
-			dbHelper.bindResultColumnInt(&pid);
+			dbHelper.bindResultColumnInt(&hid);
 
-			dbHelper.execute(L"{ call dbo.spInsertPlayerHeros (?, ?, ?, ?) }");
+			dbHelper.execute(L"{ call dbo.spInsertPlayerHeros (?, ?, ?, ?, ?, ?, ?) }");
 			dbHelper.fetchRow();
 		}
 
@@ -251,7 +254,7 @@ void GameManager::initAccount(int pid)
 			int res;
 			int skillType = static_cast<int>(info.skillType[i]);
 
-			skillDB.bindParamInt(&pid);
+			skillDB.bindParamInt(&hid);
 			skillDB.bindParamInt(&skillType);
 
 			skillDB.bindResultColumnInt(&res);

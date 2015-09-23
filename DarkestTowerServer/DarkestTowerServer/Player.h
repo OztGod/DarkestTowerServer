@@ -32,6 +32,7 @@ public:
 
 	void matchStart(Match* match)
 	{
+		state = PlayerState::GAME;
 		nowMatch = match;
 	}
 
@@ -56,6 +57,7 @@ public:
 
 	const HeroInfo& getHeroInfo(int idx) const { return heroInfo[idx]; }
 
+	PlayerState getState() const { return state; }
 private:
 	ClientSession* session = nullptr;
 	Match* nowMatch = nullptr;

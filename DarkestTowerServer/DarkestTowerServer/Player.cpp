@@ -21,6 +21,8 @@ void Player::init(int win_, int lose_, int elo_, int heroNum_)
 		int exp;
 		int maxHp;
 		int maxAp;
+		int hpGrow;
+		int actGrow;
 
 		dbHelper.bindParamInt(&pid);
 
@@ -30,12 +32,14 @@ void Player::init(int win_, int lose_, int elo_, int heroNum_)
 		dbHelper.bindResultColumnInt(&exp);
 		dbHelper.bindResultColumnInt(&maxHp);
 		dbHelper.bindResultColumnInt(&maxAp);
+		dbHelper.bindResultColumnInt(&hpGrow);
+		dbHelper.bindResultColumnInt(&actGrow);
 
 		if (dbHelper.execute(L"{ call dbo.spLoadPlayerHeros (?) }"))
 		{
 			while (dbHelper.fetchRow())
 			{
-				HmmoApplication::getInstance()->getLogicPort()->doLambda([this, heroId, heroType, level, exp, maxHp, maxAp]()
+				HmmoApplication::getInstance()->getLogicPort()->doLambda([this, heroId, heroType, level, exp, maxHp, maxAp, hpGrow, actGrow]()
 				{
 					HeroInfo info;
 
@@ -45,6 +49,8 @@ void Player::init(int win_, int lose_, int elo_, int heroNum_)
 					info.exp = exp;
 					info.maxHp = maxHp;
 					info.maxAct = maxAp;
+					info.hpGrow = hpGrow;
+					info.actGrow = actGrow;
 
 					heroInfo.push_back(info);
 					
@@ -122,7 +128,15 @@ void Player::matchEnd(bool isWin)
 		}
 		else
 		{
-			heroInfo[i].exp += 20;
+			//경험치 기본적으로 10 ~ 30사이 랜덤.
+			heroInfo[i].exp += 10 + (rand() % 21);
+
+			//이겼을 경우 20 ~ 40 더 줌
+
+			heroInfo[i].exp += 20 + (rand() % 21);
+
+			//조건 만족하면 levelup 처리함
+			heroInfo[i].levelup();
 		}
 	}
 
