@@ -40,6 +40,9 @@ enum Type : uint8
 
     REQUEST_MATCH
     CANCEL_MATCH
+
+    ENTER_LOBBY    
+    CHAMPION_DATA
 	
     TYPE_NUM
 }
@@ -309,4 +312,22 @@ packet RequestMatch : Header
 
 packet CancelMatch : Header
 {
+}
+
+packet EnterLobby : Header
+{
+    int32 win
+    int32 lose
+    int8  championNum
+}
+
+packet championData : Header
+{
+    HeroClass type
+    int8 level
+    int8 hp
+    int8 act
+    int8 skillNum
+    int8 skillType arr 4
+    int8 skillLevel arr 4
 }

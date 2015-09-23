@@ -39,7 +39,7 @@ void GameManager::getRandomHeros(std::shared_ptr<Player> player, OUT std::vector
 	}
 }
 
-void GameManager::isValidAccount(const char * id, int idLength, const char * password, int pwdLength, std::function<void(int)> complete)
+void GameManager::isValidAccount(const char * id, int idLength, const char * password, int pwdLength, AccountFunc complete)
 {
 	std::string idStr(id, id + idLength);
 	std::string passwordStr(password, password + pwdLength);
@@ -55,6 +55,7 @@ void GameManager::isValidAccount(const char * id, int idLength, const char * pas
 		int win = 0;
 		int lose = 0;
 		int elo = 0;
+		int championNum = 0;
 		bool isValid = false;
 		wchar_t comment[256] = { 0, };
 
@@ -65,6 +66,7 @@ void GameManager::isValidAccount(const char * id, int idLength, const char * pas
 		dbHelper.bindResultColumnInt(&win);
 		dbHelper.bindResultColumnInt(&lose);
 		dbHelper.bindResultColumnInt(&elo);
+		dbHelper.bindResultColumnInt(&championNum);
 		dbHelper.bindResultColumnBool(&isValid);
 		dbHelper.bindResultColumnText(comment, 256);
 
@@ -72,9 +74,9 @@ void GameManager::isValidAccount(const char * id, int idLength, const char * pas
 		{
 			if (dbHelper.fetchRow())
 			{
-				HmmoApplication::getInstance()->getIoPort()->doLambda([pid, complete]()
+				HmmoApplication::getInstance()->getIoPort()->doLambda([pid, win, lose, elo, championNum, complete]()
 				{
-					complete(pid);
+					complete(pid, win, lose, elo, championNum);
 					return true;
 				});
 			}
@@ -82,7 +84,7 @@ void GameManager::isValidAccount(const char * id, int idLength, const char * pas
 			{
 				HmmoApplication::getInstance()->getIoPort()->doLambda([pid, complete]()
 				{
-					complete(-1);
+					complete(-1, 0, 0, 0, 0);
 					return true;
 				});
 			}
@@ -237,6 +239,47 @@ void GameManager::updateMatch()
 void GameManager::removePlayerMatchMap(std::shared_ptr<Player> player)
 {
 	playerMatchMap.erase(player->getId());
+}
+
+void GameManager::initAccount(int pid)
+{
+	for (int i = 0; i < baseHeroNum; i++)
+	{
+		HeroInfo info = makeRandomHeroInfo(static_cast<HeroClass>(rand() % static_cast<int>(HeroClass::NUM)));
+
+		int pid;
+		
+		{
+			int t = static_cast<int>(info.type);
+
+			DBHelper dbHelper;
+
+			dbHelper.bindParamInt(&t);
+			dbHelper.bindParamInt(&info.level);
+			dbHelper.bindParamInt(&info.maxHp);
+			dbHelper.bindParamInt(&info.maxAct);
+
+			dbHelper.bindResultColumnInt(&pid);
+
+			dbHelper.execute(L"{ call dbo.spInsertPlayerHeros (?, ?, ?, ?) }");
+			dbHelper.fetchRow();
+		}
+
+		for (int i = 0; i < info.skillType.size(); i++)
+		{
+			DBHelper skillDB;
+			int res;
+			int skillType = static_cast<int>(info.skillType[i]);
+
+			skillDB.bindParamInt(&pid);
+			skillDB.bindParamInt(&skillType);
+
+			skillDB.bindResultColumnInt(&res);
+
+			skillDB.execute(L"{ call dbo.spInsertHeroSkills (?, ?) }");
+			skillDB.fetchRow();
+		}
+	}
 }
 
 GameManager::GameManager()

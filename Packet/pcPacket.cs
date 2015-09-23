@@ -45,7 +45,9 @@ public enum Type
 	REGISTER_ACCOUNT_RESPONSE = 25,
 	REQUEST_MATCH = 26,
 	CANCEL_MATCH = 27,
-	TYPE_NUM = 28,
+	ENTER_LOBBY = 28,
+	CHAMPION_DATA = 29,
+	TYPE_NUM = 30,
 }
 public enum StateType
 {
@@ -383,5 +385,33 @@ public class RequestMatch : Header
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public class CancelMatch : Header
 {
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class EnterLobby : Header
+{
+	[MarshalAs(UnmanagedType.U4)]
+	public Int32 win;
+	[MarshalAs(UnmanagedType.U4)]
+	public Int32 lose;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte championNum;
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class championData : Header
+{
+	[MarshalAs(UnmanagedType.U1)]
+	public byte type;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte level;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte hp;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte act;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte skillNum;
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+	public sbyte[] skillType= new sbyte[4];
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+	public sbyte[] skillLevel= new sbyte[4];
 }
 }

@@ -10,6 +10,7 @@ const int INVALID_POS = -1;
 
 class Match;
 
+
 struct SkillInfo
 {
 	SkillInfo(std::unique_ptr<Skill> skill_)
@@ -23,12 +24,29 @@ struct SkillInfo
 
 SkillInfo makeSkillInfo(SkillType type);
 
+struct HeroInfo
+{
+	HeroClass type;
+	int id;
+	int maxHp;
+	int maxAct;
+	int level;
+	int exp;
+	int hpGrow;
+	int actGrow;
+	std::vector<SkillType> skillType;
+};
+
+HeroInfo makeRandomHeroInfo(HeroClass type);
+
 class Hero
 {
 	friend class Match;
 
 public:
 	Hero(HeroClass type_, int maxHp_, int maxAct_, int idx_);
+
+	void initByInfo(HeroInfo info_, int idx_);
 	virtual ~Hero() = default;
 	HeroClass getType() const { return type; }
 	int getHp() const { return hp; }

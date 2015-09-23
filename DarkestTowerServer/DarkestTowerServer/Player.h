@@ -19,6 +19,8 @@ public:
 
 	int getId() const { return pid; }
 
+	void init(int win_, int lose_, int elo_, int heroNum_);
+
 	ClientSession* getSession() const { return session; }
 
 	void matchStart(Match* match)
@@ -39,5 +41,10 @@ public:
 private:
 	ClientSession* session = nullptr;
 	Match* nowMatch = nullptr;
+	std::vector<HeroInfo> heroInfo;
+	int win;
+	int lose;
+	int heroNum;
+	int elo;
 	int pid;
 };

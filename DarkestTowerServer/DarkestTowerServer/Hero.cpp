@@ -27,6 +27,21 @@ Hero::Hero(HeroClass type_, int maxHp_, int maxAct_, int idx_)
 {
 }
 
+void Hero::initByInfo(HeroInfo info_, int idx_)
+{
+	type = info_.type;
+	maxHp = info_.maxHp;
+	maxAct = info_.maxAct;
+	hp = maxHp;
+	act = maxAct;
+	idx = idx_;
+
+	for (auto& skill : info_.skillType)
+	{
+		skills.push_back(makeSkillInfo(skill));
+	}
+}
+
 void Hero::setPos(Point pos_)
 {
 	pos = pos_;
@@ -157,6 +172,86 @@ std::unique_ptr<Hero> getRandomHero(int idx)
 	}
 
 	return hero;
+}
+
+HeroInfo makeRandomHeroInfo(HeroClass type)
+{
+	HeroInfo info;
+	std::vector<SkillType> skills;
+
+	switch (type)
+	{
+	case HeroClass::ARCHER:
+		info.hpGrow = 2;
+		info.actGrow = 2;
+		info.maxHp = 10;
+		info.maxAct = 5;
+		info.skillType.push_back(SkillType::ARCHER_ATTACK);
+
+		skills.push_back(SkillType::ARCHER_BACK_ATTACK);
+		skills.push_back(SkillType::ARCHER_PENETRATE_SHOT);
+		skills.push_back(SkillType::ARCHER_SNIPE);
+		break;
+
+	case HeroClass::FIGHTER:
+		info.hpGrow = 3;
+		info.actGrow = 2;
+		info.maxHp = 17;
+		info.maxAct = 5;
+		info.skillType.push_back(SkillType::FIGHTER_ATTACK);
+
+		skills.push_back(SkillType::FIGHTER_CHARGE);
+		break;
+
+	case HeroClass::MAGICIAN:
+		info.hpGrow = 2;
+		info.actGrow = 2;
+		info.maxHp = 10;
+		info.maxAct = 5;
+		info.skillType.push_back(SkillType::MAGICIAN_FIRE_BLAST);
+
+		skills.push_back(SkillType::MAGICIAN_ICE_ARROW);
+		skills.push_back(SkillType::MAGICIAN_THUNDER_STORM);
+		break;
+
+	case HeroClass::MONK:
+		info.hpGrow = 3;
+		info.actGrow = 2;
+		info.maxHp = 14;
+		info.maxAct = 4;
+		info.skillType.push_back(SkillType::MONK_ATTACK);
+
+		skills.push_back(SkillType::MONK_KICK);
+		break;
+
+	case HeroClass::PRIEST:
+		info.hpGrow = 2;
+		info.actGrow = 1;
+		info.maxHp = 10;
+		info.maxAct = 5;
+		info.skillType.push_back(SkillType::PRIEST_HEAL);
+
+		skills.push_back(SkillType::PRIEST_ATTACK);
+		break;
+
+	case HeroClass::THIEF:
+		info.hpGrow = 2;
+		info.actGrow = 2;
+		info.maxHp = 14;
+		info.maxAct = 5;
+		info.skillType.push_back(SkillType::THIEF_ATTACK);
+
+		skills.push_back(SkillType::THIEF_BACK_STEP);
+		skills.push_back(SkillType::THIEF_POISON);
+		break;
+	}
+
+	info.maxHp += rand() % (1 + info.hpGrow);
+	info.maxAct += rand() % (1 + info.actGrow);
+
+	info.skillType.push_back(skills[rand() % skills.size()]);
+
+	return info;
 }
 
 SkillInfo makeSkillInfo(SkillType type)

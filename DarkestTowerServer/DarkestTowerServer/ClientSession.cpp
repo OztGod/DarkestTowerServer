@@ -84,22 +84,26 @@ void ClientSession::sessionReset()
 void ClientSession::onLoginRequest(const LoginRequest& packet)
 {
 	GameManager::getInstance()->isValidAccount(packet.id, packet.idLength,
-		packet.password, packet.passwordLength, [session = this](int pid)
+		packet.password, packet.passwordLength, [session = this](int pid, int win, int lose, int elo, int heroNum)
 	{
-		LoginResponse response;
-		response.type = Type::LOGIN_RESPONSE;
+		if (pid == -1)
+		{
+			return HmmoApplication::getInstance()->getIoPort()->doLambda([session]()
+			{
+				LoginResponse response;
+				response.type = Type::LOGIN_RESPONSE;
+				response.result = LoginResult::FAILED;
+				return session->sendPacket(response);
+			});
+		}
 
 		if (pid != -1)
 		{
-			response.result = LoginResult::SUCCESS;
 			session->player = std::make_shared<Player>(pid, session);
-		}
-		else
-		{
-			response.result = LoginResult::FAILED;
+			session->player->init(win, lose, elo, heroNum);
 		}
 
-		return session->sendPacket(response);
+		return true;
 	});
 }
 
@@ -228,28 +232,36 @@ void ClientSession::onRegisterAccount(const RegisterAccountRequest & packet)
 		std::wstring wid = converter.from_bytes(idStr);
 		std::wstring wpassword = converter.from_bytes(pwdStr);
 
-		DBHelper dbHelper;
 		int res = 0;
+		bool fetchSuccess = false;
 
-		dbHelper.bindParamText(wid.c_str());
-		dbHelper.bindParamText(wpassword.c_str());
-
-		dbHelper.bindResultColumnInt(&res);
-
-		if (dbHelper.execute(L"{ call dbo.spCreateAccount (? , ?) }"))
 		{
-			if (dbHelper.fetchRow() && res != 0)
-			{
-				HmmoApplication::getInstance()->getIoPort()->doLambda([session]()
-				{
-					RegisterAccountResponse response;
-					response.type = Type::REGISTER_ACCOUNT_RESPONSE;
-					response.isSuccess = 1;
-					return session->sendPacket(response);
-				});
+			DBHelper dbHelper;
+			
+			dbHelper.bindParamText(wid.c_str());
+			dbHelper.bindParamText(wpassword.c_str());
 
-				return true;
+			dbHelper.bindResultColumnInt(&res);
+
+			if (dbHelper.execute(L"{ call dbo.spCreateAccount (? , ?) }"))
+			{
+				fetchSuccess = dbHelper.fetchRow();
 			}
+		}
+
+		if (fetchSuccess && res != 0)
+		{
+			//해당 계정에 대한 hero 정보 초기화
+			GameManager::getInstance()->initAccount(res);
+
+			HmmoApplication::getInstance()->getIoPort()->doLambda([session]()
+			{
+				RegisterAccountResponse response;
+				response.type = Type::REGISTER_ACCOUNT_RESPONSE;
+				response.isSuccess = 1;
+				return session->sendPacket(response);
+			});
+			return true;
 		}
 
 		HmmoApplication::getInstance()->getIoPort()->doLambda([session]()
