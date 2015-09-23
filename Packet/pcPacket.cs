@@ -46,7 +46,7 @@ public enum Type
 	REQUEST_MATCH = 26,
 	CANCEL_MATCH = 27,
 	ENTER_LOBBY = 28,
-	CHAMPION_DATA = 29,
+	HERO_DATA = 29,
 	TYPE_NUM = 30,
 }
 public enum StateType
@@ -394,13 +394,13 @@ public class EnterLobby : Header
 	[MarshalAs(UnmanagedType.U4)]
 	public Int32 lose;
 	[MarshalAs(UnmanagedType.U1)]
-	public sbyte championNum;
+	public sbyte heroNum;
 }
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public class championData : Header
+public class HeroData : Header
 {
 	[MarshalAs(UnmanagedType.U1)]
-	public byte type;
+	public byte heroType;
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte level;
 	[MarshalAs(UnmanagedType.U1)]

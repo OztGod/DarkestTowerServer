@@ -55,12 +55,59 @@ void Player::init(int win_, int lose_, int elo_, int heroNum_)
 		
 		ClientSession* session = this->getSession();
 
-		return HmmoApplication::getInstance()->getIoPort()->doLambda([session]()
+		return HmmoApplication::getInstance()->getIoPort()->doLambda([this, session]()
 		{
 			LoginResponse response;
 			response.type = Type::LOGIN_RESPONSE;
 			response.result = LoginResult::SUCCESS;
-			return session->sendPacket(response);
+			session->sendPacket(response);
+
+			return HmmoApplication::getInstance()->getLogicPort()->doLambda([this, session]()
+			{
+				enterLobby();
+
+				return true;
+			});
 		});
+	});
+}
+
+void Player::enterLobby()
+{
+	state = PlayerState::LOBBY;
+
+	HmmoApplication::getInstance()->getIoPort()->doLambda([this]()
+	{
+		EnterLobby packet;
+
+		packet.type = Type::ENTER_LOBBY;
+
+		packet.win = win;
+		packet.lose = lose;
+		packet.heroNum = heroNum;
+
+		session->sendPacket(packet);
+
+		for (int i = 0; i < heroInfo.size(); i++)
+		{
+			HeroData data;
+
+			data.type = Type::HERO_DATA;
+			data.heroType = heroInfo[i].type;
+			data.hp = heroInfo[i].maxHp;
+			data.act = heroInfo[i].maxAct;
+			data.level = heroInfo[i].level;
+			data.skillNum = heroInfo[i].skillType.size();
+
+			for (int j = 0; j < heroInfo[i].skillType.size(); j++)
+			{
+				data.skillType[j] = static_cast<int>(heroInfo[i].skillType[j]);
+				data.skillLevel[j] = 1;
+			}
+
+			session->sendPacket(data);
+		}
+
+		return true;
 	});
 }

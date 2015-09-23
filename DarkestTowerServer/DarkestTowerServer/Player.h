@@ -4,6 +4,13 @@
 class ClientSession;
 class Match;
 
+enum class PlayerState
+{
+	NONE,
+	LOBBY,
+	GAME
+};
+
 class Player
 {
 public:
@@ -28,6 +35,8 @@ public:
 		nowMatch = match;
 	}
 
+	void enterLobby();
+
 	Match* getMatch()
 	{
 		return nowMatch;
@@ -42,6 +51,7 @@ private:
 	ClientSession* session = nullptr;
 	Match* nowMatch = nullptr;
 	std::vector<HeroInfo> heroInfo;
+	PlayerState state = PlayerState::NONE;
 	int win;
 	int lose;
 	int heroNum;

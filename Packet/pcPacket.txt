@@ -42,7 +42,7 @@ enum Type : uint8
     CANCEL_MATCH
 
     ENTER_LOBBY    
-    CHAMPION_DATA
+    HERO_DATA
 	
     TYPE_NUM
 }
@@ -318,12 +318,12 @@ packet EnterLobby : Header
 {
     int32 win
     int32 lose
-    int8  championNum
+    int8  heroNum
 }
 
-packet championData : Header
+packet HeroData : Header
 {
-    HeroClass type
+    HeroClass heroType
     int8 level
     int8 hp
     int8 act

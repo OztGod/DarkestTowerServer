@@ -100,7 +100,12 @@ void ClientSession::onLoginRequest(const LoginRequest& packet)
 		if (pid != -1)
 		{
 			session->player = std::make_shared<Player>(pid, session);
-			session->player->init(win, lose, elo, heroNum);
+
+			return HmmoApplication::getInstance()->getLogicPort()->doLambda([session,win,lose,elo,heroNum]()
+			{
+				session->player->init(win, lose, elo, heroNum);
+				return true;
+			});
 		}
 
 		return true;

@@ -42,7 +42,7 @@ enum class Type : uint8_t
 	REQUEST_MATCH = 26,
 	CANCEL_MATCH = 27,
 	ENTER_LOBBY = 28,
-	CHAMPION_DATA = 29,
+	HERO_DATA = 29,
 	TYPE_NUM = 30,
 };
 enum class StateType : uint8_t
@@ -327,13 +327,13 @@ struct EnterLobby : Header
 {
 	int32_t win;
 	int32_t lose;
-	int8_t championNum;
+	int8_t heroNum;
 };
 #pragma pack(pop)
 #pragma pack(push, 1)
-struct championData : Header
+struct HeroData : Header
 {
-	HeroClass type;
+	HeroClass heroType;
 	int8_t level;
 	int8_t hp;
 	int8_t act;
