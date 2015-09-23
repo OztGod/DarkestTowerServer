@@ -45,6 +45,8 @@ enum Type : uint8
     PICK
     PICK_DATA
     PICK_END
+
+    SURRENDER
 	
     TYPE_NUM
 }
@@ -345,4 +347,8 @@ packet PickData : Header
 packet PickEnd : Header
 {
     int8 heroIdx arr 4
+}
+
+packet Surrender : Header
+{
 }

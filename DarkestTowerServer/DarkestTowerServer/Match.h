@@ -44,6 +44,8 @@ public:
 	void begin();
 	void end(int winner);
 
+	void surrender(std::shared_ptr<Player> player);
+
 private:
 	void resetPlayer();
 	void broadcastHeroState(int t, int heroIdx, bool isMove);

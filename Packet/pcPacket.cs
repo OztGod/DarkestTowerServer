@@ -49,7 +49,8 @@ public enum Type
 	PICK = 29,
 	PICK_DATA = 30,
 	PICK_END = 31,
-	TYPE_NUM = 32,
+	SURRENDER = 32,
+	TYPE_NUM = 33,
 }
 public enum StateType
 {
@@ -433,5 +434,9 @@ public class PickEnd : Header
 {
 	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
 	public sbyte[] heroIdx= new sbyte[4];
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class Surrender : Header
+{
 }
 }

@@ -45,7 +45,8 @@ enum class Type : uint8_t
 	PICK = 29,
 	PICK_DATA = 30,
 	PICK_END = 31,
-	TYPE_NUM = 32,
+	SURRENDER = 32,
+	TYPE_NUM = 33,
 };
 enum class StateType : uint8_t
 {
@@ -357,5 +358,10 @@ struct PickData : Header
 struct PickEnd : Header
 {
 	int8_t heroIdx[4];
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct Surrender : Header
+{
 };
 #pragma pack(pop)

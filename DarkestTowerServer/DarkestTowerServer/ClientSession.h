@@ -34,6 +34,7 @@ public:
 	void onRequestMatch(const RequestMatch& packet);
 	void onCancelMatch(const CancelMatch& packet);
 	void onPick(const Pick& packet);
+	void onSurrender(const Surrender& packet);
 
 private:
 	std::shared_ptr<Player> player = nullptr;

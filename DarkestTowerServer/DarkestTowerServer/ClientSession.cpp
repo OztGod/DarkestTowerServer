@@ -35,6 +35,7 @@ void ClientSession::initHandler()
 	registerHandler(Type::ACT_HERO, &ClientSession::onActHero);
 	registerHandler(Type::REGISTER_ACCOUNT_REQUEST, &ClientSession::onRegisterAccount);
 	registerHandler(Type::PICK, &ClientSession::onPick);
+	registerHandler(Type::SURRENDER, &ClientSession::onSurrender);
 }
 
 bool ClientSession::onAccept()
@@ -272,6 +273,15 @@ void ClientSession::onPick(const Pick & packet)
 	HmmoApplication::getInstance()->getLogicPort()->doLambda([p = player, packet]()
 	{
 		p->getMatch()->pickHero(p, packet.heroIdx[0], packet.heroIdx[1]);
+		return true;
+	});
+}
+
+void ClientSession::onSurrender(const Surrender & packet)
+{
+	HmmoApplication::getInstance()->getLogicPort()->doLambda([p = player, packet]()
+	{
+		p->getMatch()->surrender(p);
 		return true;
 	});
 }

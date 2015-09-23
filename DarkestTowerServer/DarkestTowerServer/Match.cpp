@@ -610,6 +610,13 @@ void Match::end(int winner)
 	}
 }
 
+void Match::surrender(std::shared_ptr<Player> player)
+{
+	int t = getPlayerIndex(player);
+
+	end((t + 1) % 2);
+}
+
 void Match::resetPlayer()
 {
 	players[0]->resetMatch();
