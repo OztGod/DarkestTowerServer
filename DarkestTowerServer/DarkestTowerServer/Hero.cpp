@@ -143,39 +143,40 @@ void Hero::dead()
 	pos.y = INVALID_POS;
 }
 
-std::unique_ptr<Hero> getRandomHero(int idx)
+std::unique_ptr<Hero> getHeroFromInfo(HeroInfo info, int idx)
 {
 	std::unique_ptr<Hero> hero = nullptr;
-	int heroNum = static_cast<int>(HeroClass::NUM);
-	HeroClass heroClass = static_cast<HeroClass>(rand() % heroNum);
 
-	switch (heroClass)
+	switch (info.type)
 	{
 	case HeroClass::FIGHTER:
-		hero = std::make_unique<Fighter>(idx);
+		hero = std::make_unique<Fighter>();
 		break;
 	case HeroClass::ARCHER:
-		hero = std::make_unique<Archer>(idx);
+		hero = std::make_unique<Archer>();
 		break;
 	case HeroClass::MAGICIAN:
-		hero = std::make_unique<Magician>(idx);
+		hero = std::make_unique<Magician>();
 		break;
 	case HeroClass::MONK:
-		hero = std::make_unique<Monk>(idx);
+		hero = std::make_unique<Monk>();
 		break;
 	case HeroClass::PRIEST:
-		hero = std::make_unique<Priest>(idx);
+		hero = std::make_unique<Priest>();
 		break;
 	case HeroClass::THIEF:
-		hero = std::make_unique<Thief>(idx);
+		hero = std::make_unique<Thief>();
 		break;
 	}
+
+	hero->initByInfo(info, idx);
 
 	return hero;
 }
 
-HeroInfo makeRandomHeroInfo(HeroClass type)
+HeroInfo makeRandomHeroInfo()
 {
+	HeroClass type = static_cast<HeroClass>(rand() % static_cast<int>(HeroClass::NUM));
 	HeroInfo info;
 	std::vector<SkillType> skills;
 

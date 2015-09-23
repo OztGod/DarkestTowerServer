@@ -11,7 +11,6 @@ class GameManager
 public:
 	static GameManager* getInstance();
 
-	void getRandomHeros(std::shared_ptr<Player> player, OUT std::vector<HeroClass>& classes);
 	using AccountFunc = std::function<void(int, int, int, int, int)>;
 	void isValidAccount(const char* id, int idLength, const char* password, int pwdLength, AccountFunc complete);
 

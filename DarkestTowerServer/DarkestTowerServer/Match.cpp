@@ -177,25 +177,6 @@ void Match::moveHero(std::shared_ptr<Player> player, int idx, Point pos)
 	selectHero(player, idx);
 }
 
-void Match::randomHero(std::shared_ptr<Player> player)
-{
-	int t = getPlayerIndex(player);
-
-	//겜시작 or 레디 박은 상태면 히어로 변경 불가
-	if (state != MatchState::PLACE || isReady[t])
-	{
-		sendReject(t);
-		return;
-	}
-	
-	heroData[t].clear();
-
-	for (int i = 0; i < 4; i++)
-	{
-		heroData[t].push_back(getRandomHero(i));
-	}
-}
-
 void Match::getHeroData(std::shared_ptr<Player> player, OUT std::vector<const Hero*>& data)
 {
 	int t = getPlayerIndex(player);
@@ -465,27 +446,13 @@ bool Match::isEnd()
 
 	if (!players[0]->getSession()->isConnected())
 	{
-		MatchEnd end;
-		end.type = Type::MATCH_END;
-		end.winner = 1;
-
-		resetPlayer();
-
-		broadcastPacket(end);
-
+		end(1);
 		return true;
 	}
 
 	if (!players[1]->getSession()->isConnected())
 	{
-		MatchEnd end;
-		end.type = Type::MATCH_END;
-		end.winner = 0;
-
-		resetPlayer();
-		
-		broadcastPacket(end);
-
+		end(0);
 		return true;
 	}
 
@@ -506,15 +473,7 @@ bool Match::isEnd()
 
 		if (isEnd)
 		{
-			MatchEnd end;
-			end.type = Type::MATCH_END;
-			end.winner = (t + 1) % 2;
-
-			resetPlayer();
-
-			broadcastPacket(end);
-
-			return true;
+			end((t + 1) % 2);
 		}
 	}
 
@@ -548,6 +507,106 @@ void Match::removeEmptyLine()
 				}
 			}
 		}
+	}
+}
+
+void Match::pickHero(std::shared_ptr<Player> player, int pick1, int pick2)
+{
+	PickTurn packet;
+	packet.type = Type::PICK_TURN;
+
+	switch (pick)
+	{
+	case 0:
+		heroData[0][0] = getHeroFromInfo(player->getHeroInfo(pick1), 0);
+		heroIndex[0][0] = pick1;
+		packet.pickNum = 2;
+		sendPacket(1, packet);
+		break;
+	case 1:
+		heroData[1][0] = getHeroFromInfo(player->getHeroInfo(pick1), 0);
+		heroData[1][1] = getHeroFromInfo(player->getHeroInfo(pick2), 1);
+		heroIndex[1][0] = pick1;
+		heroIndex[1][1] = pick2;
+		packet.pickNum = 2;
+		sendPacket(0, packet);
+		break;
+	case 2:
+		heroData[0][1] = getHeroFromInfo(player->getHeroInfo(pick1), 1);
+		heroData[0][2] = getHeroFromInfo(player->getHeroInfo(pick2), 2);
+		heroIndex[0][1] = pick1;
+		heroIndex[0][2] = pick2;
+		packet.pickNum = 2;
+		sendPacket(1, packet);
+		break;
+	case 3:
+		heroData[1][2] = getHeroFromInfo(player->getHeroInfo(pick1), 2);
+		heroData[1][3] = getHeroFromInfo(player->getHeroInfo(pick2), 3);
+		heroIndex[1][2] = pick1;
+		heroIndex[1][3] = pick2;
+		packet.pickNum = 1;
+		sendPacket(0, packet);
+		break;
+	case 4:
+		heroData[0][3] = getHeroFromInfo(player->getHeroInfo(pick1), 3);
+		heroIndex[0][3] = pick1;
+		break;
+	}
+
+	if (pick == 4)
+	{
+		PickEnd end;
+		end.type = Type::PICK_END;
+
+		for (int t = 0; t < MAX_NUM; t++)
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				end.heroIdx[i] = heroIndex[t][i];
+			}
+
+			sendPacket(t, end);
+		}
+		
+		state = MatchState::PLACE;
+	}
+	else
+	{
+		pick++;
+	}
+}
+
+void Match::begin()
+{
+	PickTurn packet;
+
+	packet.type = Type::PICK_TURN;
+	packet.pickNum = 1;
+
+	sendPacket(0, packet);
+}
+
+void Match::end(int winner)
+{
+	MatchEnd end;
+	end.type = Type::MATCH_END;
+	end.winner = winner;
+
+	resetPlayer();
+
+	broadcastPacket(end);
+
+	for (int t = 0; t < MAX_NUM; t++)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			if (heroData[t][i]->isDead())
+			{
+				players[t]->invalidHeroInfo(i);
+			}
+		}
+
+		players[t]->matchEnd(t == winner);
 	}
 }
 

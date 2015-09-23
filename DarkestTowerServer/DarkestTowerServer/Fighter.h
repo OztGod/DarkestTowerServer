@@ -4,6 +4,7 @@
 class Fighter : public Hero
 {
 public:
+	Fighter() = default;
 	Fighter(int idx);
 	~Fighter() override = default;
 

@@ -27,7 +27,6 @@ public:
 	void placeHero(std::shared_ptr<Player> player, std::vector<Point>& points);
 	void moveHero(std::shared_ptr<Player> player, int idx, Point pos);
 
-	void randomHero(std::shared_ptr<Player> player);
 	void getHeroData(std::shared_ptr<Player> player, OUT std::vector<const Hero*>& data);
 
 	void selectHero(std::shared_ptr<Player> player, int idx);
@@ -39,6 +38,11 @@ public:
 	bool isEnd();
 
 	void removeEmptyLine();
+
+	void pickHero(std::shared_ptr<Player> player, int pick1, int pick2);
+
+	void begin();
+	void end(int winner);
 
 private:
 	void resetPlayer();
@@ -75,7 +79,9 @@ private:
 	bool isReady[MAX_NUM];
 	int board[MAX_NUM][3][3];
 	UHeroVec heroData[MAX_NUM];
-	MatchState state = MatchState::PLACE;
+	std::vector<int> heroIndex[MAX_NUM];
+	MatchState state = MatchState::PICK;
 	int playerNum = 0;
 	int nowTurn = 0;
+	int pick = 0;
 };

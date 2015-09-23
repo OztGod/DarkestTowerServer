@@ -24,7 +24,6 @@ public:
 	void sessionReset();
 
 	void onLoginRequest(const LoginRequest& packet);
-	void onRandomHeroRequest(const RandomHeroRequest& packet);
 	void onAllocHero(const AllocHero& packet);
 	void onMoveHero(const MoveHero& packet);
 	void onTurnEnd(const TurnEnd& packet);
@@ -34,6 +33,7 @@ public:
 	void onRegisterAccount(const RegisterAccountRequest& packet);
 	void onRequestMatch(const RequestMatch& packet);
 	void onCancelMatch(const CancelMatch& packet);
+	void onPick(const Pick& packet);
 
 private:
 	std::shared_ptr<Player> player = nullptr;

@@ -18,27 +18,6 @@ GameManager * GameManager::getInstance()
 	return instance;
 }
 
-void GameManager::getRandomHeros(std::shared_ptr<Player> player, OUT std::vector<HeroClass>& classes)
-{
-	//TODO : 나중에 DB에서 받아온 데이터 기반으로 랜덤 데이터 돌려주게끔
-	classes.clear();
-	std::vector<const Hero*> heros;
-
-	//match가 없는 경우 무시한다.
-	if (playerMatchMap.find(player->getId()) == playerMatchMap.end())
-	{
-		return;
-	}
-
-	playerMatchMap[player->getId()]->randomHero(player);
-	playerMatchMap[player->getId()]->getHeroData(player, heros);
-
-	for (int i = 0; i < heros.size(); i++)
-	{
-		classes.push_back(heros[i]->getType());
-	}
-}
-
 void GameManager::isValidAccount(const char * id, int idLength, const char * password, int pwdLength, AccountFunc complete)
 {
 	std::string idStr(id, id + idLength);
@@ -180,6 +159,7 @@ void GameManager::createMatch()
 		Match* newMatch = new Match();
 		newMatch->registerPlayer(player);
 		newMatch->registerPlayer(player2);
+		newMatch->begin();
 
 		matchList.push_back(newMatch);
 		playerMatchMap[player->getId()] = newMatch;
@@ -245,7 +225,7 @@ void GameManager::initAccount(int pid)
 {
 	for (int i = 0; i < baseHeroNum; i++)
 	{
-		HeroInfo info = makeRandomHeroInfo(static_cast<HeroClass>(rand() % static_cast<int>(HeroClass::NUM)));
+		HeroInfo info = makeRandomHeroInfo();
 
 		int pid;
 		

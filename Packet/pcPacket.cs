@@ -20,34 +20,36 @@ public enum Type
 	LOGIN_REQUEST = 0,
 	LOGIN_RESPONSE = 1,
 	ALLOC_HERO = 2,
-	RANDOM_HERO_REQUEST = 3,
-	RANDOM_HERO_RESPONSE = 4,
-	MATCH_START = 5,
-	MATCH_END = 6,
-	GAME_DATA = 7,
-	SKILL_DATA = 8,
-	CHANGE_HERO_STATE = 9,
-	SELECT_HERO = 10,
-	VALID_SKILLS = 11,
-	SKILL_RANGE_REQUEST = 12,
-	SKILL_RANGE_RESPONSE = 13,
-	SKILL_SHOT = 14,
-	MOVE_HERO = 15,
-	ACT_HERO = 16,
-	DEAD_HERO = 17,
-	TURN_END = 18,
-	UPDATE_TURN = 19,
-	REJECT = 20,
-	HERO_STATE = 21,
-	HERO_REMOVE_STATE = 22,
-	EFFECT_RESPONSE = 23,
-	REGISTER_ACCOUNT_REQUEST = 24,
-	REGISTER_ACCOUNT_RESPONSE = 25,
-	REQUEST_MATCH = 26,
-	CANCEL_MATCH = 27,
-	ENTER_LOBBY = 28,
-	HERO_DATA = 29,
-	TYPE_NUM = 30,
+	MATCH_START = 3,
+	MATCH_END = 4,
+	GAME_DATA = 5,
+	SKILL_DATA = 6,
+	CHANGE_HERO_STATE = 7,
+	SELECT_HERO = 8,
+	VALID_SKILLS = 9,
+	SKILL_RANGE_REQUEST = 10,
+	SKILL_RANGE_RESPONSE = 11,
+	SKILL_SHOT = 12,
+	MOVE_HERO = 13,
+	ACT_HERO = 14,
+	DEAD_HERO = 15,
+	TURN_END = 16,
+	UPDATE_TURN = 17,
+	REJECT = 18,
+	HERO_STATE = 19,
+	HERO_REMOVE_STATE = 20,
+	EFFECT_RESPONSE = 21,
+	REGISTER_ACCOUNT_REQUEST = 22,
+	REGISTER_ACCOUNT_RESPONSE = 23,
+	REQUEST_MATCH = 24,
+	CANCEL_MATCH = 25,
+	ENTER_LOBBY = 26,
+	HERO_DATA = 27,
+	PICK_TURN = 28,
+	PICK = 29,
+	PICK_DATA = 30,
+	PICK_END = 31,
+	TYPE_NUM = 32,
 }
 public enum StateType
 {
@@ -127,16 +129,6 @@ public class AllocHero : Header
 	public sbyte[] x= new sbyte[4];
 	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
 	public sbyte[] y= new sbyte[4];
-}
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
-public class RandomHeroRequest : Header
-{
-}
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
-public class RandomHeroResponse : Header
-{
-	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-	public byte[] heroClass= new byte[4];
 }
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public class MatchStart : Header
@@ -413,5 +405,33 @@ public class HeroData : Header
 	public sbyte[] skillType= new sbyte[4];
 	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
 	public sbyte[] skillLevel= new sbyte[4];
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class PickTurn : Header
+{
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte pickNum;
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class Pick : Header
+{
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
+	public sbyte[] heroIdx= new sbyte[2];
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class PickData : Header
+{
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte turn;
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte heroNum;
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
+	public sbyte[] heroIdx= new sbyte[2];
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class PickEnd : Header
+{
+	[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+	public sbyte[] heroIdx= new sbyte[4];
 }
 }

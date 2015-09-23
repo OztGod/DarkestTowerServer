@@ -4,6 +4,7 @@
 class Archer : public Hero
 {
 public:
+	Archer() = default;
 	Archer(int idx);
 	~Archer() override = default;
 };

@@ -111,3 +111,87 @@ void Player::enterLobby()
 		return true;
 	});
 }
+
+void Player::matchEnd(bool isWin)
+{
+	for (int i = 0; i < heroInfo.size(); i++)
+	{
+		if (!heroInfo[i].isValid)
+		{
+			heroInfo[i] = makeRandomHeroInfo();
+		}
+		else
+		{
+			heroInfo[i].exp += 20;
+		}
+	}
+
+	//승패 갱신
+	if (isWin)
+	{
+		win = win + 1;
+		HmmoApplication::getInstance()->getDBPort()->doLambda([this]()
+		{
+			DBHelper dbHelper;
+			int res;
+
+			dbHelper.bindParamInt(&pid);
+			dbHelper.bindResultColumnInt(&res);
+
+			if (dbHelper.execute(L"{ call dbo.spPlayerWin (?) }"))
+			{
+				dbHelper.fetchRow();
+			}
+			return true;
+		});
+	}
+	else
+	{
+		lose = lose + 1;
+		HmmoApplication::getInstance()->getDBPort()->doLambda([this]()
+		{
+			DBHelper dbHelper;
+			int res;
+
+			dbHelper.bindParamInt(&pid);
+			dbHelper.bindResultColumnInt(&res);
+
+			if (dbHelper.execute(L"{ call dbo.spPlayerLose (?) }"))
+			{
+				dbHelper.fetchRow();
+			}
+			return true;
+		});
+	}
+
+	HmmoApplication::getInstance()->getDBPort()->doLambda([this]()
+	{
+		for (int i = 0; i < heroInfo.size(); i++)
+		{
+			DBHelper dbHelper;
+			int res;
+
+			dbHelper.bindParamInt(&heroInfo[i].id);
+			dbHelper.bindParamInt(&heroInfo[i].level);
+			dbHelper.bindParamInt(&heroInfo[i].exp);
+			dbHelper.bindParamInt(&heroInfo[i].maxHp);
+			dbHelper.bindParamInt(&heroInfo[i].maxAct);
+
+			dbHelper.bindResultColumnInt(&res);
+
+			if (dbHelper.execute(L"{ call dbo.spUpdatePlayerHeros (?, ?, ?, ?, ?) }"))
+			{
+				dbHelper.fetchRow();
+			}
+
+			//데이터 갱신후 다시 로비로
+			HmmoApplication::getInstance()->getLogicPort()->doLambda([this]()
+			{
+				enterLobby();
+				return true;
+			});
+		}
+
+		return true;
+	});
+}

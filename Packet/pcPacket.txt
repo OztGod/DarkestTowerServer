@@ -5,9 +5,6 @@ enum Type : uint8
     
     ALLOC_HERO
     
-    RANDOM_HERO_REQUEST
-    RANDOM_HERO_RESPONSE
-    
     MATCH_START
     MATCH_END
     
@@ -43,6 +40,11 @@ enum Type : uint8
 
     ENTER_LOBBY    
     HERO_DATA
+
+    PICK_TURN
+    PICK
+    PICK_DATA
+    PICK_END
 	
     TYPE_NUM
 }
@@ -133,15 +135,6 @@ packet AllocHero : Header
     int8 allocNum
     int8 x arr 4
     int8 y arr 4
-}
-
-packet RandomHeroRequest : Header
-{
-}
-
-packet RandomHeroResponse : Header
-{
-    HeroClass heroClass arr 4
 }
 
 packet MatchStart : Header
@@ -330,4 +323,26 @@ packet HeroData : Header
     int8 skillNum
     int8 skillType arr 4
     int8 skillLevel arr 4
+}
+
+packet PickTurn : Header
+{
+    int8 pickNum
+}
+
+packet Pick : Header
+{
+    int8 heroIdx arr 2
+}
+
+packet PickData : Header
+{
+    int8 turn
+    int8 heroNum
+    int8 heroIdx arr 2
+}
+
+packet PickEnd : Header
+{
+    int8 heroIdx arr 4
 }

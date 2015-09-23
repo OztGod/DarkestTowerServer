@@ -34,16 +34,18 @@ struct HeroInfo
 	int exp;
 	int hpGrow;
 	int actGrow;
+	bool isValid = true;
 	std::vector<SkillType> skillType;
 };
 
-HeroInfo makeRandomHeroInfo(HeroClass type);
+HeroInfo makeRandomHeroInfo();
 
 class Hero
 {
 	friend class Match;
 
 public:
+	Hero() = default;
 	Hero(HeroClass type_, int maxHp_, int maxAct_, int idx_);
 
 	void initByInfo(HeroInfo info_, int idx_);
@@ -86,4 +88,4 @@ protected:
 	std::vector<std::unique_ptr<State>> states;
 };
 
-std::unique_ptr<Hero> getRandomHero(int idx);
+std::unique_ptr<Hero> getHeroFromInfo(HeroInfo info, int idx);

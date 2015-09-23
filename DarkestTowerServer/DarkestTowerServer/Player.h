@@ -47,6 +47,15 @@ public:
 		nowMatch = nullptr;
 	}
 
+	void invalidHeroInfo(int idx)
+	{
+		heroInfo[idx].isValid = false;
+	}
+
+	void matchEnd(bool isWin);
+
+	const HeroInfo& getHeroInfo(int idx) const { return heroInfo[idx]; }
+
 private:
 	ClientSession* session = nullptr;
 	Match* nowMatch = nullptr;

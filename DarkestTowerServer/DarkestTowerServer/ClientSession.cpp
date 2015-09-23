@@ -27,7 +27,6 @@ int ClientSession::select(Header header)
 void ClientSession::initHandler()
 {
 	registerHandler(Type::LOGIN_REQUEST, &ClientSession::onLoginRequest);
-	registerHandler(Type::RANDOM_HERO_REQUEST, &ClientSession::onRandomHeroRequest);
 	registerHandler(Type::ALLOC_HERO, &ClientSession::onAllocHero);
 	registerHandler(Type::TURN_END, &ClientSession::onTurnEnd);
 	registerHandler(Type::MOVE_HERO, &ClientSession::onMoveHero);
@@ -35,6 +34,7 @@ void ClientSession::initHandler()
 	registerHandler(Type::SKILL_RANGE_REQUEST, &ClientSession::onSkillRangeRequest);
 	registerHandler(Type::ACT_HERO, &ClientSession::onActHero);
 	registerHandler(Type::REGISTER_ACCOUNT_REQUEST, &ClientSession::onRegisterAccount);
+	registerHandler(Type::PICK, &ClientSession::onPick);
 }
 
 bool ClientSession::onAccept()
@@ -110,39 +110,6 @@ void ClientSession::onLoginRequest(const LoginRequest& packet)
 
 		return true;
 	});
-}
-
-void ClientSession::onRandomHeroRequest(const RandomHeroRequest & packet)
-{
-	auto context = new skylark::FunctionContext([p = this->player]()
-	{
-		std::vector<HeroClass> classes;
-
-		GameManager::getInstance()->getRandomHeros(p, classes);
-
-		RandomHeroResponse randomResponse;
-
-		randomResponse.type = Type::RANDOM_HERO_RESPONSE;
-		randomResponse.heroClass[0] = classes[0];
-		randomResponse.heroClass[1] = classes[1];
-		randomResponse.heroClass[2] = classes[2];
-		randomResponse.heroClass[3] = classes[3];
-		
-		auto sendContext = new PacketContext<RandomHeroResponse>();
-
-		sendContext->packet = randomResponse;
-		sendContext->session = p->getSession();
-
-		if (p->getSession()->isConnected())
-		{
-			HmmoApplication::getInstance()->getIoPort()->take(sendContext, 0);
-			return true;
-		}
-
-		return false;
-	});
-
-	HmmoApplication::getInstance()->getLogicPort()->take(context, 0);
 }
 
 void ClientSession::onAllocHero(const AllocHero & packet)
@@ -296,6 +263,15 @@ void ClientSession::onCancelMatch(const CancelMatch & packet)
 	HmmoApplication::getInstance()->getLogicPort()->doLambda([p = player]()
 	{
 		GameManager::getInstance()->removeMatchPendingList(p);
+		return true;
+	});
+}
+
+void ClientSession::onPick(const Pick & packet)
+{
+	HmmoApplication::getInstance()->getLogicPort()->doLambda([p = player, packet]()
+	{
+		p->getMatch()->pickHero(p, packet.heroIdx[0], packet.heroIdx[1]);
 		return true;
 	});
 }
