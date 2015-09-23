@@ -15,6 +15,7 @@ public:
 	void isValidAccount(const char* id, int idLength, const char* password, int pwdLength, std::function<void(int)> complete);
 
 	void addMatchPendingList(std::shared_ptr<Player> player);
+	void removeMatchPendingList(std::shared_ptr<Player> player);
 
 	void login(int pid);
 	void logout(int pid);

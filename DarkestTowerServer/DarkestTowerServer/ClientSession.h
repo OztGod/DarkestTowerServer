@@ -32,6 +32,8 @@ public:
 	void onSkillRangeRequest(const SkillRangeRequest& packet);
 	void onActHero(const ActHero& packet);
 	void onRegisterAccount(const RegisterAccountRequest& packet);
+	void onRequestMatch(const RequestMatch& packet);
+	void onCancelMatch(const CancelMatch& packet);
 
 private:
 	std::shared_ptr<Player> player = nullptr;

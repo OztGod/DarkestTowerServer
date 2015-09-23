@@ -43,7 +43,9 @@ public enum Type
 	EFFECT_RESPONSE = 23,
 	REGISTER_ACCOUNT_REQUEST = 24,
 	REGISTER_ACCOUNT_RESPONSE = 25,
-	TYPE_NUM = 26,
+	REQUEST_MATCH = 26,
+	CANCEL_MATCH = 27,
+	TYPE_NUM = 28,
 }
 public enum StateType
 {
@@ -161,6 +163,8 @@ public class GameData : Header
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public class SkillData : Header
 {
+	[MarshalAs(UnmanagedType.U1)]
+	public sbyte turn;
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte heroIdx;
 	[MarshalAs(UnmanagedType.U1)]
@@ -300,7 +304,7 @@ public class SkillShot : Header
 public class MatchEnd : Header
 {
 	[MarshalAs(UnmanagedType.U1)]
-	public sbyte winner;;
+	public sbyte winner;
 }
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public class Reject : Header
@@ -310,7 +314,7 @@ public class Reject : Header
 public class DeadHero : Header
 {
 	[MarshalAs(UnmanagedType.U1)]
-	public sbyte turn;;
+	public sbyte turn;
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte heroIdx;
 }
@@ -371,5 +375,13 @@ public class RegisterAccountResponse : Header
 {
 	[MarshalAs(UnmanagedType.U1)]
 	public sbyte isSuccess;
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class RequestMatch : Header
+{
+}
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public class CancelMatch : Header
+{
 }
 }

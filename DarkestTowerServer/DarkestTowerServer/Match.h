@@ -9,6 +9,14 @@
 
 class Player;
 
+enum class MatchState
+{
+	NONE = 0,
+	PICK = 1,
+	PLACE = 2,
+	GAME = 2
+};
+
 class Match
 {
 public:
@@ -67,7 +75,7 @@ private:
 	bool isReady[MAX_NUM];
 	int board[MAX_NUM][3][3];
 	UHeroVec heroData[MAX_NUM];
+	MatchState state = MatchState::PLACE;
 	int playerNum = 0;
 	int nowTurn = 0;
-	bool isStart = false;
 };

@@ -22,8 +22,8 @@ void Match::ready(std::shared_ptr<Player> player)
 {
 	int t = getPlayerIndex(player);
 
-	//이미 겜 시작한 상태면 무시
-	if (isStart)
+	//ready는 PLACE단계에서만 가능
+	if (state != MatchState::PLACE)
 	{
 		sendReject(t);
 		return;
@@ -57,6 +57,7 @@ void Match::ready(std::shared_ptr<Player> player)
 			{
 				SkillData skills;
 
+				skills.turn = t;
 				skills.type = Type::SKILL_DATA;
 				skills.heroIdx = i;
 				skills.skillNum = heroData[t][i]->getSkillNum();
@@ -66,11 +67,12 @@ void Match::ready(std::shared_ptr<Player> player)
 					skills.skillType[s] = heroData[t][i]->getSkill(s)->getType();
 					skills.skillLevel[s] = heroData[t][i]->getSkill(s)->getLevel();
 				}
-				sendPacket(t, skills);
+
+				broadcastPacket(skills);
 			}
 		}
 		
-		isStart = true;
+		state = MatchState::GAME;
 
 		UpdateTurn packet;
 		
@@ -85,8 +87,8 @@ void Match::placeHero(std::shared_ptr<Player> player, std::vector<Point>& points
 {
 	int t = getPlayerIndex(player);
 
-	//히어로 위치 배정은 겜 시작하기 전에만 가능(레디 박기 전에만 가능)
-	if (isStart || isReady[t])
+	//히어로 위치 배정은 PLACE일때만 가능
+	if (state == MatchState::PLACE || isReady[t])
 	{
 		sendReject(t);
 		return;
@@ -105,7 +107,7 @@ void Match::moveHero(std::shared_ptr<Player> player, int idx, Point pos)
 	//겜 시작했을 때만 이동 가능
 	int t = getPlayerIndex(player);
 
-	if (!isStart)
+	if (state != MatchState::GAME)
 	{
 		sendReject(t);
 		return;
@@ -180,7 +182,7 @@ void Match::randomHero(std::shared_ptr<Player> player)
 	int t = getPlayerIndex(player);
 
 	//겜시작 or 레디 박은 상태면 히어로 변경 불가
-	if (isStart || isReady[t])
+	if (state != MatchState::PLACE || isReady[t])
 	{
 		sendReject(t);
 		return;
@@ -208,6 +210,14 @@ void Match::selectHero(std::shared_ptr<Player> player, int idx)
 {
 	//해당 플레이어의 idx번째 영웅에 대해 해당 위치에서 사용 가능한 모든 스킬을 돌려준다
 	int t = getPlayerIndex(player);
+
+	//게임 내에서만 가능
+	if (state != MatchState::GAME)
+	{
+		sendReject(t);
+		return;
+	}
+
 	std::vector<int> validSkills;
 
 	printf("[player %d] : select hero..\n", t);
@@ -244,6 +254,12 @@ void Match::selectHero(std::shared_ptr<Player> player, int idx)
 void Match::getSkillRange(std::shared_ptr<Player> player, int heroIdx, int skillIdx)
 {
 	int t = getPlayerIndex(player);
+
+	if (state != MatchState::GAME)
+	{
+		sendReject(t);
+		return;
+	}
 
 	if (heroIdx < 0 || heroIdx >= 4)
 	{
@@ -311,7 +327,7 @@ void Match::turnChange(std::shared_ptr<Player> player)
 	int t = getPlayerIndex(player);
 
 	//겜이 시작 안했거나, 자기 턴도 아니면서 턴 바꿀려고 한 경우 무시
-	if (!isStart || nowTurn != t)
+	if (state != MatchState::GAME || nowTurn != t)
 	{
 		sendReject(t);
 		return;
@@ -340,6 +356,12 @@ void Match::turnChange(std::shared_ptr<Player> player)
 void Match::actHero(std::shared_ptr<Player> player, int heroIdx, int skillIdx, Point pos)
 {
 	int t = getPlayerIndex(player);
+
+	if (state != MatchState::GAME)
+	{
+		sendReject(t);
+		return;
+	}
 
 	if (heroIdx < 0 || heroIdx >= 4)
 	{

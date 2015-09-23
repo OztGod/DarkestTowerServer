@@ -37,6 +37,9 @@ enum Type : uint8
 
     REGISTER_ACCOUNT_REQUEST
     REGISTER_ACCOUNT_RESPONSE
+
+    REQUEST_MATCH
+    CANCEL_MATCH
 	
     TYPE_NUM
 }
@@ -156,6 +159,7 @@ packet GameData : Header
 
 packet SkillData : Header
 {
+    int8 turn
     int8 heroIdx
     int8 skillNum
     SkillType skillType arr 4
@@ -297,4 +301,12 @@ packet RegisterAccountRequest : Header
 packet RegisterAccountResponse : Header
 {
     int8 isSuccess
+}
+
+packet RequestMatch : Header
+{
+}
+
+packet CancelMatch : Header
+{
 }

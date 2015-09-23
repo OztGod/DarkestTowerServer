@@ -97,6 +97,11 @@ void GameManager::addMatchPendingList(std::shared_ptr<Player> player)
 	matchPendingList.push_back(player);
 }
 
+void GameManager::removeMatchPendingList(std::shared_ptr<Player> player)
+{
+	matchPendingList.remove(player);
+}
+
 void GameManager::login(int pid)
 {
 	printf("login! id = %d\n", pid);

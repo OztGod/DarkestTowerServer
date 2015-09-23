@@ -93,13 +93,6 @@ void ClientSession::onLoginRequest(const LoginRequest& packet)
 		{
 			response.result = LoginResult::SUCCESS;
 			session->player = std::make_shared<Player>(pid, session);
-
-			//일단 로그인 성공하면 무조건 match pending list에 넣는다
-			HmmoApplication::getInstance()->getLogicPort()->doLambda([p = session->player]()
-			{
-				GameManager::getInstance()->addMatchPendingList(p);
-				return true;
-			});
 		}
 		else
 		{
@@ -269,5 +262,23 @@ void ClientSession::onRegisterAccount(const RegisterAccountRequest & packet)
 
 
 		return false;
+	});
+}
+
+void ClientSession::onRequestMatch(const RequestMatch & packet)
+{
+	HmmoApplication::getInstance()->getLogicPort()->doLambda([p = player]()
+	{
+		GameManager::getInstance()->addMatchPendingList(p);
+		return true;
+	});
+}
+
+void ClientSession::onCancelMatch(const CancelMatch & packet)
+{
+	HmmoApplication::getInstance()->getLogicPort()->doLambda([p = player]()
+	{
+		GameManager::getInstance()->removeMatchPendingList(p);
+		return true;
 	});
 }

@@ -39,7 +39,9 @@ enum class Type : uint8_t
 	EFFECT_RESPONSE = 23,
 	REGISTER_ACCOUNT_REQUEST = 24,
 	REGISTER_ACCOUNT_RESPONSE = 25,
-	TYPE_NUM = 26,
+	REQUEST_MATCH = 26,
+	CANCEL_MATCH = 27,
+	TYPE_NUM = 28,
 };
 enum class StateType : uint8_t
 {
@@ -146,6 +148,7 @@ struct GameData : Header
 #pragma pack(push, 1)
 struct SkillData : Header
 {
+	int8_t turn;
 	int8_t heroIdx;
 	int8_t skillNum;
 	SkillType skillType[4];
@@ -251,7 +254,7 @@ struct SkillShot : Header
 #pragma pack(push, 1)
 struct MatchEnd : Header
 {
-	int8_t winner;;
+	int8_t winner;
 };
 #pragma pack(pop)
 #pragma pack(push, 1)
@@ -262,7 +265,7 @@ struct Reject : Header
 #pragma pack(push, 1)
 struct DeadHero : Header
 {
-	int8_t turn;;
+	int8_t turn;
 	int8_t heroIdx;
 };
 #pragma pack(pop)
@@ -305,5 +308,15 @@ struct RegisterAccountRequest : Header
 struct RegisterAccountResponse : Header
 {
 	int8_t isSuccess;
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct RequestMatch : Header
+{
+};
+#pragma pack(pop)
+#pragma pack(push, 1)
+struct CancelMatch : Header
+{
 };
 #pragma pack(pop)
