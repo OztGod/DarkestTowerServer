@@ -17,6 +17,9 @@ public:
 	void addMatchPendingList(std::shared_ptr<Player> player);
 	void removeMatchPendingList(std::shared_ptr<Player> player);
 
+	void registerPlayer(std::shared_ptr<Player> player);
+	std::shared_ptr<Player> getPlayer(int pid);
+
 	void login(int pid);
 	void logout(int pid);
 	void update();
@@ -35,6 +38,7 @@ private:
 	std::list<std::shared_ptr<Player>> matchPendingList;
 	std::vector<Match*> matchList;
 	std::map<int, Match*> playerMatchMap;
+	std::map<int, std::weak_ptr<Player>> loginPlayers;
 	int baseHeroNum = 8;
 
 	static GameManager* instance;

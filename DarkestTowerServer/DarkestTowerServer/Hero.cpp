@@ -187,7 +187,7 @@ HeroInfo makeRandomHeroInfo()
 	std::vector<SkillType> skills;
 
 	info.type = type;
-	info.level = 0;
+	info.level = 1;
 
 	switch (type)
 	{
@@ -325,9 +325,9 @@ SkillInfo makeSkillInfo(SkillType type)
 
 void HeroInfo::levelup()
 {
-	while (exp > level * level * 10)
+	while (exp > level * level * 20)
 	{
-		exp -= level * level * 10;
+		exp -= level * level * 20;
 		level++;
 
 		int t = rand() % 3;
@@ -368,6 +368,8 @@ void HeroInfo::skillup()
 		types.push_back(SkillType::THIEF_BACK_STEP);
 		types.push_back(SkillType::THIEF_POISON);
 		break;
+	default:
+		return;
 	}
 
 	//모든 스킬 다 습득한 경우

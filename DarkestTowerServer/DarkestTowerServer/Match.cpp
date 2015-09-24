@@ -88,7 +88,7 @@ void Match::placeHero(std::shared_ptr<Player> player, std::vector<Point>& points
 	int t = getPlayerIndex(player);
 
 	//히어로 위치 배정은 PLACE일때만 가능
-	if (state == MatchState::PLACE || isReady[t])
+	if (state != MatchState::PLACE || isReady[t])
 	{
 		sendReject(t);
 		return;
@@ -323,6 +323,7 @@ void Match::turnChange(std::shared_ptr<Player> player)
 			continue;
 
 		heroData[nowTurn][i]->turnUpdate();
+		removeEmptyLine();
 
 		//죽었으면 죽었다는 패킷, 아니면 hero state 나타내는 패킷 발송
 		if (heroData[nowTurn][i]->isDead())
@@ -489,6 +490,7 @@ bool Match::isEnd()
 		if (isEnd)
 		{
 			end((t + 1) % 2);
+			return true;
 		}
 	}
 
@@ -534,11 +536,23 @@ void Match::pickHero(std::shared_ptr<Player> player, int pick1, int pick2)
 
 	data.type = Type::PICK_DATA;
 
+	int t = pick % 2;
+
+	for (int i = 0; i < heroIndex[t].size(); i++)
+	{
+		//중복 있는 경우 거부(무시)
+		if (heroIndex[t][i] == pick1 || heroIndex[t][i] == pick2)
+		{
+			return;
+		}
+	}
+
+
 	switch (pick)
 	{
 	case 0:
-		heroData[0][0] = getHeroFromInfo(player->getHeroInfo(pick1), 0);
-		heroIndex[0][0] = pick1;
+		heroData[0].push_back(getHeroFromInfo(player->getHeroInfo(pick1), 0));
+		heroIndex[0].push_back(pick1);
 		packet.pickNum = 2;
 		sendPacket(1, packet);
 
@@ -548,10 +562,10 @@ void Match::pickHero(std::shared_ptr<Player> player, int pick1, int pick2)
 		broadcastPacket(data);
 		break;
 	case 1:
-		heroData[1][0] = getHeroFromInfo(player->getHeroInfo(pick1), 0);
-		heroData[1][1] = getHeroFromInfo(player->getHeroInfo(pick2), 1);
-		heroIndex[1][0] = pick1;
-		heroIndex[1][1] = pick2;
+		heroData[1].push_back(getHeroFromInfo(player->getHeroInfo(pick1), 0));
+		heroData[1].push_back(getHeroFromInfo(player->getHeroInfo(pick2), 1));
+		heroIndex[1].push_back(pick1);
+		heroIndex[1].push_back(pick2);
 		packet.pickNum = 2;
 		sendPacket(0, packet);
 
@@ -562,10 +576,10 @@ void Match::pickHero(std::shared_ptr<Player> player, int pick1, int pick2)
 		broadcastPacket(data);
 		break;
 	case 2:
-		heroData[0][1] = getHeroFromInfo(player->getHeroInfo(pick1), 1);
-		heroData[0][2] = getHeroFromInfo(player->getHeroInfo(pick2), 2);
-		heroIndex[0][1] = pick1;
-		heroIndex[0][2] = pick2;
+		heroData[0].push_back(getHeroFromInfo(player->getHeroInfo(pick1), 1));
+		heroData[0].push_back(getHeroFromInfo(player->getHeroInfo(pick2), 2));
+		heroIndex[0].push_back(pick1);
+		heroIndex[0].push_back(pick2);
 		packet.pickNum = 2;
 		sendPacket(1, packet);
 
@@ -576,10 +590,10 @@ void Match::pickHero(std::shared_ptr<Player> player, int pick1, int pick2)
 		broadcastPacket(data);
 		break;
 	case 3:
-		heroData[1][2] = getHeroFromInfo(player->getHeroInfo(pick1), 2);
-		heroData[1][3] = getHeroFromInfo(player->getHeroInfo(pick2), 3);
-		heroIndex[1][2] = pick1;
-		heroIndex[1][3] = pick2;
+		heroData[1].push_back(getHeroFromInfo(player->getHeroInfo(pick1), 2));
+		heroData[1].push_back(getHeroFromInfo(player->getHeroInfo(pick2), 3));
+		heroIndex[1].push_back(pick1);
+		heroIndex[1].push_back(pick2);
 		packet.pickNum = 1;
 		sendPacket(0, packet);
 
@@ -590,8 +604,8 @@ void Match::pickHero(std::shared_ptr<Player> player, int pick1, int pick2)
 		broadcastPacket(data);
 		break;
 	case 4:
-		heroData[0][3] = getHeroFromInfo(player->getHeroInfo(pick1), 3);
-		heroIndex[0][3] = pick1;
+		heroData[0].push_back(getHeroFromInfo(player->getHeroInfo(pick1), 3));
+		heroIndex[0].push_back(pick1);
 
 		data.turn = 0;
 		data.heroNum = 1;
@@ -655,15 +669,18 @@ void Match::end(int winner)
 
 	for (int t = 0; t < MAX_NUM; t++)
 	{
-		for (int i = 0; i < 4; i++)
+		std::vector<int> participant;
+
+		for (int i = 0; i < heroData[t].size(); i++)
 		{
+			participant.push_back(heroIndex[t][i]);
 			if (heroData[t][i]->isDead())
 			{
 				players[t]->invalidHeroInfo(i);
 			}
 		}
 
-		players[t]->matchEnd(t == winner);
+		players[t]->matchEnd(t == winner, participant);
 	}
 }
 

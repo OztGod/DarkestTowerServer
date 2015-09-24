@@ -75,12 +75,28 @@ void GameManager::isValidAccount(const char * id, int idLength, const char * pas
 
 void GameManager::addMatchPendingList(std::shared_ptr<Player> player)
 {
+	//이미 리스트에 포함되어있는 경우 무시.
+	if (std::find(matchPendingList.begin(), matchPendingList.end(), player) != matchPendingList.end())
+	{
+		return;
+	}
+
 	matchPendingList.push_back(player);
 }
 
 void GameManager::removeMatchPendingList(std::shared_ptr<Player> player)
 {
 	matchPendingList.remove(player);
+}
+
+void GameManager::registerPlayer(std::shared_ptr<Player> player)
+{
+	loginPlayers[player->getId()] = player;
+}
+
+std::shared_ptr<Player> GameManager::getPlayer(int pid)
+{
+	return loginPlayers[pid].lock();
 }
 
 void GameManager::login(int pid)

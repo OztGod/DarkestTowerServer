@@ -13,7 +13,7 @@ void Player::init(int win_, int lose_, int elo_, int heroNum_)
 
 	HmmoApplication::getInstance()->getDBPort()->doLambda([this]()
 	{
-		DBHelper dbHelper;
+		std::vector<HeroInfo> infos;
 
 		int heroId;
 		int heroType;
@@ -24,22 +24,23 @@ void Player::init(int win_, int lose_, int elo_, int heroNum_)
 		int hpGrow;
 		int actGrow;
 
-		dbHelper.bindParamInt(&pid);
-
-		dbHelper.bindResultColumnInt(&heroId);
-		dbHelper.bindResultColumnInt(&heroType);
-		dbHelper.bindResultColumnInt(&level);
-		dbHelper.bindResultColumnInt(&exp);
-		dbHelper.bindResultColumnInt(&maxHp);
-		dbHelper.bindResultColumnInt(&maxAp);
-		dbHelper.bindResultColumnInt(&hpGrow);
-		dbHelper.bindResultColumnInt(&actGrow);
-
-		if (dbHelper.execute(L"{ call dbo.spLoadPlayerHeros (?) }"))
 		{
-			while (dbHelper.fetchRow())
+			DBHelper dbHelper;
+
+			dbHelper.bindParamInt(&pid);
+
+			dbHelper.bindResultColumnInt(&heroId);
+			dbHelper.bindResultColumnInt(&heroType);
+			dbHelper.bindResultColumnInt(&level);
+			dbHelper.bindResultColumnInt(&exp);
+			dbHelper.bindResultColumnInt(&maxHp);
+			dbHelper.bindResultColumnInt(&maxAp);
+			dbHelper.bindResultColumnInt(&hpGrow);
+			dbHelper.bindResultColumnInt(&actGrow);
+
+			if (dbHelper.execute(L"{ call dbo.spLoadPlayerHeros (?) }"))
 			{
-				HmmoApplication::getInstance()->getLogicPort()->doLambda([this, heroId, heroType, level, exp, maxHp, maxAp, hpGrow, actGrow]()
+				while (dbHelper.fetchRow())
 				{
 					HeroInfo info;
 
@@ -52,12 +53,45 @@ void Player::init(int win_, int lose_, int elo_, int heroNum_)
 					info.hpGrow = hpGrow;
 					info.actGrow = actGrow;
 
-					heroInfo.push_back(info);
-					
-					return true;
-				});
+					infos.push_back(info);
+				}
 			}
 		}
+
+
+		for (int i = 0; i < infos.size(); i++)
+		{
+			std::vector<SkillType> types;
+
+			DBHelper skillDB;
+			int id = infos[i].id;
+			int skillType;
+			int skillLevel;
+
+			skillDB.bindParamInt(&id);
+
+			skillDB.bindResultColumnInt(&skillType);
+			skillDB.bindResultColumnInt(&skillLevel);
+
+			//level은 일단 무시
+
+			if (skillDB.execute(L"{ call dbo.spLoadHeroSkills (?) }"))
+			{
+				while (skillDB.fetchRow())
+				{
+					types.push_back(static_cast<SkillType>(skillType));
+				}
+			}
+
+			infos[i].skillType = types;
+		}
+
+		HmmoApplication::getInstance()->getLogicPort()->doLambda([this, infos]()
+		{
+			heroInfo = infos;
+
+			return true;
+		});
 		
 		ClientSession* session = this->getSession();
 
@@ -80,6 +114,7 @@ void Player::init(int win_, int lose_, int elo_, int heroNum_)
 
 void Player::enterLobby()
 {
+	printf("player %d enter lobby\n", pid);
 	state = PlayerState::LOBBY;
 
 	HmmoApplication::getInstance()->getIoPort()->doLambda([this]()
@@ -118,25 +153,25 @@ void Player::enterLobby()
 	});
 }
 
-void Player::matchEnd(bool isWin)
+void Player::matchEnd(bool isWin, const std::vector<int>& participantHeros)
 {
-	for (int i = 0; i < heroInfo.size(); i++)
+	for (int i = 0; i < participantHeros.size(); i++)
 	{
-		if (!heroInfo[i].isValid)
+		if (!heroInfo[participantHeros[i]].isValid)
 		{
-			heroInfo[i] = makeRandomHeroInfo();
+			heroInfo[participantHeros[i]] = makeRandomHeroInfo();
 		}
 		else
 		{
 			//경험치 기본적으로 10 ~ 30사이 랜덤.
-			heroInfo[i].exp += 10 + (rand() % 21);
+			heroInfo[participantHeros[i]].exp += 10 + (rand() % 21);
 
 			//이겼을 경우 20 ~ 40 더 줌
 
-			heroInfo[i].exp += 20 + (rand() % 21);
+			heroInfo[participantHeros[i]].exp += 20 + (rand() % 21);
 
 			//조건 만족하면 levelup 처리함
-			heroInfo[i].levelup();
+			heroInfo[participantHeros[i]].levelup();
 		}
 	}
 
@@ -144,12 +179,13 @@ void Player::matchEnd(bool isWin)
 	if (isWin)
 	{
 		win = win + 1;
-		HmmoApplication::getInstance()->getDBPort()->doLambda([this]()
+		HmmoApplication::getInstance()->getDBPort()->doLambda([pid = pid]()
 		{
 			DBHelper dbHelper;
+			int id = pid;
 			int res;
 
-			dbHelper.bindParamInt(&pid);
+			dbHelper.bindParamInt(&id);
 			dbHelper.bindResultColumnInt(&res);
 
 			if (dbHelper.execute(L"{ call dbo.spPlayerWin (?) }"))
@@ -162,12 +198,13 @@ void Player::matchEnd(bool isWin)
 	else
 	{
 		lose = lose + 1;
-		HmmoApplication::getInstance()->getDBPort()->doLambda([this]()
+		HmmoApplication::getInstance()->getDBPort()->doLambda([pid = pid]()
 		{
 			DBHelper dbHelper;
+			int id = pid;
 			int res;
 
-			dbHelper.bindParamInt(&pid);
+			dbHelper.bindParamInt(&id);
 			dbHelper.bindResultColumnInt(&res);
 
 			if (dbHelper.execute(L"{ call dbo.spPlayerLose (?) }"))
@@ -178,8 +215,9 @@ void Player::matchEnd(bool isWin)
 		});
 	}
 
-	HmmoApplication::getInstance()->getDBPort()->doLambda([this]()
+	HmmoApplication::getInstance()->getDBPort()->doLambda([info = heroInfo, pid = pid]()
 	{
+		auto heroInfo = info;
 		for (int i = 0; i < heroInfo.size(); i++)
 		{
 			DBHelper dbHelper;
@@ -197,14 +235,21 @@ void Player::matchEnd(bool isWin)
 			{
 				dbHelper.fetchRow();
 			}
-
-			//데이터 갱신후 다시 로비로
-			HmmoApplication::getInstance()->getLogicPort()->doLambda([this]()
-			{
-				enterLobby();
-				return true;
-			});
 		}
+
+		//데이터 갱신후 다시 로비로
+		HmmoApplication::getInstance()->getLogicPort()->doLambda([pid]()
+		{
+			auto player = GameManager::getInstance()->getPlayer(pid);
+
+			if (player != nullptr)
+			{
+				player->enterLobby();
+				return true;
+			}
+
+			return false;
+		});
 
 		return true;
 	});

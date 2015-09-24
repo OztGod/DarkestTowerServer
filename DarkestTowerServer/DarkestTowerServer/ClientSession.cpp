@@ -106,6 +106,7 @@ void ClientSession::onLoginRequest(const LoginRequest& packet)
 
 			return HmmoApplication::getInstance()->getLogicPort()->doLambda([session,win,lose,elo,heroNum]()
 			{
+				GameManager::getInstance()->registerPlayer(session->getPlayer());
 				session->player->init(win, lose, elo, heroNum);
 				return true;
 			});

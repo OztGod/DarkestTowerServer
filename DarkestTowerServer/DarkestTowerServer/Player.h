@@ -53,7 +53,7 @@ public:
 		heroInfo[idx].isValid = false;
 	}
 
-	void matchEnd(bool isWin);
+	void matchEnd(bool isWin, const std::vector<int>& particpantHeros);
 
 	const HeroInfo& getHeroInfo(int idx) const { return heroInfo[idx]; }
 

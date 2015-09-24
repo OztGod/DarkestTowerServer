@@ -36,6 +36,8 @@ public:
 	void onPick(const Pick& packet);
 	void onSurrender(const Surrender& packet);
 
+	std::shared_ptr<Player> getPlayer() const { return player; }
+
 private:
 	std::shared_ptr<Player> player = nullptr;
 };
