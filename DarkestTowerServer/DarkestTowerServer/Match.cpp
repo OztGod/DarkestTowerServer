@@ -676,7 +676,7 @@ void Match::end(int winner)
 			participant.push_back(heroIndex[t][i]);
 			if (heroData[t][i]->isDead())
 			{
-				players[t]->invalidHeroInfo(i);
+				players[t]->invalidHeroInfo(heroIndex[t][i]);
 			}
 		}
 

@@ -182,7 +182,8 @@ std::unique_ptr<Hero> getHeroFromInfo(HeroInfo info, int idx)
 
 HeroInfo makeRandomHeroInfo()
 {
-	HeroClass type = static_cast<HeroClass>(rand() % static_cast<int>(HeroClass::NUM));
+	int randType = rand() % static_cast<int>(HeroClass::NUM);
+	HeroClass type = static_cast<HeroClass>(randType);
 	HeroInfo info;
 	std::vector<SkillType> skills;
 
